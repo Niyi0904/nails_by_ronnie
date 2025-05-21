@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { logout } from '@/redux/features/authSlice';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 
 
@@ -28,8 +29,13 @@ export default function Header() {
     const {isAuthenticated, user} = useSelector((state: AppState) => state.auth);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const getInitials = (fullName: string) => {
+      const names = fullName.split(" ");
+      const firstInitial = names[0]?.[0] || "";
+      const lastInitial = names.length > 1 ? names[names.length - 1][0] : "";
+      return `${firstInitial}${lastInitial}`.toUpperCase();
+    };
 
-    console.log(user)
     const handleModal = () => {
       setIsMenuOpen(!isMenuOpen); 
     }
@@ -43,18 +49,36 @@ export default function Header() {
     }
 
   return (
-    <nav className="fixed top-0 w-full z-40 p-4 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
-    <h1 className="font-bold text-xl text-[#D77A8B]">Nailed_by_Ronnie</h1>
+    <nav className="fixed top-0 w-full z-40 py-1 px-4 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
+    <div>{
+      theme === 'dark' ? <Image 
+        src='/assets/logo-dark.png'
+        alt='logo-dark-mode'
+        width={150}
+        height={150}
+        className="h-14 w-36 object-cover"
+      />
+
+      :
+      <Image 
+        src='/assets/logo-white.png'
+        alt='logo-light-mode'
+        width={150}
+        height={150}
+        className="h-14 w-36 object-cover"
+      />
+      }
+    </div>
     <div className="hidden lg:flex space-x-6 text-sm">
       {isAuthenticated ? 
         (
-          <div className='items-end'>
+          <div className='items-end flex'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center space-x-3 hover:text-[#D77A8B]">
                   <Avatar className="h-8 w-8 border border-gray-200">
                     <AvatarFallback className="bg-pink-100 text-[#D77A8B]">
-                      NO
+                      {user?.full_name ? getInitials(user.full_name) : "NA"}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:inline-block font-medium">
@@ -62,6 +86,7 @@ export default function Header() {
                   </span>
                   <FaAngleDown className="h-4 w-4" />
                 </button>
+
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className='space-y-3 border-b-2 border-gray-700'>
@@ -102,6 +127,12 @@ export default function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <span className="text-3xl font-bold pl-3 text-blue-950 dark:text-white">
+              <button onClick={handleThemeToggle}>
+                  {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
+              </button>
+            </span>
           </div>
         ) : (
           <div className='space-x-6 flex items-center text-center align-middle'>

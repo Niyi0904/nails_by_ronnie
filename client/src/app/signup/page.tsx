@@ -1,6 +1,7 @@
 "use client"
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import {FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import Image from "next/image";
 import { BiLoaderAlt } from "react-icons/bi";
 
 import { useRef, useState } from "react";
@@ -29,7 +30,6 @@ export default function Signup() {
     err: unknown;
     message: string;
   } | null>(null);
-  const [error, setError] = useState<string>('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState({
     hasMinLength: false,
@@ -38,6 +38,8 @@ export default function Signup() {
   });
 
   const {user} = useSelector((state: AppState) => state.auth);
+      const {theme} = useSelector((state: AppState) => state.theme);
+
   const router = useRouter();
   const dispatch = useAppDispatch()
   
@@ -86,6 +88,7 @@ export default function Signup() {
     try {
       const response = await api.post('/auth/signup', body);
       console.log(response.data.user);
+      localStorage.removeItem('user');
       dispatch(setUser(response.data.user));
       console.log(user);
       setSubmitStatus({
@@ -147,10 +150,30 @@ export default function Signup() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center items-center  justify-center mb-8 flex flex-col"
         >
+          <div className="mb-8 rounded-lg">
+            {
+            theme === 'dark' ? <Image 
+              src='/assets/logo-dark.png'
+              alt='logo-dark-mode'
+              width={150}
+              height={150}
+              className="h-14 w-36 rounded-xl  object-cover"
+            />
+
+            :
+            <Image 
+              src='/assets/logo-white.png'
+              alt='logo-light-mode'
+              width={150}
+              height={150}
+              className="h-14 w-36 rounded-xl object-cover"
+            />
+            }
+          </div>
           <h2 className="text-3xl md:text-4xl font-delugia italic mb-4">Sign
-            <span className="text-blue-500 pl-3">Up</span>
+            <span className="text-[#E11D48]">Up </span>
           </h2>
           <p className="text-xl md:text-2xl font-delugia italic mb-2">Join the Ronnie B Empire Community</p>
           <p className="text-gray-600 dark:text-gray-400 mx-auto">

@@ -3,7 +3,7 @@
 
 import 'keen-slider/keen-slider.min.css';
 import { useKeenSlider } from 'keen-slider/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect} from 'react';
 
 type Slide = {
     id: number,
@@ -17,31 +17,17 @@ const slides: Slide[] = [
   {
     id: 1,
     type: 'video',
-    src: ['/videos/vid5.mp4', '/videos/vid6.mp4', '/videos/vid5.mp4', '/videos/vid4.mp4'],
+    src: ['/videos/vid3.mp4', '/videos/vid6.mp4', '/videos/vid7.mp4', '/videos/vid1.mp4'],
     title: 'Welcome to Nailed_by_Ronnie',
     description: 'Connect with top Lagos nails technician with ease.',
   },
   {
     id: 2,
     type: 'image',
-    src: ['/assets/slider2.jpg', '/assets/slider1.jpg', '/assets/slider4.jpg', '/assets/slider3.jpg'],
+    src: ['/assets/slider2.jpg', '/assets/slider1.jpg', '/assets/slider4.jpg', '/assets/slider2.jpg'],
     title: 'Shop Nail Essentials',
     description: 'Curated tools for flawless nail care.',
   }
-  // {
-  //   id: 3,
-  //   type: 'image',
-  //   src: ['/assets/slider3.jpg', '/assets/slider2.jpg', '/assets/slider1.jpg', '/assets/slider4.jpg'],
-  //   title: 'Book a Service',
-  //   description: 'Choose home or onsite appointments.',
-  // },
-  // {
-  //   id: 4,
-  //   type: 'video',
-  //   src: ['/videos/vid1.mp4', '/videos/vid2.mp4', '/videos/vid3.mp4', '/videos/vid5.mp4'],
-  //   title: 'Live Support Chat',
-  //   description: 'Get instant help from our admins.',
-  // },
 ];
 
 export default function MixedMediaCarousel() {

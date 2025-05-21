@@ -1,6 +1,7 @@
 "use client"
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import Image from "next/image";
+import {FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { BiLoaderAlt } from "react-icons/bi";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
@@ -27,6 +28,8 @@ export default function Contact() {
     message: string;
   } | null>(null);
   const {user} = useSelector((state: AppState) => state.auth);
+  const {theme} = useSelector((state: AppState) => state.theme);
+
   const router = useRouter();
   const dispatch = useAppDispatch()
   
@@ -88,17 +91,37 @@ export default function Contact() {
   
   return (
     <div className="relative flex justify-center items-center pt-6 mx-auto w-[98%] md:w-[50%] bg-[#F9D8DA] text-[#1E1B23] dark:bg-[#1E1B23] dark:text-[#F2F2F2]">
-      <div className="container mt-[5%] mx-auto px-4">
-        {/* div Header */}
+      <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center items-center  justify-center mb-8 flex flex-col"
         >
+        <div className="mb-8 rounded-lg">
+            {
+            theme === 'dark' ? <Image 
+              src='/assets/logo-dark.png'
+              alt='logo-dark-mode'
+              width={150}
+              height={150}
+              className="h-14 w-36 rounded-xl  object-cover"
+            />
+
+            :
+            <Image 
+              src='/assets/logo-white.png'
+              alt='logo-light-mode'
+              width={150}
+              height={150}
+              className="h-14 w-36 rounded-xl object-cover"
+            />
+            }
+          </div>
+
           <h2 className="text-3xl md:text-4xl font-delugia italic mb-4">Log
-            <span className="text-blue-500">in</span>
+            <span className="text-[#E11D48]">in</span>
           </h2>
         </motion.div>
 
@@ -192,19 +215,25 @@ export default function Contact() {
             </div>
           </motion.form>
 
-            <div className="text-center mt-5 space-y-4">
+            <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mt-5 space-y-4">
                 <p>Dont have an account ?</p>
                 <div className="w-full flex justify-end">
                     <motion.button
                         type="submit"
                         whileHover={{ scale: 1.03 }}
+                        onClick={() => router.push('/signup')}
                         whileTap={{ scale: 0.98 }}
                         className="w-[50%] bg-[#E11D48] hover:bg-[#D77A8B] dark:bg-[#943F54] text-white font-medium py-3 px-6 rounded-lg transition-colors"
                         >
                         SignUp
                     </motion.button>
                 </div>
-            </div>
+            </motion.div>
         </div>
 
       </div>

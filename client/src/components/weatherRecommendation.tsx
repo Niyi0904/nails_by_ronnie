@@ -26,7 +26,7 @@ export default function WeatherRecommendation() {
   async function fetchWeather() {
     try {
       const res = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=7476472420b946328d2140955251305&q=Lagos`
+        `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=Lagos`
       );
       const data = await res.json();
       const weatherData: WeatherData = {
@@ -38,7 +38,7 @@ export default function WeatherRecommendation() {
       setWeather(weatherData);
 
       // Simple logic (you can improve this)
-      const recs = {
+      const recs = { 
         Hot: {
           title: 'Go Bold with Neon!',
           description: 'The heat is on—go bright with neon or tropical shades.',
