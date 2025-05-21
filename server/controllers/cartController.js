@@ -1,0 +1,29 @@
+const { where } = require('sequelize');
+const {CartItem, User} = require('../models');
+
+const addToCart = async (req, res) => {
+    const {email, name, quantity, image, price} = req.body;
+
+    if (!email || !name || !quantity || !image || !price) {
+        return res.status(400).json({ error: 'user email or cart price, name, quantity, image are all required.' });
+    }
+
+    try {
+        const user = await  User.findOne({where: {email}});
+    
+        await CartItem.create({
+            name,
+            quantity,
+            image,
+            price,
+            user_id: user.Userid
+        });
+    
+        return res.status(201).json({message: 'item has been successfully added to cart'});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Internal server error"});
+    }
+}
+
+module.exports= {addToCart}
