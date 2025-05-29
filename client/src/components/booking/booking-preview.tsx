@@ -29,8 +29,6 @@ export default function BookingPreview() {
   const {user} = useAppSelector(state => state.auth);
 
   const router = useRouter();
-  const token = authState.token;
-
   const handleSubmit = async () => {
     setIsLoading(true);
 
