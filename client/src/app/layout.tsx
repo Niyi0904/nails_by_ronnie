@@ -14,6 +14,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Nails by ronnie",
   description: "Nails by ronnie is a application that links customers with the best nailtechnician in lagos, it is easy to use and user friendly",
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({
