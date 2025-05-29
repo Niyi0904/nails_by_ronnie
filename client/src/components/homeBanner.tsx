@@ -72,7 +72,7 @@ export default function MixedMediaCarousel() {
               ))}
             </div>
           ) : (
-            <div key={slide.id} className="relative w-full h-full grid grid-cols-4 bg-red-700">
+            <div key={slide.id} className="relative w-full h-full grid grid-cols-4">
             {slide.src.map((source, index) => (
               <img
                 key={index}
