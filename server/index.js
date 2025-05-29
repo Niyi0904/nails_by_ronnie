@@ -11,7 +11,7 @@ const cartRoutes = require('./routes/cart');
 const port = process.env.PORT || 3030;
 
 app.use(cors({
-  origin: 'http://localhost:3000', // your frontend
+  origin: true, // your frontend
   credentials: true,              // ✅ must match frontend
 }));
 app.use(express.json());
