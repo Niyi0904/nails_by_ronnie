@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const usersRoutes = require('./routes/userRoute');
 const cartRoutes = require('./routes/cart');
 
-const port = 3030
+const port = process.env.PORT || 3030;
 
 app.use(cors({
   origin: 'http://localhost:3000', // your frontend
