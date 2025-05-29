@@ -10,7 +10,7 @@ const cartRoutes = require('./routes/cart');
 require('dotenv').config();
 
 
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 8080;
 
 app.use(cors({
   origin: true, // your frontend
