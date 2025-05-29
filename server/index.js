@@ -1,34 +1,29 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const db = require('./models');
-const authRoutes = require('./routes/auth');
-const bookingRoutes = require('./routes/booking');
-const cookieParser = require('cookie-parser');
-const usersRoutes = require('./routes/userRoute');
-const cartRoutes = require('./routes/cart');
 require('dotenv').config();
 
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const db = require('./models');
 
-const port = process.env.PORT || 8080;
+const app = express();
+const port = process.env.PORT || 8080; // Railway usually uses 8080
 
-app.use(cors({
-  origin: true, // your frontend
-  credentials: true,              // ✅ must match frontend
-}));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
+
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.send('API is working 🎉');
 });
-app.use('/api/auth', authRoutes);
-app.use('/api/booking', bookingRoutes);
-app.use('/api/users', usersRoutes);
-app.use('/api/cart', cartRoutes);
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync()
+  .then(() => {
+    console.log('✅ Database connected');
     app.listen(port, '0.0.0.0', () => {
-        console.log(`server is running on port ${port}`); 
+      console.log(`✅ Server running on port ${port}`);
     });
-})
-
+  })
+  .catch((err) => {
+    console.error('❌ Sequelize Sync Error:', err.message);
+    process.exit(1); // Exit if DB is broken
+  });
