@@ -1,8 +1,5 @@
 "use client"
-import { useAppDispatch } from "@/hooks/useReduxHook";
-import { setUser } from "@/redux/features/authSlice";
-import { AppState } from "../redux/store";
-import { useEffect } from "react";
+
 import Herosection from "@/components/herosection";
 import OurServices from "@/components/ourServices";
 import WeatherRecommendation from "@/components/weatherRecommendation";

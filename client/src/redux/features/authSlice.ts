@@ -7,12 +7,12 @@ import {
   
   const getStoredUser = () => {
   if (typeof window === 'undefined') return null;
-  const sessionUser = sessionStorage.getItem('user');
-  if (sessionUser) return JSON.parse(sessionUser);
 
   const localUser = localStorage.getItem('user');
   if (localUser) return JSON.parse(localUser);
 
+  const sessionUser = sessionStorage.getItem('user');
+  if (sessionUser) return JSON.parse(sessionUser);
 
   return null;
 };
@@ -30,11 +30,9 @@ const savedUser = getStoredUser();
   }
   
   interface AuthState {
-    isAuthenticated: boolean;
-    
-    token: string | null;
     user: User | null;
-    error: string | null;
+    isAuthenticated: boolean;
+    isLoading: boolean
   }
   
   interface JwtPayload {
@@ -70,9 +68,8 @@ const savedUser = getStoredUser();
   // Initial state
   const initialState: AuthState = {
     isAuthenticated: false,
-    token: null,
-    user: savedUser,
-    error: null,
+    user: null,
+    isLoading: false
   };
 
   
@@ -88,7 +85,8 @@ const savedUser = getStoredUser();
         state.isAuthenticated = action.payload;
       },
 
-      setUser: (state, ) => {
+      setUser: (state, action:PayloadAction<User | null>) => {
+        state.user =action.payload
         state.isAuthenticated = true;
       },
       authSuccess: (state) => {
@@ -96,11 +94,10 @@ const savedUser = getStoredUser();
       },
       logout: (state) => {
         state.isAuthenticated = false;
-        state.token = null;
-        state.user = null;
+        state.user = null
       },
-      setError: (state, action: PayloadAction<string>) => {
-        state.error = action.payload;
+      setIsLoading: (state, action:PayloadAction<boolean>) => {
+        state.isLoading = action.payload;
       },
       },
     })
@@ -111,7 +108,7 @@ const savedUser = getStoredUser();
     setUser,
     authSuccess,
     logout,
-    setError,
+    setIsLoading
   } = authSlice.actions;
   
   export default authSlice.reducer;

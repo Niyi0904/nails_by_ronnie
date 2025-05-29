@@ -22,7 +22,7 @@ export default function CartPage() {
 
   // Example: Load cart from localStorage on mount (optional)
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
+    const savedCart = sessionStorage.getItem('cart');
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }

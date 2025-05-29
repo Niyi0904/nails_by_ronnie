@@ -19,6 +19,8 @@ import { HiMenu, HiX } from 'react-icons/hi';
 import { logout } from '@/redux/features/authSlice';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import api from '@/utils/api';
+import toast from 'react-hot-toast';
 
 
 
@@ -51,14 +53,19 @@ export default function Header() {
         }
     }
 
-    const handleLogout = () => {
-      localStorage.removeItem('user');
-      sessionStorage.removeItem('user');
-      dispatch(logout());
-    }
+    const handleLogout = async () => {
+      try {
+        await api.post('/auth/logout'); // this clears the cookie on the server
+        dispatch(logout());             // this clears Redux state
+        toast.success('Logged out successfully');
+      } catch (err) {
+        toast.error('Logout failed. Please try again.');
+      }
+    };
+
 
   return (
-    <nav className="fixed top-0 w-full z-40 py-1 px-4 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
+    <nav className="fixed top-0 w-full z-40 py-1 px-1 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
     <div>{
       theme === 'dark' ? <Image 
         src='/assets/logo-dark.png'
@@ -151,7 +158,7 @@ export default function Header() {
                 </div>
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
-                <button onClick={() => dispatch(logout())}>
+                <button onClick={handleLogout}>
                   Logout 
                 </button> <FaAngleRight className="h-4 w-4" />
                 </DropdownMenuItem>

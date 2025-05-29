@@ -47,11 +47,7 @@ export default function Contact() {
     
     try {
       const response = await api.post('/auth/login', body);
-      dispatch(setUser());
-
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
-        localStorage.setItem('cart', JSON.stringify(response.data.user.cart_items))
-
+      dispatch(setUser(response.data.user));
 
       setTimeout(() => {
         router.push('/')

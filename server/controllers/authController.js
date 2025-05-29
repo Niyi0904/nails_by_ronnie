@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const { User, CartItem } = require('../models');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 
 const signup = async (req, res) => {
@@ -102,6 +103,23 @@ const login = async (req, res) => {
       return res.status(404).json({ message: 'Invalid email or password' });
     }
 
+    const tokenData = {
+      id: user.id,
+      full_name: user.full_name,
+      email: user.email,
+      phone_number: user.phone_number,
+      address: user.address,
+      picture: user.picture,
+      shipping_address: user.shipping_address
+    }
+
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
     return res.status(201).json({
       message: 'Login Successful', user});
 
@@ -110,6 +128,18 @@ const login = async (req, res) => {
     res.status(500).json({ error: 'Server error.' });
   }
 };
+
+const logout = async (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+
 
 const verifyEmail = async (req, res) => {
   const { token } = req.query;
@@ -128,4 +158,4 @@ const verifyEmail = async (req, res) => {
 };
 
 
-module.exports = { signup, login, verifyEmail };
+module.exports = { signup, login, verifyEmail, logout };

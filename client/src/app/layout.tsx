@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "@/redux/Provider"
 import { Poppins } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
+import AppInitializer from "@/components/appInitializer";
 
 
 const poppins = Poppins({
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${poppins.className} min-h-screen`}
       >
         <Providers>
+          <AppInitializer />
           {children}
           <Toaster />
         </Providers>

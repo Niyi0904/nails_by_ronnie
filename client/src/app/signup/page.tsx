@@ -6,7 +6,6 @@ import { BiLoaderAlt } from "react-icons/bi";
 
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import api from "../../utils/api"
 import { AppState } from "@/redux/store";
 import { useSelector } from "react-redux";
@@ -87,10 +86,7 @@ export default function Signup() {
 
     try {
       const response = await api.post('/auth/signup', body);
-      console.log(response.data.user);
       dispatch(setUser(response.data.user));
-      console.log(user);
-      sessionStorage.setItem("user", JSON.stringify(response.data.user));
       setSubmitStatus({
         success: true,
         err: null,
