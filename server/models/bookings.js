@@ -13,17 +13,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      category: {
+      sub_category: {
         type: DataTypes.STRING,
         allowNull: false
       },
       booking_date: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false
       },
       booking_time: {
-        type: DataTypes.TIME,
-        allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false 
       },
       booking_status: {
         type: DataTypes.ENUM('pending', 'confirmed', 'completed', 'cancelled'),
@@ -33,12 +33,23 @@ module.exports = (sequelize, DataTypes) => {
       booking_location: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      additional_notes: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
       // Other booking-specific fields
     }, {
       tableName: 'Bookings',
       underscored: true
     });
+
+    Booking.associate= (model) => {
+      Booking.belongsTo(model.User, {
+        foreignKey: 'userId',
+        as: 'bookings'
+      }) 
+    }
   
     return Booking;
   };

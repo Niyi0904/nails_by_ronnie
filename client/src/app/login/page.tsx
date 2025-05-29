@@ -49,17 +49,20 @@ export default function Contact() {
 
     try {
       const response = await api.post('/auth/login', body);
-      console.log(response.data.user);
+      dispatch(setUser());
 
       if(isChecked) {
         localStorage.setItem('user', JSON.stringify(response.data.user));
       }
 
-      dispatch(setUser(response.data.user));
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
 
-      router.push('/');
 
-      toast.success('Login successfull');
+      setTimeout(() => {
+        router.push('/')
+      }, 3000)
+
+      toast.success('Login successful, Redirecting to Home');
 
       formRef.current?.reset();
     } catch (err: any) {
@@ -87,6 +90,16 @@ export default function Contact() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+      if (user) {
+        setTimeout(() => {
+          router.push('/')
+        }, 3000);
+      }
+  
+      console.log(user);
+    }, [user]);
 
   
   return (

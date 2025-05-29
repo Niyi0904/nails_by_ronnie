@@ -5,13 +5,28 @@ import {
     type PayloadAction,
   } from "@reduxjs/toolkit";
   
+  const getStoredUser = () => {
+  if (typeof window === 'undefined') return null;
+
+  const localUser = localStorage.getItem('user');
+  if (localUser) return JSON.parse(localUser);
+
+  const sessionUser = sessionStorage.getItem('user');
+  if (sessionUser) return JSON.parse(sessionUser);
+
+  return null;
+};
+
+const savedUser = getStoredUser();
+
   // Types
   interface User {
-    id: string;
+    Userid: string;
     full_name: string;
     email: string;
     phone_number: string;
     address: string;
+    emailVerified: boolean;
   }
   
   interface AuthState {
@@ -23,7 +38,7 @@ import {
   }
   
   interface JwtPayload {
-    userId: string;
+    id: string;
     fullName: string;
     email: string;
     role: string;
@@ -56,7 +71,7 @@ import {
   const initialState: AuthState = {
     isAuthenticated: false,
     token: null,
-    user: null,
+    user: savedUser,
     error: null,
   };
 
@@ -73,8 +88,7 @@ import {
         state.isAuthenticated = action.payload;
       },
 
-      setUser: (state, action: PayloadAction<User>) => {
-        state.user = action.payload;
+      setUser: (state, ) => {
         state.isAuthenticated = true;
       },
       authSuccess: (state) => {

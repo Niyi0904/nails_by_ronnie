@@ -29,11 +29,11 @@ export default function Header() {
     const {isAuthenticated, user} = useSelector((state: AppState) => state.auth);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const getInitials = (fullName: string) => {
-      const names = fullName.split(" ");
-      const firstInitial = names[0]?.[0] || "";
+      const getInitials = (fullName: string) => {
+      const names = fullName.trim().split(" ");
+      const firstInitial = names[0]?.[0] ?? "";
       const lastInitial = names.length > 1 ? names[names.length - 1][0] : "";
-      return `${firstInitial}${lastInitial}`.toUpperCase();
+      return (firstInitial + lastInitial).toUpperCase();
     };
 
     const handleModal = () => {
@@ -42,10 +42,19 @@ export default function Header() {
 
     const handleThemeToggle = () => {
         if (theme === 'light') {
+                console.log(user?.Userid);
+
             dispatch(changeTheme('dark'));
+            
         } else if (theme === 'dark') {
             dispatch(changeTheme('light'));
         }
+    }
+
+    const handleLogout = () => {
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
+      dispatch(logout());
     }
 
   return (
@@ -90,30 +99,45 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className='space-y-3 border-b-2 border-gray-700'>
-                  <DropdownMenuItem onClick={() => router.push('/')} className='flex justify-between'>Home  <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
-
-                  <DropdownMenuItem className='flex justify-between'>Profile    <FaAngleDown className="h-4 w-4" />
+                  <DropdownMenuItem asChild>
+                    <Link href='/' className='flex justify-between'>
+                        Home  <FaAngleRight className="h-4 w-4" />
+                    </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Bookings <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Profile    <FaAngleDown className="h-4 w-4" />
+                  </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem asChild>  
+                    <Link href="/my-bookings" className="flex justify-between">
+                          Bookings <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem onClick={() => router.push('/shop')} className='flex justify-between'>Shop <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href='/shop' className='flex justify-between'>
+                    Shop <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
                 </div>
 
                 <div className='flex flex-col mt-10'>
-                <DropdownMenuItem className='flex justify-between'><span className='flex gap-2 items-center'><IoSettingsOutline /> Settings 
+                <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'><span className='flex gap-2 items-center'><IoSettingsOutline /> Settings 
                 </span> <FaAngleDown className="h-4 w-4" />
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className='flex justify-between'><span className='flex gap-2'><LuPhone /> Contact Us </span> <FaAngleDown className="h-4 w-4" />
+                <DropdownMenuItem className='flex justify-between'>
+                  <Link href='/contact' className='flex justify-between'>
+                    <span className='flex gap-2'><LuPhone /> Contact Us </span> <FaAngleDown className="h-4 w-4" />
+                  </Link>
                 </DropdownMenuItem>
                 
                 <DropdownMenuItem className='flex justify-between'>About Us <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
@@ -136,13 +160,13 @@ export default function Header() {
           </div>
         ) : (
           <div className='space-x-6 flex items-center text-center align-middle'>
-              <a href="/" className="hover:underline">Home</a>
-              <a href="#" className="hover:underline">Book</a>
-              <button onClick={() => router.push('/shop')} className="hover:underline cursor-pointer">Shop</button>
-              <a href="#" className="hover:underline">Chat</a>
-              <span  className="hover:bg-roseAccent hover:underline px-3 py-1 rounded transition">
-                    {isAuthenticated ? <button onClick={() => dispatch(logout())}>Logout</button> : <button onClick={() => router.push('/login')} className="hover:underline cursor-pointer">Login</button>
-}
+              <Link href="/" className="hover:underline">Home</Link>
+              <Link href="/my-bookings" className="hover:underline">Book</Link>
+              <Link href='/shop' className="hover:underline cursor-pointer">Shop</Link>
+              <span>
+                <button onClick={() => router.push('/login')} className="hover:underline cursor-pointer">
+                  Login
+                </button>
               </span>
 
               <span className="text-3xl font-bold text-blue-950 dark:text-white">
@@ -174,7 +198,7 @@ export default function Header() {
                   <DropdownMenuItem className='flex justify-between'>Profile <FaAngleDown className="h-4 w-4" />
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between'>Bookings <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/my-bookings')} className='flex justify-between'>Bookings <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
                   <DropdownMenuItem className='flex justify-between'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
@@ -200,7 +224,7 @@ export default function Header() {
                 </div>
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
-                {isAuthenticated ? <button onClick={() => dispatch(logout())}>Logout</button> : <button onClick={() => router.push('/login')}>Login</button>} <FaAngleRight className="h-4 w-4" />
+                {isAuthenticated ? <button onClick={handleLogout}>Logout</button> : <button onClick={() => router.push('/login')}>Login</button>} <FaAngleRight className="h-4 w-4" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

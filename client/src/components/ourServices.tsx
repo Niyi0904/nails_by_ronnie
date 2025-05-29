@@ -41,7 +41,7 @@ export default function OurServices () {
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
                 className="relative w-full flex space-y-10 flex-col lg:flex-row justify-center mt-10 gap-5"
             >
                 {Services.map(service => (

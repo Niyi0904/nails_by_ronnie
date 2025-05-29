@@ -88,9 +88,9 @@ export default function Signup() {
     try {
       const response = await api.post('/auth/signup', body);
       console.log(response.data.user);
-      localStorage.removeItem('user');
       dispatch(setUser(response.data.user));
       console.log(user);
+      sessionStorage.setItem("user", JSON.stringify(response.data.user));
       setSubmitStatus({
         success: true,
         err: null,

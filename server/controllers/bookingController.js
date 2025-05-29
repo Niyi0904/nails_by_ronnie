@@ -1,5 +1,5 @@
 const { where } = require('sequelize');
-const { Booking } = require('../models');
+const { Booking, User } = require('../models');
 
 const myBookings = async (req, res) => {
     const user_id = req.params.userId;
@@ -50,35 +50,28 @@ const bookingsById = async (req, res) => {
 }
 
 const addBookings = async (req, res) => {
-    const {booking_location, booking_time, booking_date, category, service_type, userId} = req.body;
+    const {booking_location, booking_time, booking_date, sub_category, service_type, email} = req.body;
 
-    if (!booking_date || !booking_location || !booking_time || !category || !service_type || !userId) {
+    if (!booking_date || !booking_location || !booking_time || !sub_category || !service_type || !email) {
         res.status(400).json({ error: 'All fields are required.' });
     };
 
     try {
+        const user = await  User.findOne({where: {email}});
+
         const newBooking = await Booking.create({
             booking_date,
             booking_location,
             booking_time,
-            category,
+            sub_category,
             service_type,
-            userId
+            userId: user.Userid
         });
 
         return res.status(201).json({
             success: true,
             message: 'Booking created Successfully',
-            booking: {
-                booking_id: newBooking.id,
-                booking_status: newBooking.booking_status,
-                booking_date: newBooking.booking_date,
-                booking_location: newBooking.booking_location,
-                booking_time:  newBooking.booking_time,
-                category: newBooking.category,
-                service_type: newBooking.service_type,
-                userId: newBooking.userId
-            }
+            newBooking
         })
     } catch (err) {
         console.error(err);
