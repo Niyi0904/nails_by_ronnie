@@ -118,6 +118,12 @@ export default function Header() {
 
                   <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
+                  <DropdownMenuItem asChild>
+                    <Link href='/cart' className='flex justify-between'>
+                      Carts <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
                   <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
@@ -203,6 +209,12 @@ export default function Header() {
                   <DropdownMenuItem className='flex justify-between'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
                   <DropdownMenuItem className='flex justify-between'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href='/cart' className='flex justify-between'>
+                      Carts <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
 
                   <DropdownMenuItem className='flex justify-between'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 

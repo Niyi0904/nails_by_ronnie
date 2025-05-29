@@ -45,17 +45,12 @@ export default function Contact() {
         password: passwordRef.current?.value,
     };
     
-    const isChecked = checkboxRef.current?.checked;
-
     try {
       const response = await api.post('/auth/login', body);
       dispatch(setUser());
 
-      if(isChecked) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
-
         sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('cart', JSON.stringify(response.data.user.cart_items))
 
 
       setTimeout(() => {

@@ -89,8 +89,14 @@ export default function ShopPage() {
   }
 
   const addToCart = async (product: Product) => {
-    setCart([...cart, product]);
+    setCart((prev) => {
+      const updatedCart = [...prev, product];
+      localStorage.setItem('cart', JSON.stringify(updatedCart)); // save to localStorage
+      return updatedCart;
+    });
+    
     toast.success(`${product.name} added to cart!`);
+
 
     try {
       const body = {

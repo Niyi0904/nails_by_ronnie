@@ -7,12 +7,12 @@ import {
   
   const getStoredUser = () => {
   if (typeof window === 'undefined') return null;
+  const sessionUser = sessionStorage.getItem('user');
+  if (sessionUser) return JSON.parse(sessionUser);
 
   const localUser = localStorage.getItem('user');
   if (localUser) return JSON.parse(localUser);
 
-  const sessionUser = sessionStorage.getItem('user');
-  if (sessionUser) return JSON.parse(sessionUser);
 
   return null;
 };
