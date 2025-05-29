@@ -7,6 +7,8 @@ const bookingRoutes = require('./routes/booking');
 const cookieParser = require('cookie-parser');
 const usersRoutes = require('./routes/userRoute');
 const cartRoutes = require('./routes/cart');
+require('dotenv').config();
+
 
 const port = process.env.PORT || 3030;
 
@@ -25,7 +27,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/cart', cartRoutes);
 
 db.sequelize.sync().then(() => {
-    app.listen(port, () => {
+    app.listen(port, '0.0.0.0', () => {
         console.log(`server is running on port ${port}`); 
     });
 })
