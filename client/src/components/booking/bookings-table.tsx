@@ -1,10 +1,7 @@
 "use client";
 import { useState } from "react";
-import BookingDetailsSidebar from "./booking-details-sidebar";
 import { FaBackward, FaForward } from "react-icons/fa";
-import { Booking, BookingStatus } from "@/types/booking";
-import ConfirmCancelModal from "./confirm-cancel-modal";
-import axios from "axios";
+import { Booking} from "@/types/booking";
 
 // interface BookingsTableProps {
 //   activeTab: BookingStatus;

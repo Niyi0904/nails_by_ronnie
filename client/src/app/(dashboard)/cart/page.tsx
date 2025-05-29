@@ -11,18 +11,14 @@ type Product = {
   description: string;
   price: number;
   image: string;
-  quantity: number;
+  quantity: number; 
   totalPrice: number
 };
 
-type CartPageProps = {
-  initialCart?: Product[];
-};
-
-export default function CartPage({ initialCart = [] }: CartPageProps) {
+export default function CartPage() {
   // For demo, we'll keep cart in state. 
   // In a real app, you'd get cart from context, redux, or localStorage.
-  const [cart, setCart] = useState<Product[]>(initialCart);
+  const [cart, setCart] = useState<Product[]>([]);
 
   // Example: Load cart from localStorage on mount (optional)
   useEffect(() => {
