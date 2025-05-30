@@ -7,7 +7,6 @@ const bookingRoutes = require('./routes/booking');
 const cookieParser = require('cookie-parser');
 const usersRoutes = require('./routes/userRoute');
 const cartRoutes = require('./routes/cart');
-require('dotenv').config();
 
 
 const port = process.env.PORT || 8080;
