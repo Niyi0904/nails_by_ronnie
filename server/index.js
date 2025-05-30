@@ -12,8 +12,8 @@ const cartRoutes = require('./routes/cart');
 const port = process.env.PORT || 8080;
 
 app.use(cors({
-  origin: true, // your frontend
-  credentials: true,              // ✅ must match frontend
+  origin: ['https://nails-by-ronnie.vercel.app'],
+  credentials: true,           
 }));
 app.use(express.json());
 app.use(cookieParser());
