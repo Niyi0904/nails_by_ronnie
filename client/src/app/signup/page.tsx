@@ -318,7 +318,7 @@ export default function Signup() {
                 className={`w-full ${
                   isSubmitting
                     ? 'bg-[#D77A8B] cursor-not-allowed'
-                    : 'bg-[#E11D48] hover:bg-[#D77A8B]'
+                    : 'primary'
                 } text-white font-medium py-3 px-6 rounded-lg transition-colors`}
               >
                 {isSubmitting ? <BiLoaderAlt  className="mx-auto text-2xl h-4 w-4 animate-spin"/> : 'Sign Up'}

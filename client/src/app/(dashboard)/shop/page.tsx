@@ -147,7 +147,7 @@ export default function ShopPage() {
             {category.map((cat, index) => (
                 <div key={index} className='text-center cursor-pointer' onClick={() => changeCategory(cat.name)}>
                     <div className="bg-[#FFF0F5] dark:bg-[#2a2a2a] relative flex flex-col justify-center w-full h-32 rounded-xl overflow-hidden">
-                        <h3 className="text-xl font-semibold text-[#E11D48] text-center dark:text-[#F9D8DA] mb-1">
+                        <h3 className="text-xl font-semibold text-center mb-1">
                         {cat.name}
                         </h3>
                     </div>
@@ -176,7 +176,7 @@ export default function ShopPage() {
                 className="object-cover"
               />
             </div>
-            <h3 className="text-xl font-semibold text-[#E11D48] dark:text-[#F9D8DA] mb-1">
+            <h3 className="text-xl font-semibold  mb-1">
               {product.name}
             </h3>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{product.description}</p>
@@ -184,7 +184,7 @@ export default function ShopPage() {
             <div className='flex justify-between gap-10'>
                 <button
                 onClick={() => addToCart(product)}
-                className="bg-[#E11D48] text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition"
+                className="primary text-white py-2 px-4 rounded-lg transition"
                 >
                 Add to Cart
                 </button>
@@ -196,9 +196,9 @@ export default function ShopPage() {
                     aria-label="Toggle favorite"
                     >
                     {isFavorite ? (
-                        <FaHeart className="text-pink-600 w-5 h-5" />
+                        <FaHeart className=" w-5 h-5" />
                     ) : (
-                        <FaRegHeart className="text-pink-600 w-5 h-5" />
+                        <FaRegHeart className=" w-5 h-5" />
                     )}
                     </button>
 
@@ -208,9 +208,9 @@ export default function ShopPage() {
                     aria-label="Save product"
                     >
                     {isBookmarked ? (
-                        <FaBookmark className="text-pink-600 w-5 h-5" />
+                        <FaBookmark className="w-5 h-5" />
                     ) : (
-                        <FaRegBookmark className="text-pink-600 w-5 h-5" />
+                        <FaRegBookmark className=" w-5 h-5" />
                     )}
                     </button>
                 </div>

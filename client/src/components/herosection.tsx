@@ -15,7 +15,7 @@ export default function Herosection () {
                 Book appointments, shop beauty essentials, and chat directly with Lagos' best nails technician — all in one place.
                 </p>
                 <div className="flex justify-center gap-4">
-                <Link href='/my-bookings' className="bg-[#D77A8B] dark:bg-[#943F54] text-white px-5 py-2 rounded shadow hover:opacity-90">
+                <Link href='/my-bookings' className="primary text-white px-5 py-2 rounded shadow hover:opacity-90">
                     Book a Session
                 </Link>
                 <Link href='/shop' className="border border-[#D77A8B] text-[#D77A8B] dark:text-[#F2F2F2] px-5 py-2 rounded hover:bg-[#D77A8B] hover:text-white dark:hover:bg-[#943F54] transition">

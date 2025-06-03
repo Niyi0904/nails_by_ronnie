@@ -185,7 +185,7 @@ export default function Contact() {
                   className={`p-4 rounded-md ${
                     submitStatus.success
                       ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                      : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                      : 'bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200'
                   }`}
                 >
                   {submitStatus.message}
@@ -200,7 +200,7 @@ export default function Contact() {
                 className={`w-full ${
                   isSubmitting
                     ? 'bg-[#D77A8B] cursor-not-allowed'
-                    : 'bg-[#E11D48] hover:bg-[#D77A8B]'
+                    : 'primary'
                 } text-white font-medium py-3 px-6 rounded-lg transition-colors`}
               >
                 {isSubmitting ? <BiLoaderAlt className="mx-auto text-2xl h-4 w-4 animate-spin"/> : 'Login'}
@@ -232,7 +232,7 @@ export default function Contact() {
                         whileHover={{ scale: 1.03 }}
                         onClick={() => router.push('/signup')}
                         whileTap={{ scale: 0.98 }}
-                        className="w-[50%] bg-[#E11D48] hover:bg-[#D77A8B] dark:bg-[#943F54] text-white font-medium py-3 px-6 rounded-lg transition-colors"
+                        className="w-[50%] primary text-white font-medium py-3 px-6 rounded-lg transition-colors"
                         >
                         SignUp
                     </motion.button>

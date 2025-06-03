@@ -25,7 +25,7 @@ app.use('/api/booking', bookingRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/cart', cartRoutes);
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
     app.listen(port, '0.0.0.0', () => {
         console.log(`server is running on port ${port}`); 
     });

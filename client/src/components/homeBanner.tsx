@@ -84,7 +84,7 @@ export default function MixedMediaCarousel() {
           </div>
           )}
             <div className="absolute top-0 left-0 w-full h-full bg-transaparent bg-opacity-50 flex items-center justify-center z-10">
-              <div className="text-center rounded-xl flex flex-col justify-center min-w-[30%] h-[30%] bg-[#F9D8DA] text-[#E11D48] dark:bg-[#1E1B23] dark:text-[#B3B3C3] px-4">
+              <div className="text-center rounded-xl flex flex-col justify-center min-w-[30%] h-[30%] bg-[#F9D8DA] dark:bg-[#1E1B23]  px-4">
                 <h2 className="text-2xl md:text-4xl font-bold">{slide.title}</h2>
                 <p className="text-sm md:text-base mt-2">{slide.description}</p>
               </div>

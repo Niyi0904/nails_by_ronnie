@@ -4,7 +4,7 @@
 
 :root {
   --background: #F9D8DA;
-  --foreground: #1E1B23;
+  --foreground: #1e1b23;
 }
 
 @theme inline {
@@ -23,4 +23,11 @@ body {
 .dark{
   --background: #1E1B23;
   --foreground: #F2F2F2;
+}
+
+.primary{
+  background: #D77A8B;
+}
+.primary:hover{
+  background: #943F54;
 }

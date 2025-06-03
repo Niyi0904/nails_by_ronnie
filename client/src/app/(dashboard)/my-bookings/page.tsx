@@ -101,8 +101,6 @@ useEffect(() => {
   };
 
   const handleOpenModel = () => {
-    if (!isAuthenticated) return;
-
     dispatch(openModal());
   }
 
@@ -138,7 +136,7 @@ useEffect(() => {
               </div>
               <button
                 onClick={handleOpenModel}
-                className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#D77A8B] flex justify-center items-center-safe hover:text-white bg-[#943F54] dark:bg-[#943F54] dark:hover:bg-[#D77A8B]"
+                className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#943F54] flex justify-center items-center-safe hover:text-white primary"
               >
                 <FaPlus className="h-4 w-4 mr-2" />
                 Add New Booking
@@ -149,16 +147,8 @@ useEffect(() => {
             !isAuthenticated ? 
             <div className="flex flex-col items-center justify-center pt-12 w-full space-y-8">
               <div className="flex items-center flex-col space-y-5">
-                <h1 className="text-4xl">You are not logged in yet!</h1>
-                <p className="text-xl">Login in to book a service with us</p>
+                <h1 className="text-4xl">Your Booking is Empty!</h1>
               </div>
-
-              <Link
-                  href='/login'
-                  className="w-[20%] bg-[#E11D48] hover:bg-[#D77A8B] dark:bg-[#943F54] text-white font-medium py-3 px-6 rounded-lg transition-colors flex justify-center"
-                  >
-                  Login
-              </Link>
             </div> : 
 
             <div>

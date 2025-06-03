@@ -49,17 +49,6 @@ export default function footer() {
           </p>
         </div>
 
-        {/* Quick Links */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-white/90 dark:text-[#B3B3C3]">
-            <li><a href="/" className="hover:text-[#E11D48] transition-colors">Home</a></li>
-            <li><a href="/shop" className="hover:text-[#E11D48] transition-colors">Shop</a></li>
-            <li><a href="/services" className="hover:text-[#E11D48] transition-colors">Services</a></li>
-            <li><a href="/contact" className="hover:text-[#E11D48] transition-colors">Contact</a></li>
-          </ul>
-        </div>
-
         {/* Social Links with Motion */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Connect with us</h3>

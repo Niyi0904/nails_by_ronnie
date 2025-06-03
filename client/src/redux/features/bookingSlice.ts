@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import { act } from "react"
 
 
+
 export interface BookingState {
   step: number
   serviceType: {
@@ -21,6 +22,9 @@ export interface BookingState {
   notes: string
   location: string
   time: string
+  email: string
+  phone: string
+  name: string
   // notes: string
   isModalOpen: boolean
 }
@@ -35,6 +39,9 @@ const initialState: BookingState = {
   notes: '',
   location: '',
   time: "",
+  email: '',
+  phone:'',
+  name: '',
   // notes: "",
   isModalOpen: false,
 }
@@ -51,6 +58,23 @@ export const bookingSlice = createSlice({
     },
     setSubServiceType: (state, action: PayloadAction<BookingState["subServiceType"]>) => {
       state.subServiceType = action.payload
+    },
+    setEmail: (state, action:PayloadAction<string>) => {
+      state.email = action.payload
+    },
+    loadUserDetails: (
+      state,
+      action: PayloadAction<{ email: string; phone: string; name: string }>
+    ) => {
+      state.email = action.payload.email;
+      state.phone = action.payload.phone;
+      state.name = action.payload.name;
+    },
+    setPhone: (state, action: PayloadAction<string>) => {
+      state.phone = action.payload
+    },
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload
     },
     setDate: (state, action: PayloadAction<string>) => {
       state.date.selectedDate = action.payload
@@ -97,6 +121,10 @@ export const {
   setDate,
   setTime,
   setNotes,
+  setName,
+  setPhone,
+  setEmail,
+  loadUserDetails,
   openModal,
   closeModal,
   resetBooking,

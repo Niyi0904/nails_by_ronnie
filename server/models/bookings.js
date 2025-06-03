@@ -7,7 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: false
       },
       service_type: {
         type: DataTypes.STRING,
@@ -43,13 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'Bookings',
       underscored: true
     });
-
-    Booking.associate= (model) => {
-      Booking.belongsTo(model.User, {
-        foreignKey: 'userId',
-        as: 'bookings'
-      }) 
-    }
   
     return Booking;
   };

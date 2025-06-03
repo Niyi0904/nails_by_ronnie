@@ -37,7 +37,7 @@ const Services: services[] = [
 export default function OurServices () {
     return (
         <div className="relative flex flex-col items-center rounded-xl min-h-96 mt-20">
-            <h1 className="text-4xl font-extrabold">Our Services</h1>
+            <h1 className="text-3xl font-bold text-center">Our Services</h1>
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}

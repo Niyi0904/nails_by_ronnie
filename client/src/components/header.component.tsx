@@ -65,7 +65,7 @@ export default function Header() {
 
 
   return (
-    <nav className="fixed top-0 w-full z-40 py-1 px-1 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
+    <nav className="fixed top-0 w-full z-40 py-1 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
     <div>{
       theme === 'dark' ? <Image 
         src='/assets/logo-dark.png'

@@ -34,12 +34,15 @@ export default function BookingPreview() {
 
     try {
       const body = {
-        email: user?.email,
+        email: booking.email,
         service_type: booking.serviceType?.name,
         sub_category: booking.subServiceType?.name,
         booking_date: booking.date.selectedDate,
         booking_time: booking.time,
-        booking_location: booking.location
+        booking_location: booking.location,
+        additional_notes: booking.notes,
+        name: booking.name,
+        phone: booking.phone
       };
 
       const response = await api.post('/booking/addBooking', body);
