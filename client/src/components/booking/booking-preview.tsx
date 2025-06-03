@@ -25,12 +25,14 @@ export default function BookingPreview() {
     err: unknown;
     message: string;
   } | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const {user} = useAppSelector(state => state.auth);
 
   const router = useRouter();
   const handleSubmit = async () => {
     setIsLoading(true);
+    setIsSubmitted(true);
 
     try {
       const body = {
@@ -49,13 +51,10 @@ export default function BookingPreview() {
       console.log(response.data.user);
       console.log(response.data);
 
-      setIsSubmitted(true);
+      await setSuccess(true);
 
-      router.push('/my-bookings');
+      toast.success('Booking added successfully');
 
-      toast.success('Added Booking');
-
-      dispatch(resetBooking());
     } catch (err: any) {
       let errorMessage = 'Internal server error, please try again';
 
@@ -77,6 +76,7 @@ export default function BookingPreview() {
         err: err,
         message: errorMessage,
       });
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -90,28 +90,25 @@ export default function BookingPreview() {
     dispatch(closeModal());
   };
 
-  if (isSubmitted) {
+  if (success) {
     return (
       <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
         <div className="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-6">
           <FaCheck className="h-8 w-8 text-green-500" />
         </div>
-        <h2 className="text-2xl font-bold mb-1">Cleaning Request</h2>
+        <h2 className="text-2xl font-bold mb-1">Booking Request</h2>
         <h3 className="text-xl font-bold mb-4">Received Successfully.</h3>
 
         <p className="text-gray-600 mb-8 max-w-md">
           Thank you for submitting your details. Our team has received your
-          information and will review it shortly. An administrator will reach
-          out to you for any additional documentation required to complete the
-          process. We appreciate your cooperation and look forward to assisting
-          you further.
+          Booking details and will review it. We will get back to you shortly.
         </p>
 
         <button
           onClick={handleGoToBookings}
-          className="w-full max-w-md bg-blue-500 hover:bg-blue-600"
+          className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg primary flex justify-center disabled:cursor-not-allowed items-center-safe hover:text-white"
         >
-          Go to Bookings
+          Ok
         </button>
       </div>
     );

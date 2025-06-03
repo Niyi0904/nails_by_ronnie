@@ -52,7 +52,7 @@ const bookingsById = async (req, res) => {
 const addBookings = async (req, res) => {
     const {booking_location, booking_time, name, phone, booking_date, sub_category, service_type, email, additional_notes} = req.body;
 
-    if (!booking_date || !booking_location || !name || !phone || !booking_time || !sub_category || !service_type || !email) {
+    if (!booking_date || !booking_location || !name || !phone || !booking_time || !sub_category || !service_type) {
         res.status(400).json({ error: 'All fields are required.' });
     };
 

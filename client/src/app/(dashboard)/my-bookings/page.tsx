@@ -147,8 +147,15 @@ useEffect(() => {
             !isAuthenticated ? 
             <div className="flex flex-col items-center justify-center pt-12 w-full space-y-8">
               <div className="flex items-center flex-col space-y-5">
-                <h1 className="text-4xl">Your Booking is Empty!</h1>
+                <p className="text-xl">Login to keep track of your appointment with us!</p>
               </div>
+
+              <Link
+                  href='/login'
+                  className="w-[20%] primary text-white font-medium py-3 px-6 rounded-lg transition-colors flex justify-center"
+                  >
+                  Login
+              </Link>
             </div> : 
 
             <div>
