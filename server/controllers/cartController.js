@@ -45,4 +45,19 @@ const myCart = async (req, res) => {
     }
 }
 
-module.exports= {addToCart, myCart}
+const deleteCart = async (req, res) => {
+    const id = req.params.id
+
+    try {
+        await CartItem.destroy({ where: { id } });
+
+        return res.status(201).json({
+            message:'Deleted successfully'
+        })
+    } catch (error) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+module.exports= {addToCart, myCart, deleteCart}

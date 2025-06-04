@@ -73,8 +73,8 @@ useEffect(() => {
 
   // Save cart to localStorage on change (optional)
 
-  const removeFromCart = (id: String) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = async (id: String) => {
+    await api.delete(`/cart/deleteCart/${id}`);
     toast.success('Item removed from cart!');
   };
 
