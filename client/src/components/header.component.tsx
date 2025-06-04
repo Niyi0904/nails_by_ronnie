@@ -197,7 +197,7 @@ export default function Header() {
       }
       
     </div>
-    <div className="lg:hidden flex relative text-4xl font-bold text-blue-950 dark:text-white items-center text-center align-middle mt-1 space-x-6">
+    <div className="lg:hidden flex relative text-4xl font-bold text-blue-950 dark:text-white items-center text-center align-middle mt-1 space-x-3">
         <button onClick={handleThemeToggle}>
             {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
         </button>
@@ -211,7 +211,7 @@ export default function Header() {
           <div className='flex flex-col space-y-4'>
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
-                <button onClick={handleModal} className="text-3xl">
+                <button onClick={handleModal} className="text-3xl pr-2">
                   {isMenuOpen ? <HiX /> : <HiMenu />}
                 </button>
               </DropdownMenuTrigger>
