@@ -106,7 +106,7 @@ const login = async (req, res) => {
     const tokenData = {
       full_name: user.full_name,
       email: user.email,
-      id: user.Userid,
+      Userid: user.Userid,
       phone_number: user.phone_number,
       address: user.address,
       picture: user.picture,
@@ -114,7 +114,7 @@ const login = async (req, res) => {
     }
 
     console.log('TOKENDATA:', tokenData);
-    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1m' });
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'none',
