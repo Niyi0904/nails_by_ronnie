@@ -106,14 +106,14 @@ const login = async (req, res) => {
     const tokenData = {
       full_name: user.full_name,
       email: user.email,
-      id: user.userid,
+      id: "user.userid",
       phone_number: user.phone_number,
       address: user.address,
       picture: user.picture,
       role: user.role,
     }
 
-    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1m' });
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'none',
