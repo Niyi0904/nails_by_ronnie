@@ -222,7 +222,7 @@ export default function Header() {
                   <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Profile <FaAngleDown className="h-4 w-4" />
                   </DropdownMenuItem> 
 
-                  <DropdownMenuItem className={`hidden ${isAuthenticated ? 'flex w-full' : ''}`}>
+                  <DropdownMenuItem asChild>
                     <Link href="/my-bookings" className="relative w-full justify-between flex">
                           Bookings <FaAngleRight className="h-4 w-4" />
                     </Link>
@@ -232,7 +232,7 @@ export default function Header() {
 
                   <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className={`hidden ${isAuthenticated ? 'flex w-full' : ''}`}>
+                  <DropdownMenuItem asChild>
                     <Link href='/cart' className='relative w-full flex justify-between'>
                       Carts <FaAngleRight className="h-4 w-4" />
                     </Link>
