@@ -18,10 +18,10 @@ export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const {user, isAuthenticated} = useSelector((state: AppState) => state.auth);
 
-  const searchQuery = useRef<HTMLInputElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<BookingStatus>("confirmed");
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -130,8 +130,9 @@ useEffect(() => {
                   type="text"
                   autoFocus
                   placeholder="Search"
-                  value={searchQuery.current?.value}
+                  value={searchQuery}
                   className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg md:w-[300px]"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                 />
               </div>
               <button

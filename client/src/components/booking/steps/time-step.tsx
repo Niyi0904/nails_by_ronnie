@@ -94,7 +94,7 @@ export default function TimeStep() {
                 <select
                   value={slot.startTime}
                   onChange={(e) => updateTimeSlot(slot.id, "startTime", e.target.value)}
-                  className="w-full p-2 pr-10 border border-pink-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full p-2 pr-10 border dark:bg-gray-800  border-pink-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-pink-500"
                 >
                   {timeOptions.map((time) => (
                     <option key={`start-${time}`} value={time}>

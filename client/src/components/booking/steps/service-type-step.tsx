@@ -50,7 +50,7 @@ export default function ServiceTypeStep() {
             key={service.id}
             onClick={() => dispatch(setServiceType(service))}
             className={`relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all text-center
-              ${serviceType?.id === service.id ? "border-pink-500" : "border-transparent hover:border-gray-200"}`}
+              ${serviceType?.id === service.id ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
           >
             <Image
               src={service.image}

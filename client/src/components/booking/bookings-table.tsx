@@ -32,9 +32,9 @@ export default function BookingsTable({
 
   const filteredBookings = bookings.filter(
     (booking: any) =>
-      booking.booking_status?.toLowerCase() === activeTab &&
-      (booking.sub_category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-       booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase()))
+      booking.booking_status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.sub_category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+       booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelectAll = (checked: boolean) => {
@@ -105,7 +105,7 @@ export default function BookingsTable({
           </thead>
           <tbody>
             {bookings.length > 0 ? (
-              bookings.map((booking: any, index: any) => (
+              filteredBookings.map((booking: any, index: any) => (
                 <tr key={booking.id} className={`${index % 2 === 0 ? "bg-pink-50 dark:bg-[#2A262F]" : "bg-pink-100 dark:bg-[#3b3642]"} hover:bg-pink-200`}>
                   <td className="p-3 sm:p-4 rounded-bl-md border-gray-400 dark:border-gray-700">
                       {booking.service_type || "N/A"}

@@ -58,7 +58,7 @@ export default function BookingModal() {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#FCE4EC] shadow-2xl rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" style={{ boxShadow: '0 35px 80px -15px rgba(0, 0, 0, 0.6), 0 50px 100px -20px rgba(0, 0, 0, 0.4)' }}>
+      <div className="bg-[#FCE4EC] dark:bg-[#1E1B23] shadow-2xl rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" style={{ boxShadow: '0 35px 80px -15px rgba(0, 0, 0, 0.6), 0 50px 100px -20px rgba(0, 0, 0, 0.4)' }}>
         {showHeader && (
           <>
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
@@ -67,7 +67,7 @@ export default function BookingModal() {
                 onClick={() => dispatch(closeModal())}
                 className="text-gray-400 hover:text-gray-600"
               >
-                <MdOutlineCancel className="text-black h-5 w-5"/>
+                <MdOutlineCancel className=" h-6 w-6"/>
               </button>
             </div>
             <div className="p-4 flex-1 overflow-y-auto">

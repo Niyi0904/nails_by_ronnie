@@ -67,7 +67,7 @@ export default function LocationStep() {
           value={name}
           onChange={handleName}
           placeholder="Input your name"
-          className="w-full h-14 mb-4 focus:ring-1 focus:ring-pink-400 border px-5 rounded-xl border-pink-400"
+          className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
         />
       </div>
 
@@ -79,7 +79,7 @@ export default function LocationStep() {
           value={phone}
           onChange={handlePhone}
           placeholder="Input your phone number"
-          className="w-full h-14 mb-4 focus:ring-1 focus:ring-pink-400 border px-5 rounded-xl border-pink-400"
+          className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
         />
       </div>
 
@@ -91,7 +91,7 @@ export default function LocationStep() {
           value={email}
           onChange={handleEmail}
           placeholder="Input your email number"
-          className="w-full h-14 mb-4 focus:ring-1 focus:ring-pink-400 border px-5 rounded-xl border-pink-400"
+          className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
         />
       </div>
 
@@ -103,7 +103,7 @@ export default function LocationStep() {
           value={location}
           onChange={handleLocation}
           placeholder="Input your Location"
-          className="w-full h-14 mb-4 focus:ring-1 focus:ring-pink-400 border px-5 rounded-xl border-pink-400"
+          className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
         />
       </div>
               

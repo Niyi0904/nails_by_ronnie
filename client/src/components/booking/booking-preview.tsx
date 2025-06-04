@@ -125,58 +125,77 @@ export default function BookingPreview() {
       </div>
 
       <div className="space-y-6">
-        {/* Service */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Service</p>
-          <div className="flex items-center">
-            <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
-              <Image
-                src={booking.serviceType?.image || "/placeholder.svg"}
-                alt={booking.serviceType?.name || "Service"}
-                width={64}
-                height={64}
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div>
-              <p className="font-medium">{booking.serviceType?.name}</p>
-              <p className="text-sm">&#8358;{booking.serviceType?.price.toLocaleString()}+</p>
-            </div>
+        <div className="grid grid-cols-3">
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Name</p>
+            <p className="font-medium">{booking.name}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Phone</p>
+            <p className="font-medium">{booking.phone}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Email</p>
+            <p className="font-medium">{booking.email}</p>
           </div>
         </div>
 
-        {/* Property */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Sub-Service</p>
-          <div className="flex items-center">
-            <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
-              <Image
-                src={booking.subServiceType?.image || "/placeholder.svg"} // Display the selected property's image
-                alt={booking.subServiceType?.name || "Sub-service"}
-                width={64}
-                height={64}
-                className="h-full w-full object-cover"
-              />
+        <div className="grid grid-cols-2">
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Service</p>
+            <div className="flex items-center">
+              <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
+                <Image
+                  src={booking.serviceType?.image || "/placeholder.svg"}
+                  alt={booking.serviceType?.name || "Service"}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="font-medium">{booking.serviceType?.name}</p>
+                <p className="text-sm">&#8358;{booking.serviceType?.price.toLocaleString()}+</p>
+              </div>
             </div>
-            <p className="font-medium">{booking.subServiceType?.name}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Sub-Service</p>
+            <div className="flex items-center">
+              <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
+                <Image
+                  src={booking.subServiceType?.image || "/placeholder.svg"} // Display the selected property's image
+                  alt={booking.subServiceType?.name || "Sub-service"}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <p className="font-medium">{booking.subServiceType?.name}</p>
+            </div>
           </div>
         </div>
 
         {/* Date */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Date</p>
-          <p className="font-medium">{booking.date.selectedDate}</p>
-        </div>
+        <div className="grid grid-cols-3 gap-1">
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Date</p>
+            <p className="font-medium">{booking.date.selectedDate}</p>
+          </div>
 
-        {/* Time */}
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Time</p>
-          <p className="font-medium">{booking.time}</p>
-        </div>
+          {/* Time */}
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Time</p>
+            <p className="font-medium">{booking.time}</p>
+          </div>
 
-        <div>
-          <p className="text-sm text-gray-500 mb-2">Location</p>
-          <p className="font-medium">{booking.location}</p>
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Location</p>
+            <p className="font-medium">{booking.location}</p>
+          </div>
         </div>
       </div>
 

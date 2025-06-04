@@ -8,7 +8,7 @@ const myBookings = async (req, res) => {
         const allBookings = await Booking.findAll({
             attributes: { exclude: ['user_id'] },
             where: { email },
-            order: [['updated_at', 'DESC']]
+            order: [['created_at', 'DESC']]
         })
 
         return res.status(201).json({

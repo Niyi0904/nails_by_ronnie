@@ -165,12 +165,12 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <span className="text-3xl font-bold pl-3 text-blue-950 dark:text-white">
+            <span className="text-3xl font-bold pl-3 text-blue-950 space-x-4 dark:text-white">
               <button onClick={handleThemeToggle}>
                   {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
               </button>
               {user?.role === "admin" && (
-              <Link href="/admin/booking" className="text-sm pl-3 text-blue-950 hover:underline">
+              <Link href="/admin/booking" className="text-sm pr-4 text-blue-950 dark:text-white hover:underline">
                 Admin
               </Link>
               )}
@@ -197,7 +197,7 @@ export default function Header() {
       }
       
     </div>
-    <div className="lg:hidden flex relative text-4xl font-bold text-blue-950 dark:text-white items-center text-center align-middle mt-1 space-x-4">
+    <div className="lg:hidden flex relative text-4xl font-bold text-blue-950 dark:text-white items-center text-center align-middle mt-1 space-x-6">
         <button onClick={handleThemeToggle}>
             {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
         </button>
