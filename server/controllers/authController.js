@@ -50,7 +50,7 @@ const signup = async (req, res) => {
       html: `
         <h3>Email Verification</h3>
         <p>Click the link below to verify your email:</p>
-        <a href="http://localhost:3000/verify-email?token=${verification_token}">Verify Email</a>
+        <a href="https://nails-by-ronnie.vercel.app/verify-email?token=${verification_token}">Verify Email</a>
       `
     };
 

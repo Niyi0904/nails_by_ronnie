@@ -72,7 +72,7 @@ export default function BookingsPage() {
   };
 
 useEffect(() => {
-  if (!user?.Userid) {
+  if (!user) {
     console.log('no user found');
     return
   };
