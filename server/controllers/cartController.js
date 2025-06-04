@@ -75,17 +75,29 @@ const increaseCart = async (req, res) => {
 }
 
 const decreaseCart = async (req, res) => {
-    const id = req.params.id;
+  const id = req.params.id;
 
-    try {
-        await CartItem.decrement('quantity', {where: {id}});
-        return res.status(201).json({
-            message:'Increased successfully'
-        })
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error.' });
+  try {
+    // Fetch current item
+    const cartItem = await CartItem.findByPk(id);
+
+    if (!cartItem) {
+      return res.status(404).json({ error: 'Item not found' });
     }
-}
+
+    // Prevent quantity from going below 1
+    if (cartItem.quantity <= 1) {
+      return res.status(400).json({ error: 'Quantity cannot be less than 1' });
+    }
+
+    // Decrement quantity
+    await CartItem.decrement('quantity', { where: { id } });
+
+    return res.status(200).json({ message: 'Decreased successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error.' });
+  }
+};
 
 module.exports= {addToCart, myCart, deleteCart, increaseCart, decreaseCart}
