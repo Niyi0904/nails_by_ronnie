@@ -17,6 +17,7 @@ const BookingsTable = dynamic(() => import("@/components/booking/bookings-table"
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const {user, isAuthenticated} = useSelector((state: AppState) => state.auth);
+  const {isModalOpen} = useSelector((state: AppState) => state.booking);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<BookingStatus>("confirmed");
@@ -81,7 +82,7 @@ useEffect(() => {
 
   fetchBookings(user.email);
   
-  }, [user]);
+  }, [user, dispatch, isModalOpen]);
 
   const handlePageChange = (newPage: number) => {
     if (
