@@ -113,6 +113,7 @@ const login = async (req, res) => {
       role: user.role,
     }
 
+    console.log('TOKENDATA:', token);
     const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1m' });
     res.cookie('token', token, {
       httpOnly: true,
