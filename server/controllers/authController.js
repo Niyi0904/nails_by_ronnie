@@ -104,9 +104,9 @@ const login = async (req, res) => {
     }
 
     const tokenData = {
-      id: user.userid,
       full_name: user.full_name,
       email: user.email,
+      id: user.userid,
       phone_number: user.phone_number,
       address: user.address,
       picture: user.picture,
