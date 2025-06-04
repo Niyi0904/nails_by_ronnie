@@ -112,7 +112,6 @@ const login = async (req, res) => {
       picture: user.picture,
       shipping_address: user.shipping_address,
       role: user.role,
-      cart: user.cart_items
     }
 
     const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });

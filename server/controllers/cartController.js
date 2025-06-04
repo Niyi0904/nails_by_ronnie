@@ -26,4 +26,23 @@ const addToCart = async (req, res) => {
     }
 }
 
-module.exports= {addToCart}
+const myCart = async (req, res) => {
+    const user_id = req.params.user_id;
+
+    try {
+        const allcarts = await CartItem.findAll({
+            attributes: { exclude: ['user_id'] },
+            where: { user_id },
+            order: [['created_at', 'DESC']]
+        })
+
+        return res.status(201).json({
+            message: 'completed', allcarts
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+module.exports= {addToCart, myCart}

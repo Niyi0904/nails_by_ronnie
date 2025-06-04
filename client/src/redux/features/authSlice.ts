@@ -28,6 +28,7 @@ const savedUser = getStoredUser();
     address: string;
     emailVerified: boolean;
     role: 'user' | "admin"
+    cart: any
   }
   
   interface AuthState {
