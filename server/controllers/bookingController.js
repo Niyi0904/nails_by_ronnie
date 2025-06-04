@@ -7,7 +7,8 @@ const myBookings = async (req, res) => {
     try {
         const allBookings = await Booking.findAll({
             attributes: { exclude: ['user_id'] },
-            where: { user_id }
+            where: { user_id },
+            order: [['updated_at', 'DESC']]
         })
 
         return res.status(201).json({
@@ -21,7 +22,9 @@ const myBookings = async (req, res) => {
 
 const allBookings = async (req, res) => {
     try {
-        const allBookings = await Booking.findAll();
+        const allBookings = await Booking.findAll({
+            order: [['updated_at', 'DESC']] // Orders by updated_at descending
+        });
 
         return res.status(201).json({
             message: 'completed', allBookings
@@ -66,7 +69,7 @@ const updateBooking = async (req, res) => {
 
     await booking.update({ booking_status: status });
 
-    res.json({ success: true, message: "Status updated", booking });
+    res.json({ success: true, message: "Status updated"});
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update status" });
