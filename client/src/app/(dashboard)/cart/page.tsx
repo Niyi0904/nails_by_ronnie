@@ -119,7 +119,7 @@ const decreaseCartItem = async (id:string, quantity: number) => {
               key={item.id}
               className="grid grid-cols-3 gap-3 items-center bg-[#FFF0F5] dark:bg-[#2a2a2a] rounded-xl p-4 shadow"
             >
-              <div className="flex flex-col md:flex-row justify-start items-center gap-4 w-full md:w-auto">
+              <div className="flex flex-col md:flex-row justify-start items-center gap-3 w-full md:w-auto">
                 <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                   <Image
                     src={item.image}
@@ -128,14 +128,14 @@ const decreaseCartItem = async (id:string, quantity: number) => {
                     className="object-cover"
                   />
                 </div>
-                <p>{item.name}</p>
+                <p className='text-lg font-semibold text-center'>{item.name}</p>
               </div>
 
               <div className='flex justify-center'>
                   <div className="flex items-center justify-center">
                     <button
                       onClick={() => decreaseCartItem(item.id, item.quantity)}
-                      className="w-8 h-8 rounded-full text-lg flex items-center justify-center"
+                      className="w-8 h-8 rounded-full text-xl font-bold flex items-center justify-center"
                     >
                       <IoChevronBack/>
                     </button>
@@ -146,7 +146,7 @@ const decreaseCartItem = async (id:string, quantity: number) => {
                     />
                     <button
                       onClick={() => increaseCartItem(item.id)}
-                      className="w-8 h-8 rounded-full text-lg flex items-center justify-center"
+                      className="w-8 h-8 rounded-full text-xl font-bold flex items-center justify-center"
                     >
                       <IoChevronForward/>
                     </button>

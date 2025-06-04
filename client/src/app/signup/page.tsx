@@ -138,7 +138,7 @@ export default function Signup() {
 };
 
   return (
-    <div className="relative flex justify-center pb-20 pt-6 mx-auto w-[98%] md:w-[50%] bg-[#F9D8DA] text-[#1E1B23] dark:bg-[#1E1B23] dark:text-[#F2F2F2]">
+    <div className="relative flex justify-center pb-20 pt-6 mx-auto w-[99%] md:w-[50%] bg-[#F9D8DA] text-[#1E1B23] dark:bg-[#1E1B23] dark:text-[#F2F2F2]">
       <div className="container mx-auto px-4">
         {/* div Header */}
         <motion.div

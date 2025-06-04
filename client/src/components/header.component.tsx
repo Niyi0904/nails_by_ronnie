@@ -203,7 +203,7 @@ export default function Header() {
         </button>
 
         {user?.role === "admin" && (
-          <Link href="/admin/booking" className="text-lg pl-3 text-blue-950 hover:underline">
+          <Link href="/admin/booking" className="text-lg pl-3 text-blue-950 dark:text-white hover:underline">
             Admin
           </Link>
         )}
