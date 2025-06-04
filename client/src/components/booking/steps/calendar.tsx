@@ -213,7 +213,7 @@ export default function Calendar({
                   w-full aspect-square flex items-center justify-center text-sm rounded-full ${isPastDate ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-pink-300 hover:text-white cursor-pointer'} relative
                   ${isToday(day) ? "font-bold" : ""}
                   ${
-                    isSelected ? "bg-pink-500 text-white hover:bg-pink-600" : ""
+                    isSelected ? "primary text-white " : ""
                   }
                 `}
                 disabled={isPastDate}

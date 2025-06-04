@@ -79,7 +79,7 @@ useEffect(() => {
 
   console.log("USER FOUND", user);
 
-  fetchBookings(user.Userid);
+  fetchBookings(user.email);
   
   }, [user]);
 

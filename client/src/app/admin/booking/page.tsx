@@ -64,31 +64,31 @@ const updateStatus = async (bookingId: string, newStatus: string) => {
         <p>No bookings found.</p>
       ) : (
         <table className="w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3">Customer</th>
-              <th className="p-3">Service</th>
-              <th className="p-3">Sub-Service</th>
-              <th className="p-3">Location</th>
-              <th className="p-3">Phone</th>
-              <th className="p-3">Date</th>
-              <th className="p-3">Time</th>
-              <th className="p-3">Status</th>
-              <th className="p-3">Actions</th>
+          <thead className="rounded-xl overflow-hidden">
+            <tr className="bg-[#943F54] dark:bg-[#1F1F1F] rounded-tl-xl">
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left rounded-tl-md">Customer</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Service</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Sub-Service</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Location</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Phone</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Date</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Time</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">Status</th>
+              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left rounded-tr-md">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id} className="border-t">
-                <td className="p-3">{booking.name || "N/A"}</td>
-                <td className="p-3">{booking.service_type}</td>
-                <td className="p-3">{booking.sub_category}</td>
-                <td className="p-3">{booking.booking_location}</td>
-                <td className="p-3">{booking.phone}</td>
-                <td className="p-3">{booking.booking_date}</td>
-                <td className="p-3">{booking.booking_time}</td>
-                <td className="p-3 capitalize">{booking.booking_status}</td>
-                <td className="p-3">
+            {bookings.map((booking, index) => (
+              <tr key={booking.id} className={`${index % 2 === 0 ? "bg-pink-50 dark:bg-[#2A262F]" : "bg-pink-100 dark:bg-[#3b3642]"} hover:bg-pink-200`}>
+                <td className="p-3 sm:p-4 rounded-bl-md border-gray-400 dark:border-gray-700">{booking.name || "N/A"}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.service_type}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.sub_category}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_location}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.phone}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_date}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_time}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_status}</td>
+                <td className="p-3 sm:p-4 rounded-br-md border-gray-400 dark:border-gray-700">
                   <select
                     className="border p-1 rounded"
                     value={booking.booking_status}
