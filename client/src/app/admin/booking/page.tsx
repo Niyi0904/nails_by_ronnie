@@ -17,41 +17,42 @@ export default function AdminBookingsPage() {
   const router = useRouter();
   const {user, isAuthenticated} = useSelector((state: AppState) => state.auth);
 
-  useEffect(() => {
-    if (!user || user.role !== "admin") {
-      router.push("/"); // or redirect to homepage
-    }
-  }, [user]);
-
+  
   const fetchBookings = async () => {
     setLoading(true);
     try {
       const res = await api.get("/booking/allBookings");
-      setBookings(res.data.data || []);
+      setBookings(res.data.allBookings || []);
+      console.log(res.data.allBookings)
     } catch (err) {
       console.error(err);
       toast.error("Failed to fetch bookings.");
     } finally {
       setLoading(false);
     }
-  };
+};
 
-  const updateStatus = async (bookingId: string, newStatus: string) => {
+const updateStatus = async (bookingId: string, newStatus: string) => {
     try {
-      await api.patch(`booking/${bookingId}/status`, {
+      const patch = await api.patch(`booking/${bookingId}/status`, {
         status: newStatus,
       });
+      console.log(patch.data);
       toast.success("Booking status updated!");
       fetchBookings();
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to update booking.");
+        console.error(err);
+        toast.error("Failed to update booking.");
     }
-  };
+};
+    useEffect(() => {
+    if (!user || user.role !== "admin") {
+        router.push("/");
 
-  useEffect(() => {
+        return;
+    }
     fetchBookings();
-  }, []);
+    }, [user]);
 
   return (
     <div className="p-6">
@@ -69,6 +70,7 @@ export default function AdminBookingsPage() {
               <th className="p-3">Service</th>
               <th className="p-3">Sub-Service</th>
               <th className="p-3">Location</th>
+              <th className="p-3">Phone</th>
               <th className="p-3">Date</th>
               <th className="p-3">Time</th>
               <th className="p-3">Status</th>
@@ -82,6 +84,7 @@ export default function AdminBookingsPage() {
                 <td className="p-3">{booking.service_type}</td>
                 <td className="p-3">{booking.sub_category}</td>
                 <td className="p-3">{booking.booking_location}</td>
+                <td className="p-3">{booking.phone}</td>
                 <td className="p-3">{booking.booking_date}</td>
                 <td className="p-3">{booking.booking_time}</td>
                 <td className="p-3 capitalize">{booking.booking_status}</td>

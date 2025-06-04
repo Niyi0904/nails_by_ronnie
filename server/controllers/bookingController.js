@@ -53,7 +53,7 @@ const updateBooking = async (req, res) => {
     try {
     const { status } = req.body;
     const { id } = req.params;
-    await Booking.update({ status }, { where: { id } });
+    await Booking.update({ booking_status: status }, { where: { id } });
     res.json({ success: true, message: "Status updated" });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update status' });

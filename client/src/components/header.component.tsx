@@ -170,8 +170,8 @@ export default function Header() {
                   {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
               </button>
               {user?.role === "admin" && (
-              <Link href="/admin" className="text-sm text-blue-600 hover:underline">
-                Admin Dashboard
+              <Link href="/admin/booking" className="text-sm pl-3 text-blue-950 hover:underline">
+                Admin
               </Link>
               )}
             </span>
@@ -203,7 +203,7 @@ export default function Header() {
         </button>
 
         {user?.role === "admin" && (
-          <Link href="/admin/booking" className="text-sm text-blue-600 hover:underline">
+          <Link href="/admin/booking" className="text-lg pl-3 text-blue-950 hover:underline">
             Admin
           </Link>
         )}
