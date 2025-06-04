@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AppState } from '@/redux/store';
 import api from '@/utils/api';
+import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import { FaTrash } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
@@ -59,31 +60,47 @@ export default function CartPage() {
       }
     };
 
-useEffect(() => {
-  if (!user) {
-    console.log('no user found');
-    return
-  };
+    
+    useEffect(() => {
+      if (!user) {
+        console.log('no user found');
+        return
+      };
 
   console.log("USER FOUND", user);
 
   fetchCarts(user.Userid);
   
-  }, [user]);
+}, [user]);
 
-  // Save cart to localStorage on change (optional)
+const removeFromCart = async (id: String) => {
+  await api.delete(`/cart/deleteCart/${id}`);
+  toast.success('Item removed from cart!');
+  if (user) {
+    fetchCarts(user.Userid);
+  }
+};
 
-  const removeFromCart = async (id: String) => {
-    await api.delete(`/cart/deleteCart/${id}`);
-    toast.success('Item removed from cart!');
-  };
+const increaseCartItem = async (id:string) => {
+  await api.patch(`/cart/increase/${id}`);
+  if (user) {
+    fetchCarts(user.Userid);
+  }
+}
+
+const decreaseCartItem = async (id:string) => {
+  await api.patch(`/cart/decrease/${id}`);
+  if (user) {
+    fetchCarts(user.Userid);
+  }
+}
 
   const totalPrice = cart.reduce((sum, item) => {
     return sum + item.price;
   }, 0);
 
   return (
-    <section className="mt-20 mx-[5%] text-[#1c1c1c] dark:text-white max-w-5xl">
+    <section className="mt-20 mx-[3%] text-[#1c1c1c] dark:text-white max-w-5xl">
       <h1 className="text-4xl font-bold mb-8 text-center">Your Shopping Cart</h1>
 
       {cart.length === 0 ? (
@@ -95,10 +112,10 @@ useEffect(() => {
           {cart.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col md:flex-row items-center md:justify-between bg-[#FFF0F5] dark:bg-[#2a2a2a] rounded-xl p-4 shadow"
+              className="grid grid-cols-3 gap-3 items-center bg-[#FFF0F5] dark:bg-[#2a2a2a] rounded-xl p-4 shadow"
             >
-              <div className="flex items-center gap-6 w-full md:w-auto">
-                <div className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+              <div className="flex justify-start items-center gap-4 w-full md:w-auto">
+                <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -106,14 +123,37 @@ useEffect(() => {
                     className="object-cover"
                   />
                 </div>
+                <p>{item.name}</p>
               </div>
 
-              <div className="mt-4 md:mt-0 flex items-center gap-6">
-                <p className="text-xl font-bold">{item.price}</p>
+              <div className='flex justify-center pl-8 sm:pl-0'>
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={() => decreaseCartItem(item.id)}
+                      className="w-8 h-8 rounded-full text-lg flex items-center justify-center"
+                    >
+                      <IoChevronBack/>
+                    </button>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      className="w-6 text-center focus:border-none focus:outline-none rounded appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    />
+                    <button
+                      onClick={() => increaseCartItem(item.id)}
+                      className="w-8 h-8 rounded-full text-lg flex items-center justify-center"
+                    >
+                      <IoChevronForward/>
+                    </button>
+                  </div>
+                </div>
+
+              <div className="flex items-center gap-4 justify-end">
+                <p className="text-xl font-bold">&#8358;{item.price.toLocaleString()}</p>
                 <button
                   onClick={() => removeFromCart(item.id)}
                   aria-label={`Remove ${item.name} from cart`}
-                  className="text-red-600 hover:text-red-800 transition p-2 rounded-lg"
+                  className="text-[#D77A8B] transition p-2 rounded-lg"
                 >
                   <FaTrash className="w-6 h-6" />
                 </button>
@@ -122,12 +162,12 @@ useEffect(() => {
           ))}
 
           <div className="text-right text-3xl font-bold mt-8">
-            Total: <span className="text-[#E11D48] dark:text-[#F9D8DA]">&#8358;{totalPrice.toLocaleString()}</span>
+            Total: <span >&#8358;{totalPrice.toLocaleString()}</span>
           </div>
 
           {/* Optional: Checkout button */}
           <div className="text-right mt-6">
-            <button className="bg-[#E11D48] text-white py-3 px-6 rounded-lg text-lg hover:bg-pink-700 transition">
+            <button className="text-white py-3 px-6 rounded-lg text-lg primary transition">
               Proceed to Checkout
             </button>
           </div>

@@ -40,7 +40,7 @@ const myCart = async (req, res) => {
             message: 'completed', allcarts
         });
     } catch (err) {
-        console.error(err);
+        console.error(error);
         res.status(500).json({ error: 'Server error.' });
     }
 }
@@ -55,9 +55,37 @@ const deleteCart = async (req, res) => {
             message:'Deleted successfully'
         })
     } catch (error) {
-        console.error(err);
+        console.error(error);
         res.status(500).json({ error: 'Server error.' });
     }
 }
 
-module.exports= {addToCart, myCart, deleteCart}
+const increaseCart = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        await CartItem.increment('quantity', {where: {id}});
+        return res.status(201).json({
+            message:'Increased successfully'
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+const decreaseCart = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        await CartItem.decrement('quantity', {where: {id}});
+        return res.status(201).json({
+            message:'Increased successfully'
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error.' });
+    }
+}
+
+module.exports= {addToCart, myCart, deleteCart, increaseCart, decreaseCart}
