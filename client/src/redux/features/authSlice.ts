@@ -27,6 +27,7 @@ const savedUser = getStoredUser();
     phone_number: string;
     address: string;
     emailVerified: boolean;
+    role: 'user' | "admin"
   }
   
   interface AuthState {

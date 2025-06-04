@@ -58,9 +58,7 @@ export default function DateStep() {
         <button
           onClick={handleNext}
           disabled={!date.selectedDate}
-          className={`${
-            date.selectedDate ? "text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#D77A8B] flex justify-center items-center-safe hover:text-white bg-[#943F54] dark:bg-[#943F54] dark:hover:bg-[#D77A8B]" : "bg-gray-200"
-          }`}
+          className="text-white px-5 py-2 rounded-lg flex justify-center primary items-center-safe hover:text-white "
         >
           Next
         </button>

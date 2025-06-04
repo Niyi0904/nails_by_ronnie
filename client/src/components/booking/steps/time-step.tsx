@@ -118,7 +118,7 @@ export default function TimeStep() {
         <button
           onClick={handleNext}
           disabled={!isNextEnabled()}
-          className={`${isNextEnabled() ? "text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#D77A8B] flex justify-center items-center-safe hover:text-white bg-[#943F54] dark:bg-[#943F54] dark:hover:bg-[#D77A8B]" : "bg-gray-200"}`}
+          className={`${isNextEnabled() ? "text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg primary flex justify-center items-center-safe" : "bg-gray-200"}`}
         >
           Next
         </button>

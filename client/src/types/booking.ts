@@ -25,19 +25,17 @@ export interface Property {
   }
   
   export interface Booking {
-    _id: string;
-    propertyId: Property;
-    propertyManagerId: string;
-    cleanerId: Cleaner | null;
-    cleaningBusinessId: CleaningBusiness | null;
-    phoneNumber: string;
-    date: string;
-    startTime: string;
-    serviceType: string;
-    price: number;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
+    id: string
+    userId: string
+    name: string
+    phone: string
+    service_type: string
+    sub_category: string
+    booking_date: string
+    booking_time: string
+    booking_status: BookingStatus
+    booking_location: string
+    additional_notes: string
   }
   
   export type BookingStatus = "confirmed" | "pending" | "completed" | "cancelled";

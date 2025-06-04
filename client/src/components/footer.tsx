@@ -1,7 +1,9 @@
 'use client';
 
-import { FaInstagram, FaTwitter, FaFacebookF } from 'react-icons/fa';
+import { FaInstagram, FaTwitter, FaFacebookF} from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import { FaLocationDot } from "react-icons/fa6";
+import { LuPhone } from "react-icons/lu";
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowUp } from 'react-icons/fa';
@@ -47,6 +49,21 @@ export default function footer() {
           <p className="text-sm text-white/90 dark:text-[#B3B3C3]">
             Embrace beauty in every detail. Nails by Ronnie offers elegant nail treatments and personalized designs to match every vibe and weather.
           </p>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
+          <div className='space-y-2'>
+            <div className="flex gap-4">
+              <LuPhone className="h-5 w-5"/> +2349128943518
+            </div>
+            <div className="flex gap-4">
+              <FaLocationDot className="h-7 w-7"/>No 8 Ogunsholu street Cement Bustop
+            </div>
+            <div className="flex gap-4">
+              <FaLocationDot className="h-7 w-7"/>No 8 Ogunsholu street Cement Bustop
+            </div>
+          </div>
         </div>
 
         {/* Social Links with Motion */}

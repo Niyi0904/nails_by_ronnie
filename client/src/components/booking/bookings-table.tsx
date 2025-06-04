@@ -11,7 +11,7 @@ import { Booking} from "@/types/booking";
 //   rowsPerPage: number;
 //   totalBookings: number;
 //   onPageChange: (page: number) => void;
-//   onRowsPerPageChange: (value: number) => void;
+//   onRowsPerPageChange: (value: number) => void; 
 // }
 
 export default function BookingsTable({

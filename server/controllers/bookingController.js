@@ -49,6 +49,17 @@ const bookingsById = async (req, res) => {
     }
 }
 
+const updateBooking = async (req, res) => {
+    try {
+    const { status } = req.body;
+    const { id } = req.params;
+    await Booking.update({ status }, { where: { id } });
+    res.json({ success: true, message: "Status updated" });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update status' });
+  }
+}
+
 const addBookings = async (req, res) => {
     const {booking_location, booking_time, name, phone, booking_date, sub_category, service_type, email, additional_notes} = req.body;
 
@@ -83,4 +94,4 @@ const addBookings = async (req, res) => {
     }
 }
 
-module.exports = { myBookings, addBookings, allBookings, bookingsById };
+module.exports = { myBookings, addBookings, allBookings, bookingsById, updateBooking };

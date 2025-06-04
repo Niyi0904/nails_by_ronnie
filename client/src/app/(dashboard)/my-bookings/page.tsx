@@ -104,16 +104,16 @@ useEffect(() => {
     dispatch(openModal());
   }
 
-  const counts = {
-    confirmed: bookings.filter((b) => b.status?.toLowerCase() === "confirmed")
-      .length,
-    pending: bookings.filter((b) => b.status?.toLowerCase() === "pending")
-      .length,
-    completed: bookings.filter((b) => b.status?.toLowerCase() === "completed")
-      .length,
-    cancelled: bookings.filter((b) => b.status?.toLowerCase() === "cancelled")
-      .length,
-  };
+  // const counts = {
+  //   confirmed: bookings.filter((b) => b.status?.toLowerCase() === "confirmed")
+  //     .length,
+  //   pending: bookings.filter((b) => b.status?.toLowerCase() === "pending")
+  //     .length,
+  //   completed: bookings.filter((b) => b.status?.toLowerCase() === "completed")
+  //     .length,
+  //   cancelled: bookings.filter((b) => b.status?.toLowerCase() === "cancelled")
+  //     .length,
+  // };
 
   return (
     <div className="relative mt-15">

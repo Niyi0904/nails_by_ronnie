@@ -100,10 +100,8 @@ export default function BookingPreview() {
         <h3 className="text-xl font-bold mb-4">Received Successfully.</h3>
 
         <p className="text-gray-600 mb-8 max-w-md">
-          Thank you for submitting your details. Our team has received your
-          Booking details and will review it. We will get back to you shortly.
+          Your booking has been successfully submitted. We'll review the details and get in touch with you shortly via your registered phone number.
         </p>
-
         <button
           onClick={handleGoToBookings}
           className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg primary flex justify-center disabled:cursor-not-allowed items-center-safe hover:text-white"

@@ -100,7 +100,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="text-center items-center  justify-center mb-8 flex flex-col"
         >
         <div className="mb-8 rounded-lg">
