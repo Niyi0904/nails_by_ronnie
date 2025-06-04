@@ -2,12 +2,12 @@ const { where } = require('sequelize');
 const { Booking, User } = require('../models');
 
 const myBookings = async (req, res) => {
-    const user_id = req.params.email;
+    const email = req.params.email;
 
     try {
         const allBookings = await Booking.findAll({
             attributes: { exclude: ['user_id'] },
-            where: { user_id },
+            where: { email },
             order: [['updated_at', 'DESC']]
         })
 
