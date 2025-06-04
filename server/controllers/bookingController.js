@@ -52,14 +52,14 @@ const bookingsById = async (req, res) => {
 const updateBooking = async (req, res) => {
   try {
     const { status } = req.body;
-    const { id } = req.params;
+    const { bookingId } = req.params;
 
     const validStatuses = ["pending", "confirmed", "completed", "cancelled"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: "Invalid status value" });
     }
 
-    const booking = await Booking.findByPk(id);
+    const booking = await Booking.findByPk(bookingId);
     if (!booking) {
       return res.status(404).json({ error: "Booking not found" });
     }
