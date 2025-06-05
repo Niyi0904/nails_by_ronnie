@@ -55,13 +55,16 @@ export default function footer() {
           <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
           <div className='space-y-2'>
             <div className="flex gap-4">
-              <LuPhone className="h-5 w-5"/> +2349128943518
+              <LuPhone className="h-5 w-5"/> +2348084515135
             </div>
             <div className="flex gap-4">
-              <FaLocationDot className="h-7 w-7"/>No 8 Ogunsholu street Cement Bustop
+              <LuPhone className="h-5 w-5"/> +2349057331175
             </div>
             <div className="flex gap-4">
-              <FaLocationDot className="h-7 w-7"/>No 8 Ogunsholu street Cement Bustop
+              <FaLocationDot className="h-7 w-7"/>No 64, Adekunle banjo Magodo, beside domino pizza
+            </div>
+            <div className="flex gap-4">
+              <FaLocationDot className="h-7 w-7"/>No 97, Allen avenue beside glo office ikeja Lagos
             </div>
           </div>
         </div>
