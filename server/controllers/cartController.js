@@ -1,4 +1,3 @@
-const { where } = require('sequelize');
 const {CartItem, User} = require('../models');
 
 const addToCart = async (req, res) => {
