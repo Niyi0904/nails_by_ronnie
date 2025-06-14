@@ -124,7 +124,7 @@ export default function ShopPage() {
     );
 
   return (
-    <section className="mt-15 mx-[5%] text-[#1c1c1c] dark:text-white">
+    <section className="mt-20 mx-[5%] text-[#1c1c1c] dark:text-white">
         <div className='flex flex-col md:flex-row justify-between mb-7'>
             <h2 className="text-3xl font-bold mb-8 md:mb-0">
                 Shop Page

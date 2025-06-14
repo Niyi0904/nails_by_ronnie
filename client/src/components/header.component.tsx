@@ -170,7 +170,7 @@ export default function Header() {
                   {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
               </button>
               {user?.role === "admin" && (
-              <Link href="/admin/booking" className="text-sm pr-4 text-blue-950 dark:text-white hover:underline">
+              <Link href="/admin" className="text-sm pr-4 text-blue-950 dark:text-white hover:underline">
                 Admin
               </Link>
               )}
@@ -181,6 +181,7 @@ export default function Header() {
               <Link href="/" className="hover:underline">Home</Link>
               <Link href="/my-bookings" className="hover:underline">Bookings</Link>
               <Link href='/shop' className="hover:underline cursor-pointer">Shop</Link>
+              <Link href='/gallery' className="hover:underline cursor-pointer">Gallery</Link>
               <span>
                 <button onClick={() => router.push('/login')} className="hover:underline cursor-pointer">
                   Login
@@ -203,7 +204,7 @@ export default function Header() {
         </button>
 
         {user?.role === "admin" && (
-          <Link href="/admin/booking" className="text-lg pl-3 text-blue-950 dark:text-white hover:underline">
+          <Link href="/admin" className="text-lg pl-3 text-blue-950 dark:text-white hover:underline">
             Admin
           </Link>
         )}
@@ -217,7 +218,11 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div className='space-y-3 pb-8 border-b border-gray-700'>
-                  <DropdownMenuItem onClick={() => router.push('/')} className='flex justify-between'>Home  <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/' className='flex justify-between'>
+                        Home  <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
 
                   <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Profile <FaAngleDown className="h-4 w-4" />
                   </DropdownMenuItem> 
@@ -242,7 +247,17 @@ export default function Header() {
 
                   <DropdownMenuItem className='flex justify-between text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem onClick={() => router.push('/shop')} className='flex justify-between'>Shop <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href='/shop' className='flex justify-between'>
+                        Shop  <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href='/gallery' className='flex justify-between'>
+                        Gallery  <FaAngleRight className="h-4 w-4" />
+                    </Link>
+                  </DropdownMenuItem>
                 </div>
 
                 <div className='flex flex-col mt-7'>

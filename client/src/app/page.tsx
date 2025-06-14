@@ -3,9 +3,10 @@
 import Herosection from "@/components/herosection";
 import OurServices from "@/components/ourServices";
 import WeatherRecommendation from "@/components/weatherRecommendation";
-import ShopSection from "@/components/shop";
+import GallerySection from "@/components/gallery";
 import Header from "@/components/header.component";
 import Footer from "@/components/footer";
+import ReviewSection from "@/components/reviews";
 
 export default function Home() {
   
@@ -17,7 +18,8 @@ export default function Home() {
         <Herosection/>
         <OurServices/>
         <WeatherRecommendation/>
-        <ShopSection/>
+        <GallerySection/>
+        <ReviewSection/>
       </div>
       <Footer/>
     </div>
