@@ -7,7 +7,7 @@ const addNewGallery = async (req, res) => {
     console.log(req);
 
     if(!name || !description) {
-        res.status(400).json({error: 'All fields are required'});
+        return res.status(400).json({error: 'All fields are required'});
     }
 
     if (!imageFile.mimetype.startsWith('image/')){
@@ -23,8 +23,8 @@ const addNewGallery = async (req, res) => {
 
         res.status(201).json({message: 'Gallery added successfully'})
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: 'Internal server error'});
+        console.log(error);
+        return res.status(500).json({message: 'Internal server error'});
     }
 }
 
