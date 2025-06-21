@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 
 
 export default function AdminModal() {
+  const [image, setImage] = useState<File | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { isModalOpen, name, description} = useAppSelector((state) => state.gallery);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -20,7 +21,6 @@ export default function AdminModal() {
     message: string;
   } | null>(null);
   if (!isModalOpen) return null;
-  const [image, setImage] = useState<File | undefined>(undefined);
 
 
 
@@ -35,11 +35,7 @@ export default function AdminModal() {
     }
 
     try {
-      const response = await api.post('/gallery/addNewGallery', formData, {
-        headers: {
-          'Content-Type': undefined,
-        },
-      });
+      const response = await api.post('/gallery/addNewGallery', formData);
       console.log(response);
       toast.success('Gallery added successfuly');
       
