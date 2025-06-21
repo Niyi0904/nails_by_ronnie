@@ -13,13 +13,15 @@ import toast from 'react-hot-toast';
 
 export default function AdminModal() {
   const dispatch = useAppDispatch();
-  const { isModalOpen, name, description, image} = useAppSelector((state) => state.gallery);
+  const { isModalOpen, name, description} = useAppSelector((state) => state.gallery);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     err: unknown;
     message: string;
   } | null>(null);
   if (!isModalOpen) return null;
+  const [image, setImage] = useState<File | undefined>(undefined);
+
 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +35,11 @@ export default function AdminModal() {
     }
 
     try {
-      const response = await api.post('/gallery/addNewGallery', formData);
+      const response = await api.post('/gallery/addNewGallery', formData, {
+        headers: {
+          'Content-Type': undefined,
+        },
+      });
       console.log(response);
       toast.success('Gallery added successfuly');
       
@@ -44,6 +50,7 @@ export default function AdminModal() {
         // Backend returned a non-2xx status code
         errorMessage = err.response.data?.error || err.response.data?.message || 'Something went wrong';
         console.error('Response Error:', err.response);
+        console.log(formData);
       } else if (err.request) {
         // Request was made but no response received
         errorMessage = 'No response from server. Please check your internet or try again later.';
@@ -109,7 +116,7 @@ export default function AdminModal() {
               <input
                 type='file'
                 accept="image/*"
-                onChange={(e) => dispatch(setImage(e.target.files?.[0]))}
+                onChange={(e) => setImage(e.target.files?.[0])}
                 required
                 id= "image"
                 className="border-pink-800"
