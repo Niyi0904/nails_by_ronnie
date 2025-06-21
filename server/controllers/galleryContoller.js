@@ -4,7 +4,9 @@ const addNewGallery = async (req, res) => {
     const {name, description} = req.body;
     const imageFile = req.files?.image;
 
-    console.log(req.body);
+    console.log('NAME', name);
+    console.log('DESCRIPTION', description);
+    console.log('IMAGE', imageFile);
     console.log(req.files?.image);
 
 
