@@ -5,6 +5,7 @@ import counterReducer from "./features/counterSlice"
 import ThemeReducer from './features/themeSlice'
 import AuthReducer from './features/authSlice'
 import BookingReducer from './features/bookingSlice'
+import GalleryReducer from './features/gallerySlice'
 
 export const makeStore =
   configureStore({
@@ -12,7 +13,8 @@ export const makeStore =
       counter: counterReducer,
       theme: ThemeReducer,
       auth: AuthReducer,
-      booking: BookingReducer
+      booking: BookingReducer,
+      gallery: GalleryReducer
     },
   });
 

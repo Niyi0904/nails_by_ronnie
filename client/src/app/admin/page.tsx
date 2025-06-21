@@ -1,6 +1,26 @@
+'use client'
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { AppState } from "@/redux/store";
+import { useEffect } from "react";
 
 export default function Admin() {
+    const router = useRouter();
+    const {user, isAuthenticated} = useSelector((state: AppState) => state.auth);
+
+    
+    useEffect(() => {
+    if (!user || user.role !== "admin") {
+        router.push("/");
+    
+        return;
+    }
+    // fetchBookings();
+    }, [user]);
+
+
     return(
         <div  className="mt-20 mx-[5%]">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

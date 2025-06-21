@@ -88,7 +88,7 @@ const totalPages = Math.ceil(pagination.total / pagination.limit);
                 >
                 <IoArrowBack />
                 </button>
-                <h1 >Admin - Manage Bookings</h1>
+                <h1 >Manage Bookings</h1>
             </div>
             <div className="relative flex items-center">
                 <FaSearch className="absolute left-3 top-3 h-4 w-4 text-gray-400" />

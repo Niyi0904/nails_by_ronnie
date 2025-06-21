@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const db = require('./models');
+const fileUpload = require('express-fileupload');
 const authRoutes = require('./routes/auth');
 const bookingRoutes = require('./routes/booking');
 const cookieParser = require('cookie-parser');
@@ -17,6 +18,7 @@ app.use(cors({
   credentials: true,           
 }));
 app.use(express.json());
+app.use(fileUpload());
 app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('API is running...');
