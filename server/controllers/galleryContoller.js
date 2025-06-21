@@ -4,7 +4,9 @@ const addNewGallery = async (req, res) => {
     const {name, description} = req.body;
     const imageFile = req.files?.image;
 
-    if(!name || !description || !imageFile) {
+    console.log(req);
+
+    if(!name || !description) {
         res.status(400).json({error: 'All fields are required'});
     }
 

@@ -122,7 +122,7 @@ export default function AdminBookingsPage() {
   
 
   return (
-    <div className="p-6">
+    <div className="p-6 mt-15">
       <div>
           <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-3">
               <div className="text-2xl font-bold mb-4 flex gap-2">
@@ -132,7 +132,8 @@ export default function AdminBookingsPage() {
                   </button>
                   <h1 >Manage Gallery</h1>
               </div>
-              <div className="relative flex items-center">
+              <div className="relative flex items-center gap-4">
+                <div>
                   <FaSearch className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <input
                   type="text"
@@ -142,6 +143,7 @@ export default function AdminBookingsPage() {
                   className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg md:w-[300px]"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearch(e)}
                   />
+                </div>
 
                 <button
                   onClick={handleOpenModel}

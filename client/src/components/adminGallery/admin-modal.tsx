@@ -59,6 +59,8 @@ export default function AdminModal() {
         err: err,
         message: errorMessage
       })
+    } finally{
+      console.log(formData);
     }
 
 
@@ -77,41 +79,47 @@ export default function AdminModal() {
           </button>
         </div>
         <div className="p-4 flex-1 overflow-y-auto">
-          <form>
-            <div className="flex">
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col">
               <label htmlFor="name">Name</label>
               <input
                 type='text'
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => dispatch(setName(e.target.value))}
                 required
                 id="name"
-                className="border-pink-500"
+                className="border-pink-800"
                 />
             </div>
 
-            <div className="flex">
+            <div className="flex flex-col">
               <label htmlFor="description">Description</label>
               <input 
                 type='text'
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => dispatch(setDescription(e.target.value))}
                 required
                 id="description"
-                className="border-pink-500"
+                className="border-pink-800"
                 />
             </div>
 
-            <div className="flex">
+            <div className="flex flex-col">
               <label htmlFor="description">Image</label>
               <input
                 type='file'
                 accept="image/*"
-                onChange={(e) => setImage(e.target.files?.[0])}
+                onChange={(e) => dispatch(setImage(e.target.files?.[0]))}
                 required
                 id= "image"
-                className="border-pink-500"
+                className="border-pink-800"
               />
+            </div>
+
+            <div>
+              <button type="submit">
+                Upload
+              </button>
             </div>
           </form>
         </div>
