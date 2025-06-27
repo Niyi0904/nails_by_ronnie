@@ -19,48 +19,6 @@ const reviews: Review[] = [
     id: 1,
     name: 'Niyi Owoyemi',
     description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 3,
-  },
-  {
-    id: 2,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 2,
-  },
-  {
-    id: 3,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 5,
-  },
-    {
-    id: 4,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 4,
-  },
-    {
-    id: 5,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 5,
-  },
-    {
-    id: 6,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 1,
-  },
-    {
-    id: 7,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-    stars: 3,
-  },
-    {
-    id: 8,
-    name: 'Niyi Owoyemi',
-    description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
     stars: 5,
   },
 ];
@@ -83,7 +41,7 @@ export default function ReviewSection() {
         {reviews.map(review => {
             const totalStars = 5;
         return (
-            <div className='flex flex-col p-5 rounded-lg shadow-2xl'> 
+            <div key={review.id} className='flex flex-col p-5 rounded-lg shadow-2xl'> 
                 <div className='flex text-center space-x-3'>
                     <div className='bg-gray-400 flex justify-center text-lg items-center-safe rounded-full w-10 h-10'>
                         {getInitials(review.name)}

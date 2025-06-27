@@ -29,7 +29,7 @@ export default function AdminModal() {
 
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('descrtiption', description);
+    formData.append('description', description);
     if(image) {
       formData.append('image', image);
     }

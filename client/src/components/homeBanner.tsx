@@ -3,7 +3,7 @@
 
 import 'keen-slider/keen-slider.min.css';
 import { useKeenSlider } from 'keen-slider/react';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef} from 'react';
 
 type Slide = {
     id: number,
@@ -32,6 +32,8 @@ const slides: Slide[] = [
 
 export default function MixedMediaCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const videoRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: { perView: 1 },
@@ -59,16 +61,7 @@ export default function MixedMediaCarousel() {
           {slide.type === "video" ? (
             <div key={slide.id} className='relative m-0 p-0 w-full h-full grid grid-flow-row grid-cols-4'>
               {slide.src.map((source, index) => (
-                <video
-                  src={source}
-                  key={index}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  className="relative w-[100%] object-cover h-full"
-                />
+                <Video key={index} source={source} />
               ))}
             </div>
           ) : (
@@ -78,13 +71,14 @@ export default function MixedMediaCarousel() {
                 key={index}
                 src={source}
                 alt={slide.title}
+                loading='lazy'
                 className="block w-full h-full object-cover"
               />
             ))}
           </div>
           )}
             <div className="absolute top-0 left-0 w-full h-full bg-transaparent bg-opacity-50 flex items-center justify-center z-10">
-              <div className="text-center rounded-xl flex flex-col justify-center min-w-[30%] h-[30%] bg-[#F9D8DA] dark:bg-[#1E1B23]  px-4">
+              <div className="relative text-center rounded-xl flex flex-col justify-center min-w-[30%] h-[30%] bg-[#F9D8DA] dark:bg-[#1E1B23]  px-4">
                 <h2 className="text-2xl md:text-4xl font-bold">{slide.title}</h2>
                 <p className="text-sm md:text-base mt-2">{slide.description}</p>
               </div>
@@ -106,5 +100,46 @@ export default function MixedMediaCarousel() {
         ))}
       </div>
     </div>
+  );
+}
+
+function Video({ source }: { source: string }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsLoaded(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="metadata"
+      className="relative w-full h-full object-cover"
+    >
+      {isLoaded && <source src={source} type="video/mp4" />}
+    </video>
   );
 }

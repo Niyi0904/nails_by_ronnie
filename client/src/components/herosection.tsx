@@ -1,11 +1,19 @@
 'use client'
-
-import BannerCarousel from "@/components/homeBanner";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import { openModal } from "@/redux/features/bookingSlice";
 import Link from "next/link";
-import BookingModal from "./booking/booking-modal";
+
+
+const BookingModal = dynamic(() => import('./booking/booking-modal'), {
+  ssr: false,
+});
+
+const BannerCarousel = dynamic(() => import('@/components/homeBanner'), {
+    ssr: false,
+})
+
 
 export default function Herosection () {
     const router = useRouter();

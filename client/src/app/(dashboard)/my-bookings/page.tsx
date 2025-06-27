@@ -3,7 +3,6 @@ import { useState, useEffect, useRef} from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import {FaSearch, FaPlus } from 'react-icons/fa';
 import { openModal } from "@/redux/features/bookingSlice";
-import BookingModal from "@/components/booking/booking-modal";
 import { useSelector } from "react-redux";
 import { AppState } from "@/redux/store";
 import { BookingStatus, Booking } from "@/types/booking";
@@ -12,7 +11,12 @@ import dynamic from 'next/dynamic';
 import Loading from "./loading";
 import Link from "next/link";
 
-const BookingsTable = dynamic(() => import("@/components/booking/bookings-table"));
+const BookingsTable = dynamic(() => import("@/components/booking/bookings-table"), {
+  ssr: false,
+});
+const BookingModal = dynamic(() => import('@/components/booking/booking-modal'), {
+  ssr: false,
+});
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -105,16 +109,6 @@ useEffect(() => {
     dispatch(openModal());
   }
 
-  // const counts = {
-  //   confirmed: bookings.filter((b) => b.status?.toLowerCase() === "confirmed")
-  //     .length,
-  //   pending: bookings.filter((b) => b.status?.toLowerCase() === "pending")
-  //     .length,
-  //   completed: bookings.filter((b) => b.status?.toLowerCase() === "completed")
-  //     .length,
-  //   cancelled: bookings.filter((b) => b.status?.toLowerCase() === "cancelled")
-  //     .length,
-  // };
 
   return (
     <div className="relative mt-15">
