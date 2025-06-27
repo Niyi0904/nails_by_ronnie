@@ -141,9 +141,9 @@ useEffect(() => {
           </div>
           {
             !isAuthenticated ? 
-            <div className="flex flex-col items-center justify-center pt-12 w-full space-y-8">
-              <div className="flex items-center flex-col space-y-5">
-                <p className="text-xl">Login to keep track of your appointment with us!</p>
+            <div className="flex flex-col items-center justify-center pt-12 w-full space-y-6">
+              <div className="flex items-center flex-col">
+                <p className="text-center text-gray-500 dark:text-gray-400 text-lg">Login to keep track of your appointment with us!</p>
               </div>
 
               <Link

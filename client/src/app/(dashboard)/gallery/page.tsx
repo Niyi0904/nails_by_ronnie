@@ -1,11 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { use, useState } from 'react';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaSearch } from 'react-icons/fa';
-import toast from 'react-hot-toast';
-import sampleProducts from '@/components/shopData/shopData';
-import api from '@/utils/api';
+import {useState } from 'react';
+import {FaSearch } from 'react-icons/fa';
+
 
 
 type Gallery = {

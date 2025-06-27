@@ -49,11 +49,7 @@ export default function TimeStep() {
     return timeSlots.every((slot) => slot.startTime);
   };
 
-  const timeOptions = [
-    "6:00 AM",
-    "6:30 AM",
-    "7:00 AM",
-    "7:30 AM",
+  const timeOptions = [,
     "8:00 AM",
     "8:30 AM",
     "9:00 AM",

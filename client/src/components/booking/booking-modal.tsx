@@ -1,11 +1,9 @@
 "use client";
-
+import dynamic from "next/dynamic";
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import { closeModal } from "@/redux/features/bookingSlice";
 import ServiceTypeStep from "./steps/service-type-step";
-import DateStep from "./steps/date-step";
 import { MdOutlineCancel } from "react-icons/md";
-import dynamic from "next/dynamic";
 import ManicureStep from "./steps/manicureType";
 import PedicureStep from "./steps/pedicureType";
 import NotesStep from "./steps/notes-step";
@@ -15,7 +13,9 @@ import Nailstep from "./steps/NailType";
 import { IoArrowBack } from "react-icons/io5";
 
 
-
+const DateStep = dynamic(() => import('./steps/date-step'), {
+  ssr: false,
+})
 const TimeStep = dynamic(() => import("./steps/time-step"), {
   ssr: false,
 });

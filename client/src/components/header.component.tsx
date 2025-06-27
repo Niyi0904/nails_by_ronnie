@@ -133,7 +133,7 @@ export default function Header() {
 
                   <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  {/* <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
                   <DropdownMenuItem asChild>
                     <Link href='/shop' className='flex justify-between'>
@@ -142,7 +142,7 @@ export default function Header() {
                   </DropdownMenuItem>
                 </div>
 
-                <div className='flex flex-col mt-10'>
+                {/* <div className='flex flex-col mt-10'>
                 <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'><span className='flex gap-2 items-center'><IoSettingsOutline /> Settings 
                 </span> <FaAngleDown className="h-4 w-4" />
                 </DropdownMenuItem>
@@ -155,7 +155,7 @@ export default function Header() {
                 
                 <DropdownMenuItem className='flex justify-between'>About Us <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                </div>
+                </div> */}
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
                 <button onClick={handleLogout}>
@@ -245,7 +245,7 @@ export default function Header() {
 
                   <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  {/* <DropdownMenuItem className='flex justify-between text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
                   <DropdownMenuItem asChild>
                     <Link href='/shop' className='flex justify-between'>
@@ -260,7 +260,7 @@ export default function Header() {
                   </DropdownMenuItem>
                 </div>
 
-                <div className='flex flex-col mt-7'>
+                {/* <div className='flex flex-col mt-7'>
                 <DropdownMenuItem className='flex justify-between text-gray-400'><span className='flex gap-2 items-center'><IoSettingsOutline /> Settings 
                 </span> <FaAngleDown className="h-4 w-4" />
                 </DropdownMenuItem>
@@ -270,7 +270,7 @@ export default function Header() {
                 
                 <DropdownMenuItem className='flex justify-between text-gray-400'>About Us <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                </div>
+                </div> */}
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
                 {isAuthenticated ? <button onClick={handleLogout}>Logout</button> : <button onClick={() => router.push('/login')}>Login</button>} <FaAngleRight className="h-4 w-4" />
