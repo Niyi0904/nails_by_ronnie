@@ -31,12 +31,12 @@ export default function Header() {
     const {isAuthenticated, user} = useSelector((state: AppState) => state.auth);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-      const getInitials = (fullName: string) => {
-      const names = fullName.trim().split(" ");
-      const firstInitial = names[0]?.[0] ?? "";
-      const lastInitial = names.length > 1 ? names[names.length - 1][0] : "";
-      return (firstInitial + lastInitial).toUpperCase();
-    };
+    const getInitials = (fullName: string) => {
+    const names = fullName.trim().split(" ");
+    const firstInitial = names[0]?.[0] ?? "";
+    const lastInitial = names.length > 1 ? names[names.length - 1][0] : "";
+    return (firstInitial + lastInitial).toUpperCase();
+  };
 
     const handleModal = () => {
       setIsMenuOpen(!isMenuOpen); 

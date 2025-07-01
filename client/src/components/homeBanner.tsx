@@ -131,7 +131,6 @@ function Video({ source }: { source: string }) {
 
   return (
     <video
-      ref={videoRef}
       autoPlay
       loop
       muted
