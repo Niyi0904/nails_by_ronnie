@@ -14,7 +14,6 @@ export default function AppInitializer() {
       try {
         const res = await api.get('/auth/current-user'); // axios automatically parses JSON
         const data = res.data;
-        console.log(data);
 
         if (data.user) {
           dispatch(setUser(data.user));
