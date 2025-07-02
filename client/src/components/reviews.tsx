@@ -67,7 +67,7 @@ export default function ReviewSection() {
 
       <div className='flex justify-center space-x-4'>
         <Link
-          href="/gallery"
+          href="#"
           onClick={() => toast.error('Feature coming soon!')}
           className="text-white mt-3 px-5 py-2 rounded-lg primary flex justify-center w-[50%] sm:w-[35%] items-center-safe"
         >

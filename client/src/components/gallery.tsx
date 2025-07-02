@@ -77,7 +77,7 @@ export default function GallerySection() {
                 src={gallery.image}
                 alt={gallery.name}
                 fill
-                className='object-cover rounded-md'
+                className='object-cover rounded-xs'
               />
             </div>
             <div className='text-white w-full absolute top-[70%] left-1'>
