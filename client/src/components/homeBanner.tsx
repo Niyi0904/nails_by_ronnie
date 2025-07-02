@@ -19,7 +19,7 @@ const slides: Slide[] = [
     type: 'video',
     src: ['/videos/vid3.mp4', '/videos/vid6.mp4', '/videos/vid7.mp4', '/videos/vid1.mp4'],
     title: 'Welcome to Nailed_by_Ronnie',
-    description: 'Connect with top Lagos nails technician with ease.',
+    description: 'Connect with our nail technician with ease.',
   },
   {
     id: 2,
