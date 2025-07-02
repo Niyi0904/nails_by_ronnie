@@ -22,8 +22,6 @@ export default function Herosection () {
 
       const handleOpenModal = () => {
         dispatch(openModal());
-          console.log("Modal should open");
-
       }
 
     return (

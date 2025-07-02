@@ -44,12 +44,10 @@ export default function Header() {
 
     const handleThemeToggle = () => {
         if (theme === 'light') {
-                console.log(user?.Userid);
-
-            dispatch(changeTheme('dark'));
+          dispatch(changeTheme('dark'));
             
         } else if (theme === 'dark') {
-            dispatch(changeTheme('light'));
+          dispatch(changeTheme('light'));
         }
     }
 
