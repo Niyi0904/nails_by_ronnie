@@ -26,7 +26,7 @@ export default function Herosection () {
 
     return (
         <div className="mt-5">
-            <div className="min-h-[365px] md:min-h-[465px]">
+            <div className="min-h-[370px] md:min-h-[470px]">
                 <BannerCarousel />
             </div>
             <section className="text-center space-y-3 mt-3 max-w-2xl mx-auto">
