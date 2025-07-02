@@ -92,6 +92,7 @@ export default function MixedMediaCarousel() {
         {slides.map((_, idx) => (
           <button
             key={idx}
+            aria-label={`Go to slide ${idx + 1}`}
             onClick={() => instanceRef.current?.moveToIdx(idx)}
             className={`w-3 h-3 rounded-full transition ${
               currentSlide === idx ? 'bg-roseAccent' : 'bg-gray-400'
@@ -138,7 +139,7 @@ function Video({ source }: { source: string }) {
       preload="metadata"
       className="relative w-full h-full object-cover"
     >
-      {isLoaded && <source src={source} type="video/mp4" />}
+      <source src={source} type="video/mp4" />
     </video>
   );
 }

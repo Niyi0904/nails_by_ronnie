@@ -89,7 +89,8 @@ export default function Header() {
           <div className='items-end flex'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center space-x-3 hover:text-[#D77A8B]">
+                <button className="flex items-center space-x-3 hover:text-[#D77A8B]" aria-label="user menu">
+                  <span className="sr-only">Open user menu</span>
                   <Avatar className="h-8 w-8 border border-gray-200">
                     <AvatarFallback className="bg-pink-100 text-[#D77A8B]">
                       {user?.full_name ? getInitials(user.full_name) : "NA"}
@@ -156,7 +157,7 @@ export default function Header() {
                 </div> */}
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
-                <button onClick={handleLogout}>
+                <button onClick={handleLogout} aria-label="Logout">
                   Logout 
                 </button> <FaAngleRight className="h-4 w-4" />
                 </DropdownMenuItem>
@@ -164,7 +165,7 @@ export default function Header() {
             </DropdownMenu>
 
             <span className="text-3xl font-bold pl-3 text-blue-950 space-x-4 dark:text-white">
-              <button onClick={handleThemeToggle}>
+              <button onClick={handleThemeToggle} aria-label="Change theme">
                   {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
               </button>
               {user?.role === "admin" && (
@@ -181,13 +182,13 @@ export default function Header() {
               <Link href='/shop' className="hover:underline cursor-pointer">Shop</Link>
               <Link href='/gallery' className="hover:underline cursor-pointer">Gallery</Link>
               <span>
-                <button onClick={() => router.push('/login')} className="hover:underline cursor-pointer">
+                <Link href='/login' className="hover:underline cursor-pointer">
                   Login
-                </button>
+                </Link>
               </span>
 
               <span className="text-3xl font-bold text-blue-950 dark:text-white">
-                  <button onClick={handleThemeToggle}>
+                  <button onClick={handleThemeToggle} aria-label="Change theme">
                       {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
                   </button>
               </span>
@@ -197,7 +198,7 @@ export default function Header() {
       
     </div>
     <div className="lg:hidden flex relative text-4xl font-bold text-blue-950 dark:text-white items-center text-center align-middle mt-1 space-x-3">
-        <button onClick={handleThemeToggle}>
+        <button onClick={handleThemeToggle} aria-label="Change theme">
             {theme === 'light' ? <FaMoon size={20} /> : <FaSun size={20} />}
         </button>
 
@@ -210,7 +211,7 @@ export default function Header() {
           <div className='flex flex-col space-y-4'>
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
-                <button onClick={handleModal} className="text-3xl pr-2">
+                <button onClick={handleModal} aria-label="User menu" className="text-3xl pr-2">
                   {isMenuOpen ? <HiX /> : <HiMenu />}
                 </button>
               </DropdownMenuTrigger>
@@ -271,7 +272,7 @@ export default function Header() {
                 </div> */}
 
                 <DropdownMenuItem className='flex justify-between text-red-500'>
-                {isAuthenticated ? <button onClick={handleLogout}>Logout</button> : <button onClick={() => router.push('/login')}>Login</button>} <FaAngleRight className="h-4 w-4" />
+                {isAuthenticated ? <button onClick={handleLogout}>Logout</button> : <Link href='/login'>Login</Link>} <FaAngleRight className="h-4 w-4" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

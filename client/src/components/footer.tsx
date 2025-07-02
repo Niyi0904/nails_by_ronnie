@@ -29,6 +29,8 @@ function ScrollToTopButton() {
       onClick={scrollToTop}
       whileHover={{ scale: 1.2 }}
       whileTap={{ scale: 0.9 }}
+      aria-label="Move to top"
+      initial={{ opacity: 0 }}
       className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-[#E11D48] text-white shadow-lg hover:bg-[#b7153a] dark:bg-[#F9D8DA] dark:text-[#E11D48] transition-all"
     >
       <FaArrowUp />
@@ -74,15 +76,16 @@ export default function footer() {
           <h3 className="text-xl font-semibold mb-4">Connect with us</h3>
           <div className="flex gap-4 text-2xl">
             {[
-              { icon: <FaInstagram />, link: 'https://instagram.com' },
-              { icon: <FaTwitter />, link: 'https://twitter.com' },
-              { icon: <FaFacebookF />, link: 'https://facebook.com' },
-              { icon: <MdEmail />, link: 'mailto:hello@nailsbyronnie.com' },
-            ].map(({ icon, link }, i) => (
+              { icon: <FaInstagram />, link: 'https://instagram.com', name: 'Instagram' },
+              { icon: <FaTwitter />, link: 'https://twitter.com', name: 'Twitter' },
+              { icon: <FaFacebookF />, link: 'https://facebook.com', name: 'Facebook' },
+              { icon: <MdEmail />, link: 'mailto:hello@nailsbyronnie.com', name: 'Email' },
+            ].map(({ icon, link, name }, i) => (
               <motion.a
                 key={i}
                 href={link}
                 target="_blank"
+                aria-label={`Follow us on ${name}`}
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2, color: '#E11D48' }}
                 transition={{ type: 'spring', stiffness: 300 }}

@@ -78,7 +78,7 @@ export default function ReviewSection() {
           View all
         </Link>
 
-        <button className='text-white mt-3 px-5 py-2 rounded-lg primary flex justify-center w-[50%] sm:w-[35%] items-center-safe'>
+        <button className='text-white mt-3 px-5 py-2 rounded-lg primary flex justify-center w-[50%] sm:w-[35%] items-center-safe' aria-label="add review" onClick={() => toast.error('Feature coming soon!')}>
             Add a Review
         </button>
       </div>
