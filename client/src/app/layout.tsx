@@ -9,6 +9,7 @@ import AppInitializer from "@/components/appInitializer";
 
 const poppins = Poppins({
   subsets: ['latin'],
+  display: 'swap', // prevents invisible text during load
   weight: ['400', '600', '700'],
 });
 
@@ -31,7 +32,11 @@ export default function RootLayout({
       >
         <Providers>
           <AppInitializer />
-          {children}
+          <main>
+            <div className="w-full min-h-screen">
+              {children}
+            </div>
+          </main>
           <Toaster />
         </Providers>
       </body>
