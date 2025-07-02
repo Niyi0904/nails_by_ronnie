@@ -72,12 +72,11 @@ export default function GallerySection() {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {galleries.map(gallery => (
           <div key={gallery.id} className='relative'>
-            <div className='relative w-full h-52 rounded-xl'>
+            <div className='relative w-full h-52 aspect-auto rounded-xl'>
               <Image
                 src={gallery.image}
                 alt={gallery.name}
                 fill
-                className='rounded-xl'
               />
             </div>
             <div className='text-white w-full absolute top-[70%] left-1'>
