@@ -1,10 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import Link from "next/link";
-import toast from 'react-hot-toast';
 
 
 type Product = {
@@ -66,39 +63,6 @@ const galleries: Product[] = [
 ];
 
 export default function GallerySection() {
-    const [cart, setCart] = useState<Product[]>([]);
-  const [favorites, setFavorites] = useState<number[]>([]);
-  const [savedItems, setSavedItems] = useState<Product[]>([])
-
-  const toggleFavorite = (id: number) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
-    );
-    
-    if (favorites.includes(id)) {
-        toast.success(`removed from favorites!`);
-    } else {
-        toast.success(`added to favorites!`);
-    }
-  };
-
-  const bookmark = (product: Product) => {
-    setSavedItems((prev) => 
-        prev.includes(product) ? prev.filter((prod) => prod !== product) : [...prev, product]
-    );
-
-    if (savedItems.includes(product)) {
-        toast.success(`${product.name} has been removed from saved items`);
-    } else {
-        toast.success(`${product.name} has been saved`);
-    }
-  }
-
-  const addToCart = (product: Product) => {
-    setCart([...cart, product]);
-    toast.success(`${product.name} added to cart!`);
-};
-
   return (
     <section className="mt-25 text-[#1c1c1c] dark:text-white">
       <h2 className="text-3xl font-bold text-center mb-8">

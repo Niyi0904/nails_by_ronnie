@@ -7,17 +7,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
-import { FaMoon, FaSun, FaAngleDown, FaAngleRight, FaPhone} from 'react-icons/fa';
-import { IoSettingsOutline } from "react-icons/io5";
-import { LuPhone } from "react-icons/lu";
+import { FaMoon, FaSun, FaAngleDown, FaAngleRight} from 'react-icons/fa';
 import { changeTheme } from "@/redux/features/themeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../redux/store";
 import { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { logout } from '@/redux/features/authSlice';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import api from '@/utils/api';
 import toast from 'react-hot-toast';
@@ -27,7 +23,6 @@ import toast from 'react-hot-toast';
 export default function Header() {
     const {theme} = useSelector((state: AppState) => state.theme);
     const dispatch = useDispatch();
-    const router = useRouter();
     const {isAuthenticated, user} = useSelector((state: AppState) => state.auth);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 

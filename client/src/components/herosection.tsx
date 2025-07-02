@@ -1,7 +1,6 @@
 'use client'
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
+import { useAppDispatch} from "@/hooks/useReduxHook";
 import { openModal } from "@/redux/features/bookingSlice";
 import Link from "next/link";
 
@@ -16,7 +15,6 @@ const BannerCarousel = dynamic(() => import('@/components/homeBanner'), {
 
 
 export default function Herosection () {
-    const router = useRouter();
     const dispatch = useAppDispatch();
     
 

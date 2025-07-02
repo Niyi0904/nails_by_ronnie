@@ -10,7 +10,6 @@ import NotesStep from "./steps/notes-step";
 import LocationStep from "./steps/location-step";
 import BookingPreview from "./booking-preview";
 import Nailstep from "./steps/NailType";
-import { IoArrowBack } from "react-icons/io5";
 
 
 const DateStep = dynamic(() => import('./steps/date-step'), {

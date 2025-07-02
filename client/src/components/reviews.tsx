@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import Link from "next/link";
 import toast from 'react-hot-toast';
@@ -58,9 +56,6 @@ export default function ReviewSection() {
 
                             <span className='text-black pl-2'>({review.stars})</span>
                         </p>
-                    </div>
-                    <div>
-                        
                     </div>
                 </div>
                 <div>

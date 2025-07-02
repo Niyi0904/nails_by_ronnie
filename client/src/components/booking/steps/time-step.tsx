@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "@/hooks/useReduxHook";
 import { setStep, setTime } from "@/redux/features/bookingSlice";
-import { FaPlus, FaBackward, FaAngleDown } from "react-icons/fa";
+import {FaAngleDown } from "react-icons/fa";
 import { IoArrowBack } from "react-icons/io5";
 
 interface TimeSlot {
@@ -33,17 +33,6 @@ export default function TimeStep() {
     setTimeSlots(updatedSlots);
   };
 
-  const addTimeSlot = () => {
-    // Generate a unique ID
-    const newId = Date.now().toString();
-    setTimeSlots([...timeSlots, { id: newId, startTime: "7:30 AM" }]);
-  };
-
-  const removeTimeSlot = (id: string) => {
-    if (timeSlots.length > 1) {
-      setTimeSlots(timeSlots.filter((slot) => slot.id !== id));
-    }
-  };
 
   const isNextEnabled = () => {
     return timeSlots.every((slot) => slot.startTime);

@@ -6,7 +6,7 @@ import { useKeenSlider } from 'keen-slider/react';
 import { useState, useEffect, useRef} from 'react';
 
 type Slide = {
-    id: number,
+  id: number,
   type: 'video' | 'image';
   src: string[];
   title: string;
@@ -17,14 +17,14 @@ const slides: Slide[] = [
   {
     id: 1,
     type: 'video',
-    src: ['/videos/vid3.mp4', '/videos/vid6.mp4', '/videos/vid7.mp4', '/videos/vid1.mp4'],
+    src: ['/videos/vid3.mp4', '/videos/vid6.mp4', '/videos/vid7.mp4'],
     title: 'Welcome to Nailed_by_Ronnie',
     description: 'Connect with our nail technician with ease.',
   },
   {
     id: 2,
     type: 'image',
-    src: ['/assets/slider2.jpg', '/assets/slider1.jpg', '/assets/slider4.jpg', '/assets/slider2.jpg'],
+    src: ['/assets/slider2.jpg', '/assets/slider4.jpg', '/assets/slider2.jpg'],
     title: 'Shop Nail Essentials',
     description: 'Curated tools for flawless nail care.',
   }
@@ -32,8 +32,6 @@ const slides: Slide[] = [
 
 export default function MixedMediaCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const videoRef = useRef(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: { perView: 1 },
@@ -59,13 +57,13 @@ export default function MixedMediaCarousel() {
           className="keen-slider__slide h-[350px] md:h-[450px] relative flex items-center justify-center"
         >
           {slide.type === "video" ? (
-            <div key={slide.id} className='relative m-0 p-0 w-full h-full grid grid-flow-row grid-cols-4'>
+            <div key={slide.id} className='relative m-0 p-0 w-full h-full grid grid-flow-row grid-cols-3'>
               {slide.src.map((source, index) => (
                 <Video key={index} source={source} />
               ))}
             </div>
           ) : (
-            <div key={slide.id} className="relative w-full h-full grid grid-cols-4">
+            <div key={slide.id} className="relative w-full h-full grid grid-cols-3">
             {slide.src.map((source, index) => (
               <img
                 key={index}
@@ -77,10 +75,10 @@ export default function MixedMediaCarousel() {
             ))}
           </div>
           )}
-            <div className="absolute top-0 left-0 w-full h-full bg-transaparent bg-opacity-50 flex items-center justify-center z-10">
-              <div className="relative text-center rounded-xl flex flex-col justify-center min-w-[25%] h-[30%] bg-[#F9D8DA] dark:bg-[#1E1B23]  px-4">
-                <h2 className="text-2xl md:text-4xl font-bold">{slide.title}</h2>
-                <p className="text-sm md:text-base mt-2">{slide.description}</p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30">
+              <div className="bg-[#F9D8DA80] rounded-lg px-4 py-2 text-center shadow">
+                <h2 className="text-lg md:text-2xl font-bold text-rose-700">{slide.title}</h2>
+                <p className="text-sm md:text-base text-gray-700">{slide.description}</p>
               </div>
             </div>
         </div>
