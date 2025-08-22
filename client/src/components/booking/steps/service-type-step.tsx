@@ -11,19 +11,19 @@ import Image from "next/image"
 const services = [
   {
     id: "1",
-    name: "Manicure",
-    price: 5000,
+    name: "Home Service",
+    price: 10000,
     image: "/services/manicure.jpg",
   },
   {
     id: "2",
-    name: "Pedicure",
+    name: "Onsite- Ikeja ",
     price: 3000,
     image: "/services/pedicure.jpg",
   },
   {
     id: "3",
-    name: "Nail Polish",
+    name: "Onsite- Magodo",
     price: 3000,
     image: "/services/nails.jpg",
   },
@@ -44,13 +44,13 @@ export default function ServiceTypeStep() {
     <div>
       <h3 className="text-lg font-semibold mb-4">Choose Type Of Service </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-h-[500px] overflow-y-auto pr-2 gap-4 mb-6">
         {services.map((service) => (
           <div
             key={service.id}
-            onClick={() => dispatch(setServiceType(service))}
+            onClick={() => dispatch(setServiceType(service.id))}
             className={`relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all text-center
-              ${serviceType?.id === service.id ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
+              ${serviceType === service.id ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
           >
             <Image
               src={service.image}
@@ -59,14 +59,14 @@ export default function ServiceTypeStep() {
               height={200}
               className="w-full rounded-b-lg h-40 object-cover"
             />
-            {serviceType?.id === service.id && (
+            {serviceType === service.id && (
               <div className="absolute top-2 right-2 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
                 <FaCheck className="w-4 h-4 text-white" />
               </div>
             )}
             <div className="p-3">
               <h4 className="font-medium">{service.name}</h4>
-              <p className="text-sm text-gray-600">&#8358;{service.price.toLocaleString()}+</p>
+              {/* <p className="text-sm text-gray-600">&#8358;{service.price.toLocaleString()}+</p> */}
             </div>
           </div>
         ))}

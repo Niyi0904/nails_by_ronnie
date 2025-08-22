@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AppState } from '@/redux/store';
+import { FaSearch, FaPlus } from 'react-icons/fa';
 import api from '@/utils/api';
 import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import { FaTrash } from 'react-icons/fa';
@@ -69,7 +70,7 @@ export default function CartPage() {
 
   console.log("USER FOUND", user);
 
-  fetchCarts(user.Userid);
+  fetchCarts(user.userId);
   
 }, [user]);
 
@@ -77,14 +78,14 @@ const removeFromCart = async (id: String) => {
   await api.delete(`/cart/deleteCart/${id}`);
   toast.success('Item removed from cart!');
   if (user) {
-    fetchCarts(user.Userid);
+    fetchCarts(user.userId);
   }
 };
 
 const increaseCartItem = async (id:string) => {
   await api.patch(`/cart/increase/${id}`);
   if (user) {
-    fetchCarts(user.Userid);
+    fetchCarts(user.userId);
   }
 }
 
@@ -96,7 +97,7 @@ const decreaseCartItem = async (id:string, quantity: number) => {
   }
   await api.patch(`/cart/decrease/${id}`);
   if (user) {
-    fetchCarts(user.Userid);
+    fetchCarts(user.userId);
   }
 }
 
@@ -105,9 +106,24 @@ const decreaseCartItem = async (id:string, quantity: number) => {
   }, 0);
 
   return (
-    <section className="mt-20 mx-[3%] text-[#1c1c1c] dark:text-white max-w-5xl">
-      <h1 className="text-4xl font-bold mb-8 text-center">Your Shopping Cart</h1>
+    <section className="relative mt-20 mx-[3%] text-[#1c1c1c] dark:text-white ">
+      <div className='relative flex flex-col w-full md:flex-row items-center justify-between mb-8'>
+        <h1 className="text-2xl font-bold">Cart</h1>
 
+        <div className="flex flex-col md:flex-row gap-4  ">
+          <div className="relative flex items-center">
+            <FaSearch className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              autoFocus
+              placeholder="Search"
+              // value={searchQuery}
+              className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg md:w-[300px]"
+              // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
       {cart.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-400 text-lg">
           Your cart is empty.

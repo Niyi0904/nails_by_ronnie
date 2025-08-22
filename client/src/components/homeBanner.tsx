@@ -76,7 +76,7 @@ export default function MixedMediaCarousel() {
           </div>
           )}
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/5">
-              <div className="bg-[#F9D8DA95] rounded-lg px-4 py-2 text-center shadow">
+              <div className="bg-[#F9D8DA95] dark:bg-[#1E1B2390] rounded-lg px-4 py-2 text-center shadow">
                 <h2 className="text-lg md:text-2xl font-bold">{slide.title}</h2>
                 <p className="text-sm md:text-base">{slide.description}</p>
               </div>

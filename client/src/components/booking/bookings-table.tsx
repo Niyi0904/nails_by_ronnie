@@ -18,47 +18,52 @@ export default function BookingsTable({
   activeTab,
   searchQuery,
   bookings,
-  currentPage,
-  rowsPerPage,
-  totalBookings,
-  onPageChange,
-  onRowsPerPageChange,
+  // currentPage,
+  // rowsPerPage,
+  // totalBookings,
+  // onPageChange,
+  // onRowsPerPageChange,
   message
 }: any) {
   const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0 });
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  // const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
-  const [isCancelling, setIsCancelling] = useState(false);
+  // const [isCancelling, setIsCancelling] = useState(false);
 
-  const filteredBookings = bookings.filter(
-    (booking: any) =>
+  let filteredBookings: Booking[] = []; 
+  
+  if (!Array.isArray(bookings)) {
+    filteredBookings = [];
+  } else {
+    filteredBookings = bookings.filter( (booking: any) =>
       booking.booking_status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       booking.sub_category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-       booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase())
+      booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+}
 
-  const handleSelectAll = (checked: boolean) => {
-    setSelectedBookings(
-      checked ? filteredBookings.map((booking: any) => booking._id) : []
-    );
-  };
+  // const handleSelectAll = (checked: boolean) => {
+  //   setSelectedBookings(
+  //     checked ? filteredBookings.map((booking: any) => booking._id) : []
+  //   );
+  // };
 
-  const handleSelectBooking = (bookingId: string, checked: boolean) => {
-    setSelectedBookings(
-      checked
-        ? [...selectedBookings, bookingId]
-        : selectedBookings.filter((id) => id !== bookingId)
-    );
-  };
+  // const handleSelectBooking = (bookingId: string, checked: boolean) => {
+  //   setSelectedBookings(
+  //     checked
+  //       ? [...selectedBookings, bookingId]
+  //       : selectedBookings.filter((id) => id !== bookingId)
+  //   );
+  // };
 
-  const handleBookingClick = (booking: Booking) => {
-    setSelectedBooking(booking);
-  };
+  // const handleBookingClick = (booking: Booking) => {
+  //   setSelectedBooking(booking);
+  // };
 
-  const closeSidebar = () => {
-    setSelectedBooking(null);
-  };
+  // const closeSidebar = () => {
+  //   setSelectedBooking(null);
+  // };
 
   useEffect(() => {
     setPagination((prev) => ({ ...prev, total: bookings.length || 0 }));
@@ -67,9 +72,9 @@ export default function BookingsTable({
 
   const showCheckboxes = activeTab === "pending";
   const totalPages = Math.ceil(pagination.total / pagination.limit);
-  const hasData = totalBookings > 0;
-  const startRow = (currentPage - 1) * rowsPerPage + 1;
-  const endRow = Math.min(currentPage * rowsPerPage, totalBookings);
+  // const hasData = totalBookings > 0;
+  // const startRow = (currentPage - 1) * rowsPerPage + 1;
+  // const endRow = Math.min(currentPage * rowsPerPage, totalBookings);
 
   return (
     <div className="w-full overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 relative">
@@ -109,7 +114,7 @@ export default function BookingsTable({
             </tr>
           </thead>
           <tbody>
-            {bookings.length > 0 ? (
+            {Array.isArray(bookings) ? (
               filteredBookings.map((booking: any, index: any) => (
                 <tr key={booking.id} className={`${index % 2 === 0 ? "bg-pink-50 dark:bg-[#2A262F]" : "bg-pink-100 dark:bg-[#3b3642]"} hover:bg-pink-200`}>
                   <td className="p-3 sm:p-4 rounded-bl-md border-gray-400 dark:border-gray-700">
@@ -129,12 +134,12 @@ export default function BookingsTable({
                   </td>
                   <td className="p-3 sm:p-4 rounded-br-md border-gray-400 dark:border-gray-700">
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      booking.booking_status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                      booking.booking_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      booking.booking_status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                      booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                      booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      booking.status === 'completed' ? 'bg-blue-100 text-blue-800' :
                       'bg-red-100 text-red-800'
                     }`}>
-                      {booking.booking_status || "N/A"}
+                      {booking.status || "N/A"}
                     </span>
                   </td>
                 </tr>

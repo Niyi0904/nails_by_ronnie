@@ -1,21 +1,19 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import { act } from "react"
 
+export interface SubServiceType {
+    id: string
+    name: string
+    image: string,
+    price: number,
+    description: string
+  }
 
 
 export interface BookingState {
   step: number
-  serviceType: {
-    id:string,
-    name: string
-    image: string
-    price: number
-  } | null
-  subServiceType: {
-    id: string
-    name: string
-    image: string
-  } | null
+  serviceType: string
+  subServiceType: SubServiceType[]
   date: {
     selectedDate?: string
   },
@@ -31,8 +29,8 @@ export interface BookingState {
 
 const initialState: BookingState = {
   step: 1,
-  serviceType: null,
-  subServiceType: null,
+  serviceType: '',
+  subServiceType: [],
   date: {
     selectedDate:''
   },
@@ -56,8 +54,11 @@ export const bookingSlice = createSlice({
     setServiceType: (state, action: PayloadAction<BookingState["serviceType"]>) => {
       state.serviceType = action.payload
     },
-    setSubServiceType: (state, action: PayloadAction<BookingState["subServiceType"]>) => {
-      state.subServiceType = action.payload
+    setSubServiceType: (state, action: PayloadAction<SubServiceType>) => {
+      state.subServiceType.push(action.payload);
+    },
+    removeSubServiceType: (state, action: PayloadAction<string>) => {
+      state.subServiceType = state.subServiceType.filter(subService => subService.id !== action.payload)
     },
     setEmail: (state, action:PayloadAction<string>) => {
       state.email = action.payload
@@ -97,8 +98,8 @@ export const bookingSlice = createSlice({
     closeModal: (state) => {
       state.isModalOpen = false
       state.step = 1
-      state.serviceType = null
-      state.subServiceType= null
+      state.serviceType = ''
+      state.subServiceType= []
       state.time = ""
       state.date.selectedDate=''
       // state.notes = ""
@@ -118,6 +119,7 @@ export const {
   setStep,
   setServiceType,
   setSubServiceType,
+  removeSubServiceType,
   setDate,
   setTime,
   setNotes,

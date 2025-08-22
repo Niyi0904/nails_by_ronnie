@@ -20,15 +20,15 @@ import {
 const savedUser = getStoredUser();
 
   // Types
-  interface User {
-    Userid: string;
+  export interface User {
+    userId: string;
     full_name: string;
     email: string;
     phone_number: string;
     address: string;
-    emailVerified: boolean;
-    role: 'user' | "admin"
-    cart: any
+    role: 'user' | "admin";
+    profilePicture?: string;
+    cart?: any
   }
   
   interface AuthState {

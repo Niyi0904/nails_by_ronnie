@@ -5,14 +5,23 @@ import {FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { BiLoaderAlt } from "react-icons/bi";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
-import api from "../../utils/api"
 import { AppState } from "@/redux/store";
 import toast from 'react-hot-toast';
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/useReduxHook";
-import { setUser } from "@/redux/features/authSlice";
+import { setUser, User } from "@/redux/features/authSlice";
+import { serverTimestamp } from "firebase/firestore";
+
+import { doc, updateDoc } from "firebase/firestore";
+import {GetUserData} from "@/functions/getUserData/getUserData";
+import { auth, db } from "@/lib/Firebase/firebaseUtils";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+interface LoginDetails {
+  email: string;
+  password: string;
+}
 
 export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -40,14 +49,29 @@ export default function Contact() {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    const body = {
-        email: emailRef.current?.value,
-        password: passwordRef.current?.value,
+    const body: LoginDetails = {
+        email: emailRef.current?.value as string ,
+        password: passwordRef.current?.value as string,
     };
     
     try {
-      const response = await api.post('/auth/login', body);
-      dispatch(setUser(response.data.user));
+      const userAuth = await signInWithEmailAndPassword(auth, body.email, body.password);
+      const docRef = doc(db, 'users', userAuth.user.email as string);
+      await updateDoc(docRef, {
+        lastLogin: serverTimestamp(),
+      });
+      const user = await GetUserData(docRef);
+      const userData = {
+        userId: user?.UserId,
+        full_name: user?.full_name,
+        email: user?.email,
+        phone_number: user?.phoneNumber,
+        address: user?.address,
+        role: user?.role,
+        profilePicture: user?.profilePicture,
+      };
+      dispatch(setUser(userData as User));
+      console.log(user);
 
       setTimeout(() => {
         router.push('/')
@@ -89,7 +113,6 @@ export default function Contact() {
         }, 3000);
       }
   
-      console.log(user);
     }, [user]);
 
   
@@ -137,7 +160,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="bg-[#FCE4EC] dark:bg-[#2A262F] text-[#1E1B23] p-8 rounded-xl shadow-lg"
           >
             <div className="space-y-6">

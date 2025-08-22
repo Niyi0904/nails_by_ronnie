@@ -7,29 +7,25 @@ import { MdOutlineCancel } from "react-icons/md";
 import { IoArrowBack} from "react-icons/io5";
 import Image from "next/image";
 import { useState } from "react";
-import api from "@/utils/api";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import axios from "axios";
 import Loading from "@/app/(dashboard)/my-bookings/loading";
+
+import { serverTimestamp } from "firebase/firestore";
+import { addNewBooking } from "@/functions/bookingfunc/addNewBooking";
 
 
 export default function BookingPreview() {
   const dispatch = useAppDispatch();
   const booking = useAppSelector((state) => state.booking);
-  const authState = useAppSelector((state) => state.auth);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-   const [submitStatus, setSubmitStatus] = useState<{
+  const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     err: unknown;
     message: string;
   } | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const {user} = useAppSelector(state => state.auth);
-
-  const router = useRouter();
   const handleSubmit = async () => {
     setIsLoading(true);
     setIsSubmitted(true);
@@ -44,14 +40,14 @@ export default function BookingPreview() {
         booking_location: booking.location,
         additional_notes: booking.notes,
         name: booking.name,
-        phone: booking.phone
+        phone: booking.phone,
+        createdAt: serverTimestamp(),
+        status: "pending",
       };
 
-      const response = await api.post('/booking/addBooking', body);
-      console.log(response.data.user);
-      console.log(response.data);
-
-      await setSuccess(true);
+      const response = await addNewBooking(body);
+      dispatch(resetBooking()); 
+      setSuccess(true);
 
       toast.success('Booking added successfully');
 

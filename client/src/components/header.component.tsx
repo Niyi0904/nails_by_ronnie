@@ -15,8 +15,8 @@ import { useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { logout } from '@/redux/features/authSlice';
 import Image from 'next/image';
-import api from '@/utils/api';
 import toast from 'react-hot-toast';
+import { auth } from '@/lib/Firebase/firebaseUtils';
 
 
 
@@ -48,8 +48,8 @@ export default function Header() {
 
     const handleLogout = async () => {
       try {
-        await api.post('/auth/logout'); // this clears the cookie on the server
-        dispatch(logout());             // this clears Redux state
+        await auth.signOut()
+        dispatch(logout());
         toast.success('Logged out successfully');
       } catch (err) {
         toast.error('Logout failed. Please try again.');
@@ -58,7 +58,7 @@ export default function Header() {
 
 
   return (
-    <nav className="fixed top-0 w-full z-40 py-1 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
+    <nav className="fixed top-0 font-heading w-full z-40 py-1 flex items-center justify-between bg-white dark:bg-[#121212] shadow-lg">
     <div>{
       theme === 'dark' ? <Image 
         src='/assets/logo-dark.png'
@@ -88,7 +88,15 @@ export default function Header() {
                   <span className="sr-only">Open user menu</span>
                   <Avatar className="h-8 w-8 border border-gray-200">
                     <AvatarFallback className="bg-pink-100 text-[#D77A8B]">
-                      {user?.full_name ? getInitials(user.full_name) : "NA"}
+                      { 
+                        user?.profilePicture ? <Image
+                          src={user.profilePicture}
+                          alt={user.full_name || 'User Avatar'}
+                          width={32}
+                          height={32}
+                          className="rounded-full object-center"
+                        /> : getInitials(user?.full_name || '')
+                      }
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden sm:inline-block font-medium">

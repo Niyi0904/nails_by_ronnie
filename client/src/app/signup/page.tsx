@@ -1,17 +1,31 @@
 "use client"
 import { motion } from "framer-motion";
-import {FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import {FaRegEye, FaRegEyeSlash, FaUser } from "react-icons/fa";
 import Image from "next/image";
 import { BiLoaderAlt } from "react-icons/bi";
 
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import api from "../../utils/api"
 import { AppState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/useReduxHook";
-import { setUser } from "@/redux/features/authSlice";
+import { setUser, User } from "@/redux/features/authSlice";
+import {auth} from "@/lib/Firebase/firebaseUtils";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserProfile } from "@/functions/createUserProfile/createUserProfile";
+import toast from "react-hot-toast";
+
+import { GetUserData} from "@/functions/getUserData/getUserData";
+
+type Body = {
+  name: string
+  email: string
+  password: string
+  address: string
+  phoneNumber: string,
+  image: File | null
+}
 
 export default function Signup() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -21,6 +35,8 @@ export default function Signup() {
   const addressRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const imageref = useRef<HTMLInputElement>(null)
+  
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -37,7 +53,7 @@ export default function Signup() {
   });
 
   const {user} = useSelector((state: AppState) => state.auth);
-      const {theme} = useSelector((state: AppState) => state.theme);
+  const {theme} = useSelector((state: AppState) => state.theme);
 
   const router = useRouter();
   const dispatch = useAppDispatch()
@@ -49,8 +65,6 @@ export default function Signup() {
         router.push('/')
       }, 3000);
     }
-
-    console.log(user);
   }, [user]);
   
 
@@ -62,6 +76,7 @@ export default function Signup() {
     const confirmPassword = confirmPasswordRef.current?.value;
     
     if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
       setSubmitStatus({
         success: false,
         err: null,
@@ -71,28 +86,57 @@ export default function Signup() {
       return;
     }
 
+    const body: Body = {
+      name: nameRef.current?.value as string,
+      email: emailRef.current?.value as string,
+      password: passwordRef.current?.value as string,
+      address: addressRef.current?.value as string,
+      phoneNumber: phoneRef.current?.value as string,
+      image: imageref.current?.files ? imageref.current.files[0] : null,
+    };
+
+    if (!body.name || !body.email || !body.password || !body.address || !body.phoneNumber || !body.image) {
+      toast.error('All fields are required');
+      setSubmitStatus({
+        success: false,
+        err: null,
+        message: 'All fields are required',
+      });
+      
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    const body = {
-      full_name: nameRef.current?.value,
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
-      address: addressRef.current?.value,
-      phone_number: phoneRef.current?.value
-    };
-
-
 
     try {
-      const response = await api.post('/auth/signup', body);
-      dispatch(setUser(response.data.user));
+      const userAuth = await createUserWithEmailAndPassword(auth, body.email, body.password);
+      const newUser = await createUserProfile(userAuth, body);
+
+      if(newUser) {
+        const user = await GetUserData(newUser);
+        const userData = {
+          userId: user?.UserId,
+          full_name: user?.full_name,
+          email: user?.email,
+          phone_number: user?.phoneNumber,
+          address: user?.address,
+          role: user?.role,
+          profilePicture: user?.profilePicture,
+        };
+        dispatch(setUser(userData as User));
+      }
+      toast.success('Account created successfully!');
+
       setSubmitStatus({
         success: true,
         err: null,
-        message: 'Check Email for verification Link',
+        message: 'Account created successfully!',
       });
       formRef.current?.reset();
+
+
     } catch (err: any) {
       let errorMessage = 'Internal server error, please try again';
 
@@ -109,6 +153,7 @@ export default function Signup() {
         errorMessage = err.message || 'Unexpected error occurred.';
         console.error('General Error:', err.message);
       }
+      toast.error(errorMessage);
       setSubmitStatus({
         success: false,
         err: err,
@@ -145,7 +190,7 @@ export default function Signup() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="text-center items-center  justify-center mb-8 flex flex-col"
         >
           <div className="mb-8 rounded-lg">
@@ -185,10 +230,26 @@ export default function Signup() {
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="bg-[#FCE4EC] dark:bg-[#2A262F] text-[#1E1B23] p-8 rounded-xl shadow-lg"
           >
             <div className="space-y-6">
+
+              <div className="flex flex-col justify-center items-center ">
+                <label htmlFor="image" className="block text-sm font-medium text-[#1E1B23] dark:text-[#F2F2F2] mb-2">Image</label>
+                <input
+                  type='file'
+                  accept="image/*"
+                  ref={imageref}
+                  id= "image"
+                  className="w-40 h-40 px-4 rounded-full border bg-gray-200 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white items-center justify-center cursor-pointer py-15"
+                />
+                <div className="text-xs text-gray-500 mt-2">
+                  <FaUser className="inline-block mr-1" />
+                  Upload a profile picture
+                </div>
+              </div>
+
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-[#1E1B23] dark:text-[#F2F2F2] mb-2">
                   Full Name

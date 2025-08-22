@@ -11,6 +11,8 @@ import dynamic from 'next/dynamic';
 import Loading from "./loading";
 import Link from "next/link";
 
+import { FetchBookings } from "@/functions/bookingfunc/fetchBookings";
+
 const BookingsTable = dynamic(() => import("@/components/booking/bookings-table"), {
   ssr: false,
 });
@@ -25,7 +27,7 @@ export default function BookingsPage() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<BookingStatus>("confirmed");
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[] | string>([]);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -37,22 +39,21 @@ export default function BookingsPage() {
   const fetchBookings = async (id:string) => {
     try {
       setIsLoading(true);
-      const response = await api.get(`/booking/mybookings/${id}`);
-      console.log(response);
-      setBookings(response.data.allBookings || []);
+      const response = await FetchBookings(id);
+      setBookings(response);
       setPagination((prev) => ({
           ...prev,
-          total: response.data.allBookings.length || 0,
+          total: response.length || 0,
         }));
 
 
-      if (response.data) {
-        setBookings(response.data.allBookings || []);
-        setPagination((prev) => ({
-          ...prev,
-          total: response.data.total || 0,
-        }));
-      }
+      // if (response.data) {
+      //   setBookings(response.data.allBookings || []);
+      //   setPagination((prev) => ({
+      //     ...prev,
+      //     total: response.data.total || 0,
+      //   }));
+      // }
     } catch (err: any) {
       let errorMessage = 'Internal server error, please try again';
 
@@ -81,8 +82,6 @@ useEffect(() => {
     console.log('no user found');
     return
   };
-
-  console.log("USER FOUND", user);
 
   fetchBookings(user.email);
   
@@ -167,7 +166,7 @@ useEffect(() => {
                   totalBookings={pagination.total}
                   onPageChange={handlePageChange}
                   onRowsPerPageChange={handleRowsPerPageChange}
-                  message={error ? error : "No booking found"}
+                  message={!Array.isArray(bookings) && "No booking found"}
                 />
               }
           </div>

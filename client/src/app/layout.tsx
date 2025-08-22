@@ -2,15 +2,27 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/redux/Provider"
-import { Poppins } from 'next/font/google';
+import { Poppins, Pacifico, Dancing_Script} from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import AppInitializer from "@/components/appInitializer";
 
 
 const poppins = Poppins({
   subsets: ['latin'],
-  display: 'swap', // prevents invisible text during load
+  display: 'swap', // 
   weight: ['400', '600', '700'],
+});
+
+const pacifico = Pacifico({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-pacifico',
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-heading',
 });
 
 export const metadata: Metadata = {
@@ -28,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} min-h-screen`}
+      <body className={`${poppins.className} ${pacifico.variable} min-h-screen`}
       >
         <Providers>
           <AppInitializer />
