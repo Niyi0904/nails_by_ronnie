@@ -33,8 +33,8 @@ export default function BookingPreview() {
     try {
       const body = {
         email: booking.email,
-        service_type: booking.serviceType?.name,
-        sub_category: booking.subServiceType?.name,
+        service_type: booking.serviceType,
+        sub_category: booking.subServiceType,
         booking_date: booking.date.selectedDate,
         booking_time: booking.time,
         booking_location: booking.location,
@@ -144,16 +144,15 @@ export default function BookingPreview() {
             <div className="flex items-center">
               <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
                 <Image
-                  src={booking.serviceType?.image || "/placeholder.svg"}
-                  alt={booking.serviceType?.name || "Service"}
+                  src={booking.serviceType || "/placeholder.svg"}
+                  alt={booking.serviceType || "Service"}
                   width={64}
                   height={64}
                   className="h-full w-full object-cover"
                 />
               </div>
               <div>
-                <p className="font-medium">{booking.serviceType?.name}</p>
-                <p className="text-sm">&#8358;{booking.serviceType?.price.toLocaleString()}+</p>
+                <p className="font-medium">{booking.serviceType}</p>
               </div>
             </div>
           </div>
@@ -161,16 +160,25 @@ export default function BookingPreview() {
           <div>
             <p className="text-sm text-gray-500 mb-2">Sub-Service</p>
             <div className="flex items-center">
-              <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
-                <Image
-                  src={booking.subServiceType?.image || "/placeholder.svg"} // Display the selected property's image
-                  alt={booking.subServiceType?.name || "Sub-service"}
-                  width={64}
-                  height={64}
-                  className="h-full w-full object-cover"
-                />
+              <div className="h-16 w-16 flex rounded-md overflow-hidden mr-3">
+                {
+                  booking.subServiceType.map((book) => (
+
+                    <Image
+                      src={book.image || "/placeholder.svg"} // Display the selected property's image
+                      alt={book.name || "Sub-service"}
+                      width={64}
+                      height={64}
+                      className="h-full w-full object-cover"
+                    />
+                  ))
+                }
               </div>
-              <p className="font-medium">{booking.subServiceType?.name}</p>
+              {
+                booking.subServiceType.map((book) => (
+                  <p className="font-medium">{book.name}</p>
+                ))
+              }
             </div>
           </div>
         </div>

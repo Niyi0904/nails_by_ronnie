@@ -7,11 +7,11 @@ import { closeModal } from "@/redux/features/bookingSlice";
 import ServiceTypeStep from "./steps/service-type-step";
 import { MdOutlineCancel } from "react-icons/md";
 import ManicureStep from "./steps/manicureType";
-import PedicureStep from "./steps/pedicureType";
+// import PedicureStep from "./steps/pedicureType";
 import NotesStep from "./steps/notes-step";
 import LocationStep from "./steps/location-step";
 import BookingPreview from "./booking-preview";
-import Nailstep from "./steps/NailType";
+// import Nailstep from "./steps/NailType";
 
 
 const DateStep = dynamic(() => import('./steps/date-step'), {
