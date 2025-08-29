@@ -40,6 +40,7 @@ export default function BookingsPage() {
     try {
       setIsLoading(true);
       const response = await FetchBookings(id);
+      console.log(response)
       setBookings(response);
       setPagination((prev) => ({
           ...prev,

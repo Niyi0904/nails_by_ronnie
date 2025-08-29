@@ -38,7 +38,7 @@ export default function BookingsTable({
   } else {
     filteredBookings = bookings.filter( (booking: any) =>
       booking.booking_status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      booking.sub_category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.sub_category.includes(searchQuery.toLowerCase()) ||
       booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 }
@@ -121,7 +121,7 @@ export default function BookingsTable({
                       {booking.service_type || "N/A"}
                   </td>
                   <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
-                    {booking.sub_category || "N/A"}
+                    {booking.sub_category.map((category:{name: string, duration: string, description: string, id: string, image: string, price: number}) => (<span>{category.name},  </span>)) || "N/A"}
                   </td>
                   <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
                     {booking.booking_location || "N/A"}

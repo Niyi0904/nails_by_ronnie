@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="flex justify-center items-center h-32">
+    <div className="flex justify-center items-center">
       {/* Simple spinner using Tailwind CSS */}
       <svg
         className="animate-spin h-8 w-8 text-pink-600"

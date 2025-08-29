@@ -16,6 +16,7 @@ const manicures = [
     id: "1",
     name: "Normal manicure",
     price: 10000,
+    duration: '1hr 30mins',
     description: "A simple, clean, and elegant treatment that keeps your natural nails healthy and polished.",
     image: "/services/manicure.jpg",
   },
@@ -23,6 +24,7 @@ const manicures = [
     id: "2",
     name: "Acrylic manicure",
     price: 20000,
+    duration: '1hr 30mins',
     description: "A simple, clean, and elegant treatment that keeps your natural nails healthy and polished.",
     image: "/services/manicure.jpg",
   },
@@ -30,6 +32,7 @@ const manicures = [
     id: "3",
     name: "French manicure",
     price: 7000,
+    duration: '1hr 30mins',
     description: "Timeless elegance with crisp white tips and a glossy, sheer base.",
     image: "/services/pedicure.jpg",
   },
@@ -37,6 +40,7 @@ const manicures = [
     id: "4",
     name: "Gel manicure",
     price: 5000,
+    duration: '1hr 30mins',
     description: "Long-lasting shine and chip-free finish for nails that stay flawless for weeks.",
     image: "/services/nails.jpg",
   },
@@ -44,12 +48,14 @@ const manicures = [
     id: "5",
     name: "American manicure",
     price: 7000,
+    duration: '1hr 30mins',
     description: "Soft and natural with creamy tips and a nude base—perfect for an effortless, classy look.",
     image: "/services/nails.jpg",
   },
   {
     id: "5",
     name: "Baby Boomer (French Ombre)",
+    duration: '1hr 30mins',
     price: 7000,
     description: "A modern ombré blend of pink and white for a subtle yet stunning effect.",
     image: "/services/nails.jpg",
@@ -68,6 +74,7 @@ export default function ManicureStep() {
 
   useEffect(() => {
     const sections = document.querySelectorAll('section');
+    const scrollContainer = document.querySelector(".scroll-container");
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -76,7 +83,9 @@ export default function ManicureStep() {
         }
       })
     },
-    {threshold: 0.6}
+    {
+      root: scrollContainer as Element | null,
+      threshold: 0.3}
   )
 
   sections.forEach((section) => observer.observe(section));
@@ -107,7 +116,7 @@ export default function ManicureStep() {
         </div>
       </div>
 
-      <div className="mt-2 space-y-10 flex flex-col max-h-[500px] overflow-y-auto pr-2">
+      <div className="mt-2 space-y-10 flex flex-col max-h-[500px] scroll-container overflow-y-auto pr-2">
         <section id="manicure">
           <h3 className="text-lg font-semibold mb-2">Manicure</h3>
           <div className="flex flex-col space-y-2">
@@ -129,6 +138,7 @@ export default function ManicureStep() {
                   <div className="p-3">
                     <h4 className="font-normal">{service.name}</h4>
                     <p className="text-sm text-gray-500">{service.description}</p>
+                    <p className="text-sm text-gray-500 mt-4">{service.duration}</p>
                     <p className="font-normal mt-2">&#8358; {service.price.toLocaleString()}+</p>
                   </div>
                 </div>
@@ -160,8 +170,8 @@ export default function ManicureStep() {
             {manicures.map((service) => (
               <div
                 key={service.id}
-                className={`relative flex items-center p-1 rounded-lg overflow-hidden border-2 justify-between border-white transition-all
-                  ${findService(service.id) ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
+                className={`relative flex items-center p-1 rounded-lg overflow-hidden border-2 justify-between border-gray-200 transition-all
+                  ${findService(service.id) ? "border-pink-500" : "border-gray-200 hover:border-pink-200"}`}
               >
                 <div className="flex items-center">
                   <Image
@@ -173,18 +183,28 @@ export default function ManicureStep() {
                   />
 
                   <div className="p-3">
-                    <h4 className="font-medium">{service.name}</h4>
-                    <p className="text-sm text-gray-600">{service.description}</p>
-                    <p className="font-medium">&#8358;{service.price.toLocaleString()}+</p>
+                    <h4 className="font-normal">{service.name}</h4>
+                    <p className="text-sm text-gray-500">{service.description}</p>
+                    <p className="text-sm text-gray-500 mt-4">{service.duration}</p>
+                    <p className="font-normal mt-2">&#8358; {service.price.toLocaleString()}+</p>
                   </div>
                 </div>
 
-                <div className="p-2" onClick={() => dispatch(setSubServiceType(service))}
->
-                  <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                    <FaPlus className="w-4 h-4 text-white" />
-                  </div>
-                </div>
+                {
+                  findService(service.id) ? (
+                    <div className="p-2" onClick={() => dispatch(removeSubServiceType(service.id))}>
+                      <div className="w-6 h-6 primary rounded-md flex items-center justify-center">
+                        <MdRemove className="w-5 h-4 text-white" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-2" onClick={() => dispatch(setSubServiceType(service))}>
+                      <div className="w-6 h-6 primary rounded-md flex items-center justify-center">
+                        <FaPlus className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+                  )
+                }
               </div>
             ))}
           </div>
@@ -197,8 +217,8 @@ export default function ManicureStep() {
             {manicures.map((service) => (
               <div
                 key={service.id}
-                className={`relative flex items-center p-1 rounded-lg overflow-hidden border-2 justify-between border-white transition-all
-                  ${findService(service.id) ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
+                className={`relative flex items-center p-1 rounded-lg overflow-hidden border-2 justify-between border-gray-200 transition-all
+                  ${findService(service.id) ? "border-pink-500" : "border-gray-200 hover:border-pink-200"}`}
               >
                 <div className="flex items-center">
                   <Image
@@ -210,18 +230,28 @@ export default function ManicureStep() {
                   />
 
                   <div className="p-3">
-                    <h4 className="font-medium">{service.name}</h4>
-                    <p className="text-sm text-gray-600">{service.description}</p>
-                    <p className="font-medium">&#8358;{service.price.toLocaleString()}+</p>
+                    <h4 className="font-normal">{service.name}</h4>
+                    <p className="text-sm text-gray-500">{service.description}</p>
+                    <p className="text-sm text-gray-500 mt-4">{service.duration}</p>
+                    <p className="font-normal mt-2">&#8358; {service.price.toLocaleString()}+</p>
                   </div>
                 </div>
 
-                <div className="p-2" onClick={() => dispatch(setSubServiceType(service))}
->
-                  <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                    <FaPlus className="w-4 h-4 text-white" />
-                  </div>
-                </div>
+                {
+                  findService(service.id) ? (
+                    <div className="p-2" onClick={() => dispatch(removeSubServiceType(service.id))}>
+                      <div className="w-6 h-6 primary rounded-md flex items-center justify-center">
+                        <MdRemove className="w-5 h-4 text-white" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-2" onClick={() => dispatch(setSubServiceType(service))}>
+                      <div className="w-6 h-6 primary rounded-md flex items-center justify-center">
+                        <FaPlus className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+                  )
+                }
               </div>
             ))}
           </div>

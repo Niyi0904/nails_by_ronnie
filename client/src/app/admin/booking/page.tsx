@@ -124,11 +124,11 @@ const totalPages = Math.ceil(pagination.total / pagination.limit);
             </tr>
           </thead>
           <tbody>
-            {filteredBookings.map((booking, index) => (
+            {filteredBookings.map((booking: any, index) => (
               <tr key={booking.id} className={`${index % 2 === 0 ? "bg-pink-50 dark:bg-[#2A262F]" : "bg-pink-100 dark:bg-[#3b3642]"} hover:bg-pink-200`}>
                 <td className="p-3 sm:p-4 rounded-bl-md border-gray-400 dark:border-gray-700">{booking.name || "N/A"}</td>
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.service_type}</td>
-                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.sub_category}</td>
+                <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.sub_category.map((category:{name: string, duration: string, description: string, id: string, image: string, price: number}) => (<span>{category.name},  </span>)) || "N/A"}</td>
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_location}</td>
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.phone}</td>
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_date}</td>

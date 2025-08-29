@@ -30,7 +30,7 @@ export default function DateStep() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full ">
       <h3 className="text-lg font-semibold mb-6">Choose a preferred date</h3>
 
       <div className="flex-1 min-h-0">
@@ -40,7 +40,7 @@ export default function DateStep() {
             <p className="text-sm font-medium">{getSelectedDateDisplay()}</p>
           </div>
 
-          <div className="min-h-[400px]">
+          <div>
             <Calendar
               type="one-time"
               onSelect={(date) => dispatch(setSelectedDate(date))}
@@ -51,14 +51,14 @@ export default function DateStep() {
         </div>
       </div>
 
-      <div className="flex justify-between mt-6 pt-4 border-t">
+      <div className="flex justify-between mt-4 pt-4">
         <button onClick={handleBack}>
           <IoArrowBack className="w-5 h-5" />
         </button>
         <button
           onClick={handleNext}
           disabled={!date.selectedDate}
-          className="text-white px-5 py-2 rounded-lg flex justify-center primary items-center-safe hover:text-white "
+          className="text-white px-5 py-2 rounded-lg flex justify-center primary items-center-safe hover:text-white disabled:cursor-not-allowed"
         >
           Next
         </button>

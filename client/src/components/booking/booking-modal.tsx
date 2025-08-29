@@ -72,9 +72,9 @@ export default function BookingModal() {
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#FCE4EC] dark:bg-[#1E1B23] shadow-2xl rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" style={{ boxShadow: '0 35px 80px -15px rgba(0, 0, 0, 0.6), 0 50px 100px -20px rgba(0, 0, 0, 0.4)' }}>
+      <div className="bg-[#FCE4EC] dark:bg-[#1E1B23] shadow-2xl rounded-lg w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col" style={{ boxShadow: '0 35px 80px -15px rgba(0, 0, 0, 0.6), 0 50px 100px -20px rgba(0, 0, 0, 0.4)' }}>
         {showHeader && (
-          <div >
+          <>
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
               <h2 className="text-xl font-semibold">Book a New Services</h2>
               <button
@@ -84,10 +84,10 @@ export default function BookingModal() {
                 <MdOutlineCancel className=" h-6 w-6"/>
               </button>
             </div>
-            <div className="px-4 py-1 flex-1 overflow-y-auto">
+            <div className="p-4 flex-1 overflow-y-auto">
               {renderStep()}
             </div>
-          </div>
+          </>
         )}
 
         {!showHeader && (

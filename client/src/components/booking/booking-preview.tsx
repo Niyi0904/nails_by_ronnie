@@ -121,84 +121,77 @@ export default function BookingPreview() {
       </div>
 
       <div className="space-y-6">
-        <div className="grid grid-cols-3">
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Name</p>
-            <p className="font-medium">{booking.name}</p>
-          </div>
+        <div>
+          <h1 className='font-semibold border-b border-gray-300'>User Info</h1>
 
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Phone</p>
-            <p className="font-medium">{booking.phone}</p>
-          </div>
+          <div className="flex flex-col space-y-2">
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Name :</p>
+              <p className="font-medium">{booking.name}</p>
+            </div>
 
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Email</p>
-            <p className="font-medium">{booking.email}</p>
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Phone :</p>
+              <p className="font-medium">{booking.phone}</p>
+            </div>
+
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Email :</p>
+              <p className="font-medium">{booking.email}</p>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2">
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Service</p>
-            <div className="flex items-center">
-              <div className="h-16 w-16 rounded-md overflow-hidden mr-3">
-                <Image
-                  src={booking.serviceType || "/placeholder.svg"}
-                  alt={booking.serviceType || "Service"}
-                  width={64}
-                  height={64}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="font-medium">{booking.serviceType}</p>
+        <div>
+          <h1 className='font-semibold border-b border-gray-300'>Services</h1>
+
+          <div className="flex flex-col space-y-2">
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Service :</p>
+              <div className="flex items-center">
+                <div>
+                  <p className="font-medium">{booking.serviceType}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Sub-Service</p>
-            <div className="flex items-center">
-              <div className="h-16 w-16 flex rounded-md overflow-hidden mr-3">
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Sub-Service :</p>
+              <div className="flex items-center">
                 {
                   booking.subServiceType.map((book) => (
-
-                    <Image
-                      src={book.image || "/placeholder.svg"} // Display the selected property's image
-                      alt={book.name || "Sub-service"}
-                      width={64}
-                      height={64}
-                      className="h-full w-full object-cover"
-                    />
+                    <p className="font-medium">{book.name}</p>
                   ))
                 }
               </div>
-              {
-                booking.subServiceType.map((book) => (
-                  <p className="font-medium">{book.name}</p>
-                ))
-              }
             </div>
           </div>
         </div>
 
-        {/* Date */}
-        <div className="grid grid-cols-3 gap-1">
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Date</p>
-            <p className="font-medium">{booking.date.selectedDate}</p>
-          </div>
 
-          {/* Time */}
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Time</p>
-            <p className="font-medium">{booking.time}</p>
-          </div>
+        <div>
+          <h1 className='font-semibold border-b border-gray-300'>Date/Time</h1>
 
-          <div>
-            <p className="text-sm text-gray-500 mb-2">Location</p>
-            <p className="font-medium">{booking.location}</p>
+          <div className="flex flex-col space-y-2">
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Date :</p>
+              <p className="font-medium">{booking.date.selectedDate}</p>
+            </div>
+
+            {/* Time */}
+            <div className="flex space-x-2 items-center">
+              <p className="text-gray-600 font-semibold">Time :</p>
+              <p className="font-medium">{booking.time}</p>
+            </div>
+
+                {
+                  booking.serviceType === "Home" && (
+                    <div className="flex space-x-2 items-center">
+                      <p className="text-gray-600 font-semibold">Location :</p>
+                      <p className="font-medium">{booking.location}</p>
+                    </div>
+                  )
+                }
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook"
 import { setServiceType, setStep } from "@/redux/features/bookingSlice"
-import { FaBackward, FaForward, FaCheck } from "react-icons/fa";
+import {FaInfoCircle, FaCheck } from "react-icons/fa";
 import { closeModal } from "@/redux/features/bookingSlice";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 
@@ -14,18 +14,21 @@ const services = [
     name: "Home Service",
     price: 10000,
     image: "/services/manicure.jpg",
+    note: 'Additional fee may apply for home Services'
   },
   {
     id: "2",
-    name: "Onsite- Ikeja ",
+    name: "ONSITE - No 97, Allen avenue beside glo office ikeja Lagos",
     price: 3000,
     image: "/services/pedicure.jpg",
+    note: ''
   },
   {
     id: "3",
-    name: "Onsite- Magodo",
+    name: "ONSITE - No 64, Adekunle banjo Magodo, beside domino pizza",
     price: 3000,
     image: "/services/nails.jpg",
+    note: ''
   },
 ]
 
@@ -48,9 +51,9 @@ export default function ServiceTypeStep() {
         {services.map((service) => (
           <div
             key={service.id}
-            onClick={() => dispatch(setServiceType(service.id))}
+            onClick={() => dispatch(setServiceType(service.name))}
             className={`relative rounded-lg overflow-hidden cursor-pointer border-2 transition-all text-center
-              ${serviceType === service.id ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
+              ${serviceType === service.name ? "border-pink-500" : "border-transparent hover:border-pink-200"}`}
           >
             <Image
               src={service.image}
@@ -59,15 +62,23 @@ export default function ServiceTypeStep() {
               height={200}
               className="w-full rounded-b-lg h-40 object-cover"
             />
-            {serviceType === service.id && (
-              <div className="absolute top-2 right-2 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+            {serviceType === service.name && (
+              <div className="absolute top-2 right-2 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center"> 
                 <FaCheck className="w-4 h-4 text-white" />
               </div>
             )}
             <div className="p-3">
-              <h4 className="font-medium">{service.name}</h4>
+              <h4 className="font-semibold text-base">{service.name}</h4>
               {/* <p className="text-sm text-gray-600">&#8358;{service.price.toLocaleString()}+</p> */}
             </div>
+            {
+              service.note && (
+                <div className="flex p-2 items-center">
+                  <FaInfoCircle size={30} className='text-red-700'/>
+                  <p className="text-sm text-gray-500">{service.note}</p>
+                </div>
+              )
+            }
           </div>
         ))}
       </div>

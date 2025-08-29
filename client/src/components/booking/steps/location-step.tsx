@@ -13,7 +13,7 @@ export default function LocationStep() {
   // const phone = useRef('');
   // const name = useRef('');
   const dispatch = useAppDispatch();
-  const { subServiceType, location, email, phone, name} = useAppSelector((state) => state.booking);
+  const { subServiceType, location, serviceType, email, phone, name} = useAppSelector((state) => state.booking);
   const { user } = useAppSelector((state) => state.auth);
 
 
@@ -33,7 +33,7 @@ export default function LocationStep() {
   };
 
   const handleNext = () => {
-    if (location) {
+    if (serviceType === "Home" && location || name || phone || email) {
       dispatch(setStep(6));
     }
   };
@@ -60,7 +60,7 @@ export default function LocationStep() {
       </div> */}
 
       <div>
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name*</label>
         <input
           type='text'
           id="name"
@@ -72,7 +72,7 @@ export default function LocationStep() {
       </div>
 
       <div>
-        <label htmlFor="phone">Phone</label>
+        <label htmlFor="phone">Phone*</label>
         <input
           type='number'
           id="phone"
@@ -84,7 +84,7 @@ export default function LocationStep() {
       </div>
 
       <div>
-        <label htmlFor="phone">email</label>
+        <label htmlFor="phone">email*</label>
         <input
           type='email'
           id="email"
@@ -95,17 +95,21 @@ export default function LocationStep() {
         />
       </div>
 
-      <div>
-        <label htmlFor="location">Location</label>
-        <input
-          type='text'
-          id="location"
-          value={location}
-          onChange={handleLocation}
-          placeholder="Input your Location"
-          className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
-        />
-      </div>
+        {
+          serviceType === "Home" && (
+            <div>
+              <label htmlFor="location">Location*</label>
+              <input
+                type='text'
+                id="location"
+                value={location}
+                onChange={handleLocation}
+                placeholder="Input your Location"
+                className="w-full h-14 mb-4 focus:ring-1 focus:ring-[#D77A8B] border px-5 rounded-xl border-[#D77A8B]"
+              />
+            </div>
+          )
+        }
               
 
       <div className="flex justify-between items-center">
@@ -116,7 +120,7 @@ export default function LocationStep() {
         </div>
         <button
           onClick={handleNext}
-          disabled={!location}
+          disabled={serviceType === "Home" && !location || !name || !phone || !email}
           className="text-white px-5 py-2 rounded-lg primary flex justify-center disabled:cursor-not-allowed items-center-safe"
         >
           Next
