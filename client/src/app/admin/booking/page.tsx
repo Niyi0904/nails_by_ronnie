@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { AppState } from "@/redux/store";
 import { useRef } from "react";
+import { FetchAllBookings } from "@/functions/bookingfunc/fetchBookings";
 
 
 const statusOptions = ["confirmed", "pending", "completed", "cancelled"];
@@ -29,11 +30,11 @@ export default function AdminBookingsPage() {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/booking/allBookings");
-      setBookings(res.data.allBookings || []);
-      setPagination((prev) => ({ ...prev, total: res.data.allBookings.length || 0 }));
+      const res = await FetchAllBookings();
+      setBookings(res || []);
+      setPagination((prev) => ({ ...prev, total: res.length || 0 }));
 
-      console.log(res.data.allBookings)
+      console.log(res)
     } catch (err) {
       console.error(err);
       toast.error("Failed to fetch bookings.");
@@ -134,15 +135,15 @@ const totalPages = Math.ceil(pagination.total / pagination.limit);
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_date}</td>
                 <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">{booking.booking_time}</td>
                 <td className={`p-3 border-x border-gray-400 dark:border-gray-700 ${
-                      booking.booking_status === 'confirmed' ? ' text-green-800' :
-                      booking.booking_status === 'pending' ? ' text-yellow-500' :
-                      booking.booking_status === 'completed' ? ' text-blue-800' :
+                      booking.status === 'confirmed' ? ' text-green-800' :
+                      booking.status === 'pending' ? ' text-yellow-500' :
+                      booking.status === 'completed' ? ' text-blue-800' :
                       ' text-red-800'
-                    }`}>{booking.booking_status}</td>
+                    }`}>{booking.status}</td>
                 <td className="p-3 sm:p-4  rounded-br-md border-gray-400 dark:border-gray-700">
                     <select
                         className="border p-1 rounded dark:bg-[#1E1B23]"
-                        value={booking.booking_status}
+                        value={booking.status}
                         onChange={(e) => updateStatus(booking.id, e.target.value)}
                     >
                         {statusOptions.map((status) => (

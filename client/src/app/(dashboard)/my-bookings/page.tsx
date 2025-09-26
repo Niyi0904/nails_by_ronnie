@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import Loading from "./loading";
 import Link from "next/link";
 
-import { FetchBookings } from "@/functions/bookingfunc/fetchBookings";
+import { FetchAllBookings, FetchBookings } from "@/functions/bookingfunc/fetchBookings";
 
 const BookingsTable = dynamic(() => import("@/components/booking/bookings-table"), {
   ssr: false,
@@ -40,6 +40,9 @@ export default function BookingsPage() {
     try {
       setIsLoading(true);
       const response = await FetchBookings(id);
+      const test = await FetchAllBookings();
+
+      console.log(test)
       console.log(response)
       setBookings(response);
       setPagination((prev) => ({

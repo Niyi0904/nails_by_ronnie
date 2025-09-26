@@ -114,8 +114,8 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Profile    <FaAngleDown className="h-4 w-4" />
-                  </DropdownMenuItem>
+                  {/* <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Profile    <FaAngleDown className="h-4 w-4" />
+                  </DropdownMenuItem> */}
 
                   <DropdownMenuItem asChild>  
                     <Link href="/my-bookings" className="flex justify-between">
@@ -123,25 +123,25 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  {/* <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
-                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
-
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
+{/* 
                   <DropdownMenuItem asChild>
                     <Link href='/cart' className='flex justify-between'>
                       Carts <FaAngleRight className="h-4 w-4" />
                     </Link>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  </DropdownMenuItem> */}
+{/* 
+                  <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
                   {/* <DropdownMenuItem className='flex justify-between cursor-not-allowed text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
-                  <DropdownMenuItem asChild>
+                  {/* <DropdownMenuItem asChild>
                     <Link href='/shop' className='flex justify-between'>
                     Shop <FaAngleRight className="h-4 w-4" />
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                 </div>
 
                 {/* <div className='flex flex-col mt-10'>
@@ -182,7 +182,7 @@ export default function Header() {
           <div className='space-x-6 flex items-center text-center align-middle'>
               <Link href="/" className="hover:underline">Home</Link>
               <Link href="/my-bookings" className="hover:underline">Bookings</Link>
-              <Link href='/shop' className="hover:underline cursor-pointer">Shop</Link>
+              {/* <Link href='/shop' className="hover:underline cursor-pointer">Shop</Link> */}
               <Link href='/gallery' className="hover:underline cursor-pointer">Gallery</Link>
               <span>
                 <Link href='/login' className="hover:underline cursor-pointer">
@@ -226,8 +226,8 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Profile <FaAngleDown className="h-4 w-4" />
-                  </DropdownMenuItem> 
+                  {/* <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Profile <FaAngleDown className="h-4 w-4" />
+                  </DropdownMenuItem>  */}
 
                   <DropdownMenuItem asChild>
                     <Link href="/my-bookings" className="relative w-full justify-between flex">
@@ -235,7 +235,7 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  {/* <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Orders <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
                   <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Favourites <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
 
@@ -245,15 +245,15 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem>
+                  <DropdownMenuItem className={`justify-between hidden ${isAuthenticated ? 'flex text-gray-400' : ''}`}>Saved Items <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
                   {/* <DropdownMenuItem className='flex justify-between text-gray-400'>Chat <FaAngleRight className="h-4 w-4" /></DropdownMenuItem> */}
 
-                  <DropdownMenuItem asChild>
+                  {/* <DropdownMenuItem asChild>
                     <Link href='/shop' className='flex justify-between'>
                         Shop  <FaAngleRight className="h-4 w-4" />
                     </Link>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
 
                   <DropdownMenuItem asChild>
                     <Link href='/gallery' className='flex justify-between'>
