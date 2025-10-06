@@ -1,5 +1,5 @@
 import { db } from "@/lib/Firebase/firebaseUtils"
-import { getDocs, collection, collectionGroup,  query, orderBy } from "firebase/firestore"
+import { getDocs, collection, collectionGroup,  query, orderBy, doc, updateDoc } from "firebase/firestore"
 
 export const FetchBookings = async (userEmail: string): Promise<any|string> => {
 
@@ -45,3 +45,19 @@ export const FetchAllBookings = async (): Promise<any|string> => {
   }
 
 }
+
+export const updateBooking = async (bookingId: string, newStatus: string, bookingEmail: string) => {
+  try {
+    // Reference to user doc (use email carefully as ID)
+    const docRef = doc(db, "users", bookingEmail, "bookings", bookingId);
+
+    // Update booking Document
+    await updateDoc(docRef, {
+      status: newStatus,
+    });
+
+  } catch (error) {
+    console.error("Error adding new booking:", error);
+    throw error;
+  }
+};

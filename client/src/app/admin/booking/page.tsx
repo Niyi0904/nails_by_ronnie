@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { AppState } from "@/redux/store";
 import { useRef } from "react";
-import { FetchAllBookings } from "@/functions/bookingfunc/fetchBookings";
+import { FetchAllBookings, updateBooking } from "@/functions/bookingfunc/fetchBookings";
 
 
 const statusOptions = ["confirmed", "pending", "completed", "cancelled"];
@@ -33,27 +33,21 @@ export default function AdminBookingsPage() {
       const res = await FetchAllBookings();
       setBookings(res || []);
       setPagination((prev) => ({ ...prev, total: res.length || 0 }));
-
-      console.log(res)
     } catch (err) {
-      console.error(err);
       toast.error("Failed to fetch bookings.");
     } finally {
       setLoading(false);
     }
 };
 
-const updateStatus = async (bookingId: string, newStatus: string) => {
+const updateStatus = async (bookingId: string, newStatus: string, bookingEmail: string) => {
     try {
-      const patch = await api.patch(`booking/${bookingId}/status`, {
-        status: newStatus,
-      });
-      console.log(patch.data);
+      await updateBooking(bookingId, newStatus, bookingEmail);
       toast.success("Booking status updated!");
       fetchBookings();
     } catch (err) {
-        console.error(err);
-        toast.error("Failed to update booking.");
+      console.error(err);
+      toast.error("Failed to update booking.");
     }
 };
 
@@ -144,7 +138,7 @@ const totalPages = Math.ceil(pagination.total / pagination.limit);
                     <select
                         className="border p-1 rounded dark:bg-[#1E1B23]"
                         value={booking.status}
-                        onChange={(e) => updateStatus(booking.id, e.target.value)}
+                        onChange={(e) => updateStatus(booking.id, e.target.value, booking.email)}
                     >
                         {statusOptions.map((status) => (
                             <option key={status} value={status}>
