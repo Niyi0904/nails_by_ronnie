@@ -3,10 +3,13 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import { closeModal, setImage } from "@/redux/features/gallerySlice";
 import { MdOutlineCancel } from "react-icons/md";
+import { FaUpload } from "react-icons/fa6";
 import React, { useEffect, useState } from "react";
 import { setDescription, setName } from "@/redux/features/gallerySlice";
 import api from "@/utils/api";
 import toast from 'react-hot-toast';
+import { addNewGallery } from "@/functions/galleryfunc/function";
+import Loading from "@/app/(dashboard)/my-bookings/loading";
 
 
 
@@ -15,6 +18,7 @@ export default function AdminModal() {
   const [image, setImage] = useState<File | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { isModalOpen, name, description} = useAppSelector((state) => state.gallery);
+  const [loading, setLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     err: unknown;
@@ -26,19 +30,20 @@ export default function AdminModal() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!image) return;
+    setLoading(true);
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    if(image) {
-      formData.append('image', image);
+    const data = {
+      name: name,
+      description: description,
+      image: image
     }
 
     try {
-      const response = await api.post('/gallery/addNewGallery', formData);
+      const response = await addNewGallery(data);
       console.log(response);
       toast.success('Gallery added successfuly');
-      
+      dispatch(closeModal());
     } catch (err: any) {
       let errorMessage = 'Internal server error, please try again';
 
@@ -46,7 +51,7 @@ export default function AdminModal() {
         // Backend returned a non-2xx status code
         errorMessage = err.response.data?.error || err.response.data?.message || 'Something went wrong';
         console.error('Response Error:', err.response);
-        console.log(formData);
+        console.log(data);
       } else if (err.request) {
         // Request was made but no response received
         errorMessage = 'No response from server. Please check your internet or try again later.';
@@ -63,7 +68,8 @@ export default function AdminModal() {
         message: errorMessage
       })
     } finally{
-      console.log(formData);
+      console.log(data);
+      setLoading(false);
     }
 
 
@@ -82,7 +88,7 @@ export default function AdminModal() {
           </button>
         </div>
         <div className="p-4 flex-1 overflow-y-auto">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col">
               <label htmlFor="name">Name</label>
               <input
@@ -91,7 +97,7 @@ export default function AdminModal() {
                 onChange={(e) => dispatch(setName(e.target.value))}
                 required
                 id="name"
-                className="border-pink-800"
+                className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg"
                 />
             </div>
 
@@ -103,7 +109,7 @@ export default function AdminModal() {
                 onChange={(e) => dispatch(setDescription(e.target.value))}
                 required
                 id="description"
-                className="border-pink-800"
+                className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg"
                 />
             </div>
 
@@ -115,13 +121,18 @@ export default function AdminModal() {
                 onChange={(e) => setImage(e.target.files?.[0])}
                 required
                 id= "image"
-                className="border-pink-800"
+                className="pl-9 w-full border px-5 py-2 border-gray-400 rounded-lg"
               />
             </div>
 
             <div>
-              <button type="submit">
-                Upload
+              <button type="submit" className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#D77A8B] flex justify-center disabled:cursor-not-allowed items-center-safe hover:text-white bg-[#943F54] dark:bg-[#943F54] dark:hover:bg-[#D77A8B]">
+                {
+                  !loading ? <span className="flex items-center">
+                    <FaUpload className="mr-3"/>
+                    Upload
+                  </span> : <Loading/>
+                }
               </button>
             </div>
           </form>

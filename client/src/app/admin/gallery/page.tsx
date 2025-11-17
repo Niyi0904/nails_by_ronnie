@@ -12,65 +12,67 @@ import { useSelector } from "react-redux";
 import { AppState } from "@/redux/store";
 import { useRef } from "react";
 import AdminModal from "@/components/adminGallery/admin-modal";
+import { FetchAllGallery } from "@/functions/galleryfunc/function";
+import Loading from "@/app/(dashboard)/my-bookings/loading";
 
 
 type Gallery = {
   id: number;
   name: string;
   description: string;
-  image: string;
+  imageUrl: string;
 };
 
-const galleries: Gallery[] = [
-  {
-    id: 1,
-    name: 'Acrylic Nail',
-    description: 'High-quality long-lasting polish.',
-    image: '/assets/slider1.jpg',
-  },
-  {
-    id: 2,
-    name: 'French Nail',
-    description: 'Precision trimming for clean cuticles.',
-    image: '/assets/slider2.jpg',
-  },
-  {
-    id: 3,
-    name: 'Acrylic Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider3.jpg',
-  },
-    {
-    id: 4,
-    name: 'French Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider4.jpg',
-  },
-    {
-    id: 5,
-    name: 'Acrylic Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider2.jpg',
-  },
-    {
-    id: 6,
-    name: 'French Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider4.jpg',
-  },
-    {
-    id: 7,
-    name: 'Acrylic Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider3.jpg',
-  },
-    {
-    id: 8,
-    name: 'Acrylic Nail',
-    description: 'Smooth and shape your nails easily.',
-    image: '/assets/slider1.jpg',
-  },
-];
+// const galleries: Gallery[] = [
+//   {
+//     id: 1,
+//     name: 'Acrylic Nail',
+//     description: 'High-quality long-lasting polish.',
+//     image: '/assets/slider1.jpg',
+//   },
+//   {
+//     id: 2,
+//     name: 'French Nail',
+//     description: 'Precision trimming for clean cuticles.',
+//     image: '/assets/slider2.jpg',
+//   },
+//   {
+//     id: 3,
+//     name: 'Acrylic Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider3.jpg',
+//   },
+//     {
+//     id: 4,
+//     name: 'French Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider4.jpg',
+//   },
+//     {
+//     id: 5,
+//     name: 'Acrylic Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider2.jpg',
+//   },
+//     {
+//     id: 6,
+//     name: 'French Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider4.jpg',
+//   },
+//     {
+//     id: 7,
+//     name: 'Acrylic Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider3.jpg',
+//   },
+//     {
+//     id: 8,
+//     name: 'Acrylic Nail',
+//     description: 'Smooth and shape your nails easily.',
+//     image: '/assets/slider1.jpg',
+//   },
+// ];
 
 
 export default function AdminBookingsPage() {
@@ -79,22 +81,21 @@ export default function AdminBookingsPage() {
   const router = useRouter();
   const {user, isAuthenticated} = useSelector((state: AppState) => state.auth);
   const [search, setSearch] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [galleries, setGalleries] = useState<Gallery[]>([]);
 
-  //   const fetchBookings = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const res = await api.get("/booking/allBookings");
-  //       setBookings(res.data.allBookings || []);
-  //       setPagination((prev) => ({ ...prev, total: res.data.allBookings.length || 0 }));
-  
-  //       console.log(res.data.allBookings)
-  //     } catch (err) {
-  //       console.error(err);
-  //       toast.error("Failed to fetch bookings.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  // };
+
+const fetchGalleries = async () => {
+  setLoading(true);
+  try {
+    const res = await FetchAllGallery();
+    setGalleries(res || []);
+  } catch (err) {
+    toast.error("Failed to fetch gallery.");
+  } finally {
+    setLoading(false);
+  }
+};
   
   useEffect(() => {
   if (!user || user.role !== "admin") {
@@ -102,8 +103,10 @@ export default function AdminBookingsPage() {
   
       return;
   }
-  // fetchBookings();
+  fetchGalleries();
   }, [user]);
+
+
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,13 +157,17 @@ export default function AdminBookingsPage() {
                 </button>
               </div>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          
+          {
+            loading? (
+              <Loading/>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 {filteredGallery.map(gallery => (
                     <div key={gallery.id} className='relative'>
                     <div className='relative w-full h-52 rounded-xl'>
                         <Image
-                        src={gallery.image}
+                        src={gallery.imageUrl}
                         alt={gallery.name}
                         fill
                         className='rounded-xl'
@@ -172,7 +179,10 @@ export default function AdminBookingsPage() {
                     </div>
                     </div>
                 ))}
-            </div>
+              </div>
+            )
+          }
+          
       </div>
       <AdminModal/>
     </div>
