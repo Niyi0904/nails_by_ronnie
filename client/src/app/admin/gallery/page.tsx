@@ -83,6 +83,7 @@ export default function AdminBookingsPage() {
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState<Gallery[]>([]);
+  const [lightboxImage, setLightboxImage] = useState<Gallery | null>(null);
 
 
 const fetchGalleries = async () => {
@@ -165,13 +166,14 @@ const fetchGalleries = async () => {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 {filteredGallery.map(gallery => (
                     <div key={gallery.id} className='relative'>
-                    <div className='relative w-full h-52 rounded-xl'>
-                        <Image
-                        src={gallery.imageUrl}
-                        alt={gallery.name}
-                        fill
-                        className='rounded-xl'
-                        />
+                    <div className='relative w-full h-52 rounded-xl' onClick={() => setLightboxImage(gallery)}
+>
+                      <Image
+                      src={gallery.imageUrl}
+                      alt={gallery.name}
+                      fill
+                      className='rounded-xl'
+                      />
                     </div>
                     <div className='text-white w-full absolute top-[70%] left-1'>
                         <h1>{gallery.name}</h1>
@@ -182,7 +184,39 @@ const fetchGalleries = async () => {
               </div>
             )
           }
-          
+
+          {lightboxImage && (
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+              onClick={() => setLightboxImage(null)}
+            >
+              <div
+                className="relative max-w-3xl w-full animate-zoom"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={lightboxImage.imageUrl}
+                  alt="Image preview"
+                  className="w-full h-auto rounded-xl shadow-2xl"
+                />
+
+                <h2 className="text-white text-lg md:text-xl font-semibold text-center mb-1">
+                  {lightboxImage.name || 'Untitled'}
+                </h2>
+
+                <p className="text-white/90 text-sm md:text-base text-center">
+                  {lightboxImage.description || 'No description available.'}
+                </p>
+
+                <button
+                  onClick={() => setLightboxImage(null)}
+                  className="absolute -top-6 right-0 text-white text-3xl"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
       </div>
       <AdminModal onAction={fetchGalleries}/>
     </div>

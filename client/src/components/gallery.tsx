@@ -69,7 +69,7 @@ type Gallery = {
 export default function GallerySection() {
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState<Gallery[]>([]);
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<Gallery | null>(null);
     
 
   const fetchGalleries = async () => {
@@ -97,7 +97,7 @@ export default function GallerySection() {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {(galleries.slice(0, 10) || galleriesFallBack).map(gallery => (
           <div key={gallery.id} className='relative'>
-            <div className='relative w-full h-52 aspect-auto rounded-xl' onClick={() => setLightboxImage(gallery.imageUrl)}
+            <div className='relative w-full h-52 aspect-auto rounded-xl' onClick={() => setLightboxImage(gallery)}
 >
               <Image
                 src={gallery.imageUrl}
@@ -124,10 +124,18 @@ export default function GallerySection() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={lightboxImage}
+              src={lightboxImage.imageUrl}
               alt="Image preview"
               className="w-full h-auto rounded-xl shadow-2xl"
             />
+
+            <h2 className="text-white text-lg md:text-xl font-semibold text-center mb-1">
+              {lightboxImage.name || 'Untitled'}
+            </h2>
+
+            <p className="text-white/90 text-sm md:text-base text-center">
+              {lightboxImage.description || 'No description available.'}
+            </p>
 
             <button
               onClick={() => setLightboxImage(null)}
