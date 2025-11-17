@@ -200,13 +200,15 @@ const fetchGalleries = async () => {
                   className="w-full h-auto rounded-xl shadow-2xl"
                 />
 
-                <h2 className="text-white text-lg md:text-xl font-semibold text-center mb-1">
-                  {lightboxImage.name || 'Untitled'}
-                </h2>
+                <div className="absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-sm p-4 rounded-b-xl text-center">
+                  <h2 className="text-white text-lg md:text-xl font-semibold text-center mb-1">
+                    {lightboxImage.name || 'Untitled'}
+                  </h2>
 
-                <p className="text-white/90 text-sm md:text-base text-center">
-                  {lightboxImage.description || 'No description available.'}
-                </p>
+                  <p className="text-white/90 text-sm md:text-base text-center">
+                    {lightboxImage.description || 'No description available.'}
+                  </p>
+                </div>
 
                 <button
                   onClick={() => setLightboxImage(null)}
