@@ -11,10 +11,13 @@ import toast from 'react-hot-toast';
 import { addNewGallery } from "@/functions/galleryfunc/function";
 import Loading from "@/app/(dashboard)/my-bookings/loading";
 
+interface ChildProps {
+  onAction: () => void;
+}
 
 
 
-export default function AdminModal() {
+export default function AdminModal({ onAction }: ChildProps) {
   const [image, setImage] = useState<File | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { isModalOpen, name, description} = useAppSelector((state) => state.gallery);
@@ -43,6 +46,7 @@ export default function AdminModal() {
       const response = await addNewGallery(data);
       console.log(response);
       toast.success('Gallery added successfuly');
+      onAction();
       dispatch(closeModal());
     } catch (err: any) {
       let errorMessage = 'Internal server error, please try again';

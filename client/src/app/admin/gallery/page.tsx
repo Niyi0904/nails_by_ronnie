@@ -184,7 +184,7 @@ const fetchGalleries = async () => {
           }
           
       </div>
-      <AdminModal/>
+      <AdminModal onAction={fetchGalleries}/>
     </div>
   );
 }

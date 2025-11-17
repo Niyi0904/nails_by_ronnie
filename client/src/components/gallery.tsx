@@ -4,6 +4,8 @@ import { FetchAllGallery } from '@/functions/galleryfunc/function';
 import Image from 'next/image';
 import Link from "next/link";
 import { useState, useEffect } from 'react';
+import { MdCancel } from "react-icons/md";
+
 
 
 const galleriesFallBack: Gallery[] = [
@@ -67,6 +69,7 @@ type Gallery = {
 export default function GallerySection() {
   const [loading, setLoading] = useState(false);
   const [galleries, setGalleries] = useState<Gallery[]>([]);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
     
 
   const fetchGalleries = async () => {
@@ -94,7 +97,8 @@ export default function GallerySection() {
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {(galleries.slice(0, 10) || galleriesFallBack).map(gallery => (
           <div key={gallery.id} className='relative'>
-            <div className='relative w-full h-52 aspect-auto rounded-xl'>
+            <div className='relative w-full h-52 aspect-auto rounded-xl' onClick={() => setLightboxImage(gallery.imageUrl)}
+>
               <Image
                 src={gallery.imageUrl}
                 alt={gallery.name}
@@ -109,6 +113,31 @@ export default function GallerySection() {
           </div>
         ))}
       </div>
+
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+          onClick={() => setLightboxImage(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full animate-zoom"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightboxImage}
+              alt="Image preview"
+              className="w-full h-auto rounded-xl shadow-2xl"
+            />
+
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute -top-6 right-0 text-white text-3xl"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className='flex justify-center'>
         <Link
