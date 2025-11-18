@@ -77,7 +77,7 @@ export default function footer() {
           <div className="flex gap-4 text-2xl">
             {[
               { icon: <FaInstagram />, link: 'https://www.instagram.com/nailed_by_ronnie?igsh=MTh4Y3EzaWducHJlNg%3D%3D&utm_source=qr', name: 'Instagram' },
-              { icon: <FaTwitter />, link: 'https://twitter.com', name: 'Twitter' },
+              { icon: <FaTwitter />, link: 'https://x.com/ronkeowoyemi?s=21', name: 'Twitter' },
               { icon: <FaFacebookF />, link: 'https://facebook.com', name: 'Facebook' },
               { icon: <MdEmail />, link: 'mailto:Ronkeowoyemi@gmail.com', name: 'Email' },
             ].map(({ icon, link, name }, i) => (

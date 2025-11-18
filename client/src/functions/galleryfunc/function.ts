@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, collection, query, doc, getDoc, getDocs, updateDoc, serverTimestamp, orderBy } from "firebase/firestore";
 import { db } from "@/lib/Firebase/firebaseUtils";
 import { uploadImage } from '@/functions/uploadImage/uploadImage';
 
@@ -12,7 +12,8 @@ export const addNewGallery = async (galleryData: any) => {
       const response = await addDoc(galleryDocRef, {
         name: galleryData.name,
         description: galleryData.description,
-        imageUrl: image.data.url
+        imageUrl: image.data.url,
+        createdAt: serverTimestamp()
       })
 
       return response;
@@ -25,7 +26,8 @@ export const FetchAllGallery = async (): Promise<any|string> => {
 
     try {
     const galleryRef = collection(db, "gallery");
-    const snapshot = await getDocs(galleryRef);
+    const q = query(galleryRef, orderBy("createdAt", "desc"))
+    const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       return "No gallery found.";
