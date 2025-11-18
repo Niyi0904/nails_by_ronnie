@@ -141,7 +141,7 @@ export default function ReviewSection() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="space-y-4 max-w-sm">
+        <DialogContent className="space-y-4 w-full max-w-sm sm:max-w-md md:max-w-lg p-4 sm:p-6 rounded-lg overflow-auto max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Add Review</DialogTitle>
           </DialogHeader>
@@ -153,6 +153,7 @@ export default function ReviewSection() {
               placeholder="Enter client name"
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
+              autoFocus={false}
             />
           </div>
 
