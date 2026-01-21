@@ -66,7 +66,7 @@ export default function footer() {
               <FaLocationDot className="h-7 w-7"/>No 64, Adekunle banjo Magodo, beside domino pizza
             </div>
             <div className="flex gap-4">
-              <FaLocationDot className="h-7 w-7"/>No 97, Allen avenue beside glo office ikeja Lagos
+              <FaLocationDot className="h-7 w-7"/>No 29B, Afolabi Aina, at nelson's and grills plaza, ikeja Lagos
             </div>
           </div>
         </div>

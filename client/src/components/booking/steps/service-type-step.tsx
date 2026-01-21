@@ -18,7 +18,7 @@ const services = [
   },
   {
     id: "2",
-    name: "ONSITE - No 97, Allen avenue beside glo office ikeja Lagos",
+    name: "ONSITE - No 29B, Afolabi Aina, at nelson's and grills plaza, ikeja Lagos",
     price: 3000,
     image: "/services/pedicure.jpg",
     note: ''
