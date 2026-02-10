@@ -1,16 +1,15 @@
 'use client';
 
-import { FaStar } from 'react-icons/fa';
-import Link from "next/link";
+import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { addNewReview, FetchAllReviews } from '@/functions/reviewFunc/function';
 import Loading from '@/app/(dashboard)/my-bookings/loading';
-
 
 type Review = {
   id: string;
@@ -18,15 +17,6 @@ type Review = {
   description: string;
   stars: number;
 };
-
-// const reviews: Review[] = [
-//   {
-//     id: 1,
-//     name: 'Niyi Owoyemi',
-//     description: 'They have the best services and their customer approach is the best, i rocommend this as the best nailtech in Lagos',
-//     stars: 5,
-//   },
-// ];
 
 const getInitials = (fullName: string) => {
   const names = fullName.trim().split(" ");
@@ -37,7 +27,7 @@ const getInitials = (fullName: string) => {
 
 export default function ReviewSection() {
   const [open, setOpen] = useState(false);
-  const [rating, setRating] = useState(0); // 0 to 5
+  const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [clientName, setClientName] = useState("");
   const [reviewText, setReviewText] = useState("");
@@ -50,147 +40,140 @@ export default function ReviewSection() {
       const res = await FetchAllReviews();
       setReviews(res || []);
     } catch (err) {
-      toast.error("Failed to fetch gallery.");
+      toast.error("Failed to fetch reviews.");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, []);
+  useEffect(() => { fetchReviews(); }, []);
 
   const handleSubmit = async () => {
-    setLoading(true);
     if (!clientName || !reviewText || !rating) {
-      toast.error('All fields are required');
+      toast.error('Please fill in all fields and provide a rating');
       return;
     }
-    const reviewData = {
-      name: clientName,
-      description: reviewText,
-      stars: rating,
-    };
+    setLoading(true);
     try {
-      console.log("Review submitted:", reviewData);
-      // Call your API to save `reviewData` here
-      const response = await addNewReview(reviewData);
-      console.log(response);
-      // Optional: reset form
-      setClientName("");
-      setReviewText("");
-      setRating(0);
+      await addNewReview({ name: clientName, description: reviewText, stars: rating });
+      setClientName(""); setReviewText(""); setRating(0);
       fetchReviews();
       setOpen(false);
-      toast.success('Gallery added successfuly');
+      toast.success('Thank you for your review!');
     } catch (error) {
-      toast.error('Something went wrong please try again');
-      console.error(error);
-      throw new Error('Something went wrong please try again')
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
-
-};
-
+  };
 
   return (
-    <section className="mt-25 text-[#1c1c1c] dark:text-white">
-      <h2 className="text-3xl font-bold text-center mb-8">
-        Reviews
-      </h2>
+    <section className="py-20">
+      <div className="text-center mb-12">
+        <h2 className="text-[#D77A8B] font-bold tracking-widest uppercase text-xs mb-2">Testimonials</h2>
+        <h1 className="text-3xl md:text-4xl font-bold dark:text-white">Client Stories</h1>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-      {reviews.map(review => {
-        const totalStars = 5;
-        return (
-          <div key={review.id} className="flex flex-col p-5 rounded-lg shadow-lg bg-white dark:bg-gray-800">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gray-400 flex justify-center items-center w-10 h-10 rounded-full font-bold text-white">
+      {/* Reviews Grid */}
+      <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+        {reviews.map((review, index) => (
+          <motion.div 
+            key={review.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="break-inside-avoid bg-white dark:bg-[#1A1A1A] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col"
+          >
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#943F54] to-[#D77A8B] flex items-center justify-center text-white font-bold text-lg shrink-0">
                 {getInitials(review.name)}
               </div>
-              <div className="flex flex-col">
-                <h1 className="font-semibold text-lg text-gray-900 dark:text-white">{review.name}</h1>
-                <div className="flex space-x-1" aria-label={`Rating: ${review.stars} out of ${totalStars} stars`}>
-                  {Array.from({ length: totalStars }, (_, index) => (
-                    <FaStar
-                      key={index}
-                      className={index < review.stars ? 'text-yellow-500' : 'text-gray-400'}
-                    />
+              <div>
+                <h3 className="font-bold text-gray-900 dark:text-white leading-none">{review.name}</h3>
+                <div className="flex mt-1">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} className={`text-xs ${i < review.stars ? 'text-yellow-400' : 'text-gray-200 dark:text-gray-700'}`} />
                   ))}
                 </div>
               </div>
             </div>
-            <p className="mt-2 text-gray-700 dark:text-gray-300">{review.description}</p>
-          </div>
-        )})}
+            
+            <div className="relative">
+              <FaQuoteLeft className="absolute -top-2 -left-2 text-gray-100 dark:text-gray-800 text-3xl -z-0" />
+              <p className="relative z-10 text-gray-600 dark:text-gray-300 italic leading-relaxed">
+                {review.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
-      <div className='flex justify-center space-x-4'>
-        {/* <Link
-          href="#"
-          onClick={() => toast.error('Feature coming soon!')}
-          className="text-white mt-3 px-5 py-2 rounded-lg primary flex justify-center w-[50%] sm:w-[35%] items-center-safe"
+      {/* Action Buttons */}
+      <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <Button 
+          onClick={() => setOpen(true)}
+          className="bg-[#943F54] hover:bg-[#D77A8B] text-white px-10 py-6 rounded-full text-lg shadow-lg transition-all duration-300 active:scale-95"
         >
-          View all
-        </Link> */}
-
-        <button className='text-white mt-3 px-5 py-2 rounded-lg primary flex justify-center w-[50%] sm:w-[35%] items-center-safe' aria-label="add review" onClick={() => setOpen(true)}>
-            Add a Review
-        </button>
+          Share Your Experience
+        </Button>
       </div>
 
+      {/* Add Review Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="space-y-4 w-full max-w-sm sm:max-w-md md:max-w-lg p-4 sm:p-6 rounded-lg overflow-auto max-h-[90vh]">
+        <DialogContent className="sm:max-w-[425px] rounded-2xl border-none shadow-2xl">
           <DialogHeader>
-            <DialogTitle>Add Review</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-center">Write a Review</DialogTitle>
           </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <p className="text-sm font-medium text-gray-500">Your Rating</p>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={`text-4xl transition-all ${star <= (hoverRating || rating) ? 'text-yellow-400 scale-110' : 'text-gray-200'}`}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          {/* Client Name */}
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Client Name</label>
-            <Input
-              placeholder="Enter client name"
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              autoFocus={false}
-            />
-          </div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold ml-1">Your Name</label>
+              <Input 
+                placeholder="How should we call you?" 
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="rounded-xl border-gray-200 focus:ring-[#D77A8B]"
+              />
+            </div>
 
-          {/* Review */}
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Review</label>
-            <Textarea
-              placeholder="Write the review..."
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-            />
-          </div>
-
-          {/* Star Rating */}
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Stars</label>
-            <div className="flex items-center gap-1 text-2xl cursor-pointer">
-              {[1,2,3,4,5].map((star) => (
-                <span
-                  key={star}
-                  className={`transition-colors ${
-                    star <= (hoverRating || rating) ? 'text-yellow-400' : 'text-gray-300'
-                  }`}
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHoverRating(star)}
-                  onMouseLeave={() => setHoverRating(0)}
-                >
-                  ★
-                </span>
-              ))}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold ml-1">Your Story</label>
+              <Textarea 
+                placeholder="Tell us about your service..." 
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                className="rounded-xl min-h-[100px] border-gray-200 focus:ring-[#D77A8B]"
+              />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" className='cursor-pointer' onClick={() => setOpen(false)}>Cancel</Button>
-
-            <Button type="submit" onClick={handleSubmit} className="text-white dark:text-[#F2F2F2] px-5 py-2 rounded-lg hover:bg-[#D77A8B] flex justify-center disabled:cursor-not-allowed cursor-pointer items-center-safe hover:text-white bg-[#943F54] dark:bg-[#943F54] dark:hover:bg-[#D77A8B]">{loading ? <Loading/> : 'Submit Review'}</Button>
+            <Button 
+              disabled={loading}
+              onClick={handleSubmit} 
+              className="w-full py-6 bg-[#943F54] hover:bg-[#D77A8B] text-white rounded-xl font-bold"
+            >
+              {loading ? <Loading /> : 'Post Review'}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

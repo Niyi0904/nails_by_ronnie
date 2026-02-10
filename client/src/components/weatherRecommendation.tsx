@@ -1,125 +1,109 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import BeautyQuote from './beautyQuotes';
 
-type WeatherData = {
-  temp: number;
-  condition: string;
-  icon: string;
-  city: string;
-};
-
-type Recommendation = {
-  title: string;
-  description: string;
-  image: string;
-};
+type WeatherData = { temp: number; condition: string; icon: string; city: string; };
+type Recommendation = { title: string; description: string; image: string; color: string; };
 
 export default function WeatherRecommendation() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   async function fetchWeather() {
     try {
-      const res = await fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=Lagos`
-      );
+      const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=Lagos`);
       const data = await res.json();
-      const weatherData: WeatherData = {
+      
+      const weatherData = {
         temp: data.current.temp_c,
         condition: data.current.condition.text,
         icon: data.current.condition.icon,
         city: data.location.name,
       };
-      setWeather(weatherData);
 
-      // Simple logic (you can improve this)
-      const recs = { 
-        Hot: {
-          title: 'Go Bold with Neon!',
-          description: 'The heat is on—go bright with neon or tropical shades.',
+      const cond = weatherData.condition.toLowerCase();
+      let rec: Recommendation;
+
+      if (weatherData.temp >= 30) {
+        rec = {
+          title: 'Bold & Sun-Kissed',
+          description: 'It’s a hot day! Match the heat with vibrant Neons or tropical Corals.',
           image: '/recommend/nail-hot.png',
-        },
-        Rain: {
-          title: 'Pastel Mood',
-          description: 'Match the rain with calm pastel nails.',
+          color: 'from-orange-50 to-pink-50 dark:from-orange-950/20 dark:to-pink-950/20'
+        };
+      } else if (cond.includes('rain') || cond.includes('drizzle')) {
+        rec = {
+          title: 'Cool Rain Pastels',
+          description: 'The weather is gloomy, but your nails don’t have to be. Try soft Lavenders or Sky Blues.',
           image: '/recommend/nail-rain.jpg',
-        },
-        Cold: {
-          title: 'Cozy Elegance',
-          description: 'Try deep reds or muted tones for the cool weather.',
+          color: 'from-blue-50 to-slate-50 dark:from-blue-950/20 dark:to-slate-950/20'
+        };
+      } else {
+        rec = {
+          title: 'Classic Cozy Tones',
+          description: 'Perfect weather for deep Burgundies, Nudes, or sophisticated Earth tones.',
           image: '/recommend/nail-cold2.png',
-        },
-      };
+          color: 'from-rose-50 to-stone-50 dark:from-rose-950/20 dark:to-stone-950/20'
+        };
+      }
 
-      if (weatherData.temp >= 30) setRecommendation(recs.Hot);
-      else if (weatherData.condition.toLowerCase().includes('rain'))
-        setRecommendation(recs.Rain);
-      else setRecommendation(recs.Cold);
+      setWeather(weatherData);
+      setRecommendation(rec);
     } catch (err) {
-      console.error(err);
-      setError(err)
+      console.error("Weather fetch failed", err);
+    } finally {
+      setLoading(false);
     }
   }
-  useEffect(() => {
-    fetchWeather();
-  }, []);
+
+  useEffect(() => { fetchWeather(); }, []);
 
   return (
-    <section className="mt-20 bg-[#FCE4EC] dark:bg-[#2A262F] py-16 px-4 md:px-16 rounded-xl text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-6">
-          Today's Nail Recommendation
-        </h2>
+    <section className={`mt-20 rounded-3xl p-8 md:p-12 transition-all duration-700 bg-gradient-to-br ${recommendation?.color || 'bg-gray-50'}`}>
+      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+        <div className="text-center mb-10">
+          <h2 className="text-[#D77A8B] font-bold tracking-widest uppercase text-xs mb-2">Personalized For You</h2>
+          <h1 className="text-3xl md:text-4xl font-bold dark:text-white">The Daily Vibe</h1>
+        </div>
 
-        {weather && recommendation ? (
-          <div className="grid md:grid-cols-2 items-center gap-10">
-            {/* Weather Info */}
-            <div className="bg-white dark:bg-[#2E2E2E] p-6 rounded-xl shadow">
-              <h3 className="text-xl font-semibold mb-2 text-[#E11D48] dark:text-[#F9D8DA]">
-                Weather in {weather.city}
-              </h3>
-              <div className="flex justify-center items-center gap-4">
-                <img src={weather.icon} alt={weather.condition} />
-                <p className="text-lg text-gray-700 dark:text-gray-200">
-                  {weather.temp}°C – {weather.condition}
+        {loading ? (
+          <div className="h-64 flex items-center justify-center animate-pulse text-gray-400">Curating your style...</div>
+        ) : weather && recommendation ? (
+          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            
+            {/* Weather Card */}
+            <div className="bg-white/40 dark:bg-white/5 backdrop-blur-md border border-white/20 p-8 rounded-2xl shadow-sm text-center">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Current Forecast in {weather.city}</p>
+              <div className="flex flex-col items-center mt-2">
+                <img src={weather.icon} alt={weather.condition} className="w-20 h-20" />
+                <p className="text-4xl font-light dark:text-white">{weather.temp}°C</p>
+                <p className="text-gray-600 dark:text-gray-300 capitalize">{weather.condition}</p>
+              </div>
+            </div>
+
+            {/* Recommendation Card */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-[#1A1A1A]">
+              <div className="relative h-56 w-full">
+                <Image src={recommendation.image} alt={recommendation.title} fill className="object-cover group-hover:scale-110 transition-transform duration-1000" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-4 left-6 text-white">
+                  <h3 className="text-2xl font-bold">{recommendation.title}</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed italic">
+                  "{recommendation.description}"
                 </p>
               </div>
             </div>
-
-            {/* Recommendation */}
-            <div className="text-left max-w-md mx-auto">
-              <h3 className="text-2xl font-bold text-[#E11D48] dark:text-[#F9D8DA] mb-2">
-                {recommendation.title}
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
-                {recommendation.description}
-              </p>
-              <div className="relative h-48 w-full rounded-lg overflow-hidden">
-                <Image
-                  src={recommendation.image}
-                  alt={recommendation.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
           </div>
-        ) : (
-          <p className="text-gray-600 dark:text-gray-400 mt-4">{error ? 'Loading recommendation...' : 'Unable to fetch nail recomendation'}</p>
-        )}
+        ) : null}
       </motion.div>
 
-      <BeautyQuote/>
+      <BeautyQuote />
     </section>
   );
 }

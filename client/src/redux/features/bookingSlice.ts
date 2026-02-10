@@ -55,7 +55,11 @@ export const bookingSlice = createSlice({
       state.serviceType = action.payload
     },
     setSubServiceType: (state, action: PayloadAction<SubServiceType>) => {
-      state.subServiceType.push(action.payload);
+      // Good practice: check if it already exists before pushing
+      const exists = state.subServiceType.find(s => s.id === action.payload.id);
+      if (!exists) {
+        state.subServiceType.push(action.payload);
+      }
     },
     removeSubServiceType: (state, action: PayloadAction<string>) => {
       state.subServiceType = state.subServiceType.filter(subService => subService.id !== action.payload)

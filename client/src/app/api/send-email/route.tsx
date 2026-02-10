@@ -1,68 +1,68 @@
-// app/api/contact/route.ts
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { render } from "@react-email/render";
-import BookingConfirmation from '@/components/react-email'; // ✅ fixed import
-
-const allowedOrigins = [
-  'https://nails-by-ronnie.vercel.app',
-  'http://localhost:3000',
-  'https://niyi-owoyemi-niyi0904s-projects.vercel.app/',
-  'https://niyi-owoyemi-3ch3zv6g0-niyi0904s-projects.vercel.app/',
-  undefined
-];
-
-export async function OPTIONS() {
-  const response = new NextResponse(null, { status: 204 });
-  response.headers.set('Access-Control-Allow-Origin', allowedOrigins.join(','));
-  response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-  response.headers.set('Access-Control-Max-Age', '86400');
-  return response;
-}
+import BookingConfirmation from '@/components/react-email';
 
 export async function POST(request: Request) {
-  const { name, email, message } = await request.json();
-
+  // Check origin for CORS (Simple version)
+  const origin = request.headers.get('origin');
+  
   try {
+    const { name, email, message } = await request.json();
 
-    // ✅ no await needed
-    const html = await render(<BookingConfirmation name={name} />);
+    // Generate the HTML from your react-email component
+    const emailHtml = await render(<BookingConfirmation name={name} />);
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      port: 587, // Changed from 465
+      secure: false, // Use TLS
       auth: {
         user: 'owoyeminiyi2@gmail.com',
-        pass: 'aogv orqv gmkd hujf',
+        pass: 'aogv orqv gmkd hujf', // Ensure this is a valid App Password
       },
+      tls: {
+        // This helps if you are on a network that has strict handshake rules
+        rejectUnauthorized: false 
+      }
     });
 
     const info = await transporter.sendMail({
-      from: `"NidavTech Contact Form" <owoyeminiyi2@gmail.com>`,
-      replyTo: 'owoyeminiyi2@gmail.com',
+      from: `"Nails by Ronnie" <owoyeminiyi2@gmail.com>`,
       to: 'owoyeminiyi2@gmail.com',
       subject: `New message from ${name}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}
-      `,
-      html: html as string ,
+      text: message, // Plain text fallback
+      html: emailHtml,
     });
 
-    console.log(info.messageId)
+    console.log("Email sent: ", info.messageId);
 
     return NextResponse.json(
       { success: true, message: 'Message sent successfully' },
-      { status: 200 }
+      { 
+        status: 200,
+        headers: { 'Access-Control-Allow-Origin': origin || '*' } 
+      }
     );
   } catch (error) {
     console.error('Error sending email:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to send email' },
       { status: 500 }
     );
   }
+}
+
+// Fix OPTIONS to handle CORS properly
+export async function OPTIONS(request: Request) {
+  const origin = request.headers.get('origin');
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': origin || '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400',
+    },
+  });
 }

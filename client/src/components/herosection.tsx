@@ -1,8 +1,8 @@
 'use client'
 import dynamic from "next/dynamic";
 import { useAppDispatch} from "@/hooks/useReduxHook";
-import { openModal } from "@/redux/features/bookingSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 const BookingModal = dynamic(() => import('./booking/booking-modal'), {
@@ -15,35 +15,41 @@ const BannerCarousel = dynamic(() => import('@/components/homeBanner'), {
 
 
 export default function Herosection () {
-    const dispatch = useAppDispatch();
+    const router = useRouter();
     
 
-      const handleOpenModal = () => {
-        dispatch(openModal());
-      }
-
     return (
-        <div className="mt-5">
+        <div className="mt-3">
             <div className="min-h-[370px] md:min-h-[470px]">
                 <BannerCarousel />
             </div>
-            <section className="text-center space-y-3 mt-3 max-w-2xl mx-auto">
-                <h2 className="text-4xl font-extrabold font-heading">Your Nail Care, Reimagined</h2>
-                <p className="text-lg dark:text-[#B3B3C3] font-heading">
-                ✨ Where Elegance Meets Perfection.
+
+            <div className="relative z-10 mt-4 bg-white dark:bg-[#121212] mx-auto max-w-3xl rounded-2xl p-8 shadow-xl text-center border border-gray-50 dark:border-gray-800">
+                <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
+                Your Nail Care, <span className="text-[#D77A8B]">Reimagined</span>
+                </h1>
+                
+                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+                ✨ Where elegance meets perfection. Luxury nail care and bespoke designs 
+                crafted to keep you looking effortlessly classy.
                 </p>
-                <p className="text-lg dark:text-[#B3B3C3] font-heading">
-                Luxury nail care and designs that keep you looking effortlessly classy
-                </p>
-                <div className="flex justify-center gap-4">
-                <button onClick={handleOpenModal} className="primary text-white px-5 py-2 rounded shadow hover:opacity-90" aria-label="Book a nail care session">
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button 
+                    onClick={() => router.push('/book')}
+                    className="w-full sm:w-auto bg-[#D77A8B] text-white px-8 py-4 rounded-full font-semibold shadow-lg shadow-[#D77A8B]/30 hover:bg-[#c46a7a] hover:-translate-y-1 transition-all active:scale-95"
+                >
                     Book an Appointment
                 </button>
-                <Link href='/shop' className="border border-[#D77A8B] text-[#D77A8B] dark:text-[#F2F2F2] px-5 py-2 rounded hover:bg-[#D77A8B] hover:text-white dark:hover:bg-[#943F54] transition">
+                
+                <Link 
+                    href='/shop' 
+                    className="w-full sm:w-auto border-2 border-[#D77A8B] text-[#D77A8B] px-8 py-4 rounded-full font-semibold hover:bg-pink-50 dark:hover:bg-gray-800 transition-all"
+                >
                     Explore Shop
                 </Link>
                 </div>
-            </section>
+            </div>
             <BookingModal/>
         </div>
     );

@@ -1,156 +1,110 @@
 "use client";
-import { useEffect, useState } from "react";
-import { FaBackward, FaForward } from "react-icons/fa";
-import { Booking} from "@/types/booking";
 
-// interface BookingsTableProps {
-//   activeTab: BookingStatus;
-//   searchQuery: string;
-//   bookings: Booking[];
-//   currentPage: number;
-//   rowsPerPage: number;
-//   totalBookings: number;
-//   onPageChange: (page: number) => void;
-//   onRowsPerPageChange: (value: number) => void; 
-// }
+import { useEffect, useState, useMemo } from "react";
+import { FaChevronLeft, FaChevronRight, FaRegClock, FaMapMarkerAlt } from "react-icons/fa";
+import { Booking } from "@/types/booking";
 
 export default function BookingsTable({
   activeTab,
   searchQuery,
   bookings,
-  // currentPage,
-  // rowsPerPage,
-  // totalBookings,
-  // onPageChange,
-  // onRowsPerPageChange,
   message
 }: any) {
-  const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0 });
-  // const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
-  const [cancelModalOpen, setCancelModalOpen] = useState(false);
-  // const [isCancelling, setIsCancelling] = useState(false);
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
-  let filteredBookings: Booking[] = []; 
-  
-  if (!Array.isArray(bookings)) {
-    filteredBookings = [];
-  } else {
-    filteredBookings = bookings.filter( (booking: any) =>
-      booking.booking_status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      booking.sub_category.includes(searchQuery.toLowerCase()) ||
-      booking.booking_location.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filter logic memoized for performance
+  const filteredBookings = useMemo(() => {
+    if (!Array.isArray(bookings)) return [];
+    
+    return bookings.filter((booking: any) => {
+      // 1. Filter by Tab Status (The logic: Is it the "all" tab? OR does the status match?)
+      const matchesTab = activeTab === "all" || booking.status === activeTab;
+      
+      // If it doesn't match the tab criteria, skip this booking immediately
+      if (!matchesTab) return false;
+
+      // 2. Filter by Search Query
+      const query = searchQuery.toLowerCase();
+      
+      // Check if query exists in location, service, or sub-categories
+      const matchesLocation = booking.booking_location?.toLowerCase().includes(query);
+      const matchesService = booking.service_type?.toLowerCase().includes(query);
+      const matchesSub = booking.sub_category?.some((sub: any) => 
+        sub.name.toLowerCase().includes(query)
+      );
+
+      // Final result: Must match tab (from step 1) AND (Search Query must be empty OR match a field)
+      return !searchQuery || matchesLocation || matchesService || matchesSub;
+    });
+  }, [bookings, searchQuery, activeTab]);
+
+  const totalPages = Math.ceil(filteredBookings.length / pagination.limit) || 1;
+  const paginatedData = filteredBookings.slice(
+    (pagination.page - 1) * pagination.limit,
+    pagination.page * pagination.limit
   );
-}
-
-  // const handleSelectAll = (checked: boolean) => {
-  //   setSelectedBookings(
-  //     checked ? filteredBookings.map((booking: any) => booking._id) : []
-  //   );
-  // };
-
-  // const handleSelectBooking = (bookingId: string, checked: boolean) => {
-  //   setSelectedBookings(
-  //     checked
-  //       ? [...selectedBookings, bookingId]
-  //       : selectedBookings.filter((id) => id !== bookingId)
-  //   );
-  // };
-
-  // const handleBookingClick = (booking: Booking) => {
-  //   setSelectedBooking(booking);
-  // };
-
-  // const closeSidebar = () => {
-  //   setSelectedBooking(null);
-  // };
-
-  useEffect(() => {
-    setPagination((prev) => ({ ...prev, total: bookings.length || 0 }));
-  }, [pagination.page, pagination.limit]);
-
-
-  const showCheckboxes = activeTab === "pending";
-  const totalPages = Math.ceil(pagination.total / pagination.limit);
-  // const hasData = totalBookings > 0;
-  // const startRow = (currentPage - 1) * rowsPerPage + 1;
-  // const endRow = Math.min(currentPage * rowsPerPage, totalBookings);
 
   return (
-    <div className="w-full overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 relative">
-      {selectedBookings.length > 0 && showCheckboxes && (
-        <div className="mb-4">
-          <button 
-            onClick={() => setCancelModalOpen(true)}
-            className="flex items-center gap-2 text-red-500 hover:text-red-700 px-3 py-1.5 rounded border border-red-200 hover:bg-red-50 transition-colors"
-          >
-            <FaBackward className="h-4 w-4" /> Cancel Selected ({selectedBookings.length})
-          </button>
-        </div>
-      )}
-
-      <div className="min-w-[1000px]">
-        <table className="w-full border-collapse">
-          <thead className="rounded-xl overflow-hidden">
-            <tr className="bg-[#943F54] dark:bg-[#1F1F1F] rounded-tl-xl">
-              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left rounded-tl-md">
-                Service Type
-              </th>
-              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">
-                Sub-Service Type
-              </th>
-              <th className="p-3 sm:p-4 text-white dark:text-[#F9D8DA] font-semibold border-x text-left border-gray-400 dark:border-gray-600">
-                Address
-              </th>
-              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">
-                Date
-              </th>
-              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left border-x border-gray-400 dark:border-gray-600">
-                Time
-              </th>
-              <th className="p-3 sm:p-4 font-semibold text-white dark:text-[#F9D8DA] text-left rounded-tr-md">
-                Status
-              </th>
+    <div className="w-full">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full border-separate border-spacing-y-3">
+          <thead>
+            <tr className="text-gray-400 text-[10px] uppercase font-black tracking-widest">
+              <th className="px-6 py-4 text-left">Service & Treatments</th>
+              <th className="px-6 py-4 text-left">Location</th>
+              <th className="px-6 py-4 text-left">Schedule</th>
+              <th className="px-6 py-4 text-center">Status</th>
             </tr>
           </thead>
-          <tbody>
-            {Array.isArray(bookings) ? (
-              filteredBookings.map((booking: any, index: any) => (
-                <tr key={booking.id} className={`${index % 2 === 0 ? "bg-pink-50 dark:bg-[#2A262F]" : "bg-pink-100 dark:bg-[#3b3642]"} hover:bg-pink-200`}>
-                  <td className="p-3 sm:p-4 rounded-bl-md border-gray-400 dark:border-gray-700">
-                      {booking.service_type || "N/A"}
+          <tbody className="text-sm">
+            {paginatedData.length > 0 ? (
+              paginatedData.map((booking: any) => (
+                <tr 
+                  key={booking.id} 
+                  className="bg-white dark:bg-[#1E1B23] group hover:shadow-md transition-all duration-200"
+                >
+                  {/* Service Column */}
+                  <td className="px-6 py-5 rounded-l-[1.5rem] border-y border-l border-gray-100 dark:border-gray-800">
+                    <p className="font-bold text-gray-800 dark:text-gray-100">{booking.service_type}</p>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {booking.sub_category?.map((sub: any, i: number) => (
+                        <span key={i} className="text-[10px] text-[#943F54] bg-[#943F54]/5 px-2 py-0.5 rounded-md font-medium">
+                          {sub.name}
+                        </span>
+                      ))}
+                    </div>
                   </td>
-                  <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
-                    {booking.sub_category.map((category:{name: string, duration: string, description: string, id: string, image: string, price: number}) => (<span>{category.name},  </span>)) || "N/A"}
+
+                  {/* Location Column */}
+                  <td className="px-6 py-5 border-y border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center gap-2 text-gray-500">
+                      <FaMapMarkerAlt className="text-[#D77A8B]" size={12} />
+                      <span className="truncate max-w-[150px]">{booking.booking_location || "Studio"}</span>
+                    </div>
                   </td>
-                  <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
-                    {booking.booking_location || "N/A"}
+
+                  {/* Date/Time Column */}
+                  <td className="px-6 py-5 border-y border-gray-100 dark:border-gray-800">
+                    <div className="flex flex-col">
+                      <span className="font-bold text-gray-700 dark:text-gray-300">
+                        {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "N/A"}
+                      </span>
+                      <div className="flex items-center gap-1 text-[11px] text-gray-400">
+                        <FaRegClock size={10} /> {booking.booking_time}
+                      </div>
+                    </div>
                   </td>
-                  <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
-                    {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : "N/A"}
-                  </td>
-                  <td className="p-3 sm:p-4 border-x border-gray-400 dark:border-gray-700">
-                    {booking.booking_time || "N/A"}
-                  </td>
-                  <td className="p-3 sm:p-4 rounded-br-md border-gray-400 dark:border-gray-700">
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                      booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      booking.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {booking.status || "N/A"}
-                    </span>
+
+                  {/* Status Column */}
+                  <td className="px-6 py-5 rounded-r-[1.5rem] border-y border-r border-gray-100 dark:border-gray-800 text-center">
+                    <StatusBadge status={booking.status} />
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td
-                  colSpan={showCheckboxes ? 7 : 6}
-                  className="p-4 text-center text-gray-500"
-                >
-                  {message}
+                <td colSpan={4} className="py-20 text-center text-gray-400 italic">
+                  {message || "No records found for this category."}
                 </td>
               </tr>
             )}
@@ -158,45 +112,57 @@ export default function BookingsTable({
         </table>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="mt-4 flex gap-4 items-center">
-        <button
-          disabled={pagination.page === 1}
-          onClick={() => setPagination((p) => ({ ...p, page: p.page - 1 }))}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
-        <span>
-          Page {pagination.page} of {totalPages}
-        </span>
-        <button
-          disabled={pagination.page === totalPages}
-          onClick={() => setPagination((p) => ({ ...p, page: p.page + 1 }))}
-          className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-        <select
-          value={pagination.limit}
-          onChange={(e) => setPagination({ ...pagination, page: 1, limit: Number(e.target.value) })}
-          className="ml-4 border dark:bg-[#1E1B23] p-1 rounded"
-        >
-          {[5, 10, 20, 50].map((n) => (
-            <option key={n} value={n}>{n} / page</option>
-          ))}
-        </select>
-      </div>
+      {/* Pagination Container */}
+      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
+        <div className="flex items-center gap-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-tighter">View</label>
+          <select
+            value={pagination.limit}
+            onChange={(e) => setPagination({ page: 1, limit: Number(e.target.value) })}
+            className="bg-transparent border-b-2 border-gray-200 dark:border-gray-800 text-sm font-bold focus:border-[#943F54] outline-none transition-colors px-1"
+          >
+            {[5, 10, 20].map((n) => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
 
-      {/* {selectedBooking && (
-        <>
-          <div className="fixed inset-0 backdrop-blur-sm bg-white/30 bg-opacity-50 z-40"></div>
-          <BookingDetailsSidebar
-            booking={selectedBooking}
-            onClose={closeSidebar}
-          />
-        </>
-      )} */}
+        <div className="flex items-center gap-4 bg-white dark:bg-[#1A1A1A] px-4 py-2 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm">
+          <button
+            disabled={pagination.page === 1}
+            onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
+            className="p-2 text-gray-400 hover:text-[#943F54] disabled:opacity-20 transition-colors"
+          >
+            <FaChevronLeft size={14} />
+          </button>
+          
+          <span className="text-xs font-black text-gray-600 dark:text-gray-300 min-w-[80px] text-center uppercase tracking-widest">
+            {pagination.page} / {totalPages}
+          </span>
+
+          <button
+            disabled={pagination.page === totalPages}
+            onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
+            className="p-2 text-gray-400 hover:text-[#943F54] disabled:opacity-20 transition-colors"
+          >
+            <FaChevronRight size={14} />
+          </button>
+        </div>
+      </div>
     </div>
+  );
+}
+
+// Sub-component for badges
+function StatusBadge({ status }: { status: string }) {
+  const styles: any = {
+    confirmed: "bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20",
+    pending: "bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20",
+    completed: "bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20",
+    cancelled: "bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20",
+  };
+
+  return (
+    <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${styles[status] || styles.pending}`}>
+      {status}
+    </span>
   );
 }

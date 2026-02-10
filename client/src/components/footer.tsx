@@ -1,108 +1,131 @@
 'use client';
 
-import { FaInstagram, FaTwitter, FaFacebookF} from 'react-icons/fa';
+import { FaInstagram, FaTwitter, FaFacebookF, FaArrowUp } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { FaLocationDot } from "react-icons/fa6";
 import { LuPhone } from "react-icons/lu";
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaArrowUp } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when scroll is past 300px
   useEffect(() => {
-    const toggleVisibility = () => {
-      setIsVisible(window.scrollY > 300);
-    };
+    const toggleVisibility = () => setIsVisible(window.scrollY > 300);
     window.addEventListener('scroll', toggleVisibility);
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  return isVisible ? (
-    <motion.button
-      onClick={scrollToTop}
-      whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.9 }}
-      aria-label="Move to top"
-      initial={{ opacity: 0 }}
-      className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-[#E11D48] text-white shadow-lg hover:bg-[#b7153a] dark:bg-[#F9D8DA] dark:text-[#E11D48] transition-all"
-    >
-      <FaArrowUp />
-    </motion.button>
-  ) : null;
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          onClick={scrollToTop}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.5 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          aria-label="Scroll to top"
+          className="fixed bottom-8 right-8 z-[60] p-4 rounded-full bg-[#943F54] text-white shadow-2xl transition-colors hover:bg-[#D77A8B]"
+        >
+          <FaArrowUp size={20} />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
 }
 
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
 
-export default function footer() {
   return (
     <>
-    <ScrollToTopButton />
-    <footer className="relative top-54 w-full bg-gradient-to-r from-[#D77A8B] to-[#FCE4EC] dark:from-[#1F1F1F] dark:to-[#2E2E2E] text-white dark:text-[#F9D8DA] py-10 px-6 md:px-20">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Logo & Description */}
-        <div className="flex flex-col gap-3">
-          <h2 className="text-2xl font-extrabold text-white dark:text-[#F9D8DA]">Nails by Ronnie</h2>
-          <p className="text-sm text-white/90 dark:text-[#B3B3C3]">
-            Embrace beauty in every detail. Nails by Ronnie offers elegant nail treatments and personalized designs to match every vibe and weather.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-          <div className='space-y-2'>
+      <ScrollToTopButton />
+      <footer className="w-full bg-[#1A1A1A] text-gray-300 py-16 px-6 md:px-20 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+          
+          {/* Brand Column */}
+          <div className="md:col-span-4 space-y-6">
+            <h2 className="text-2xl font-bold text-white tracking-tight">
+              Nailed by <span className="text-[#D77A8B]">Ronnie</span>
+            </h2>
+            <p className="text-sm leading-relaxed text-gray-400">
+              Elevating the art of nail care in Lagos. We combine precision artistry with a luxury experience to ensure your hands tell your story beautifully.
+            </p>
             <div className="flex gap-4">
-              <LuPhone className="h-5 w-5"/> +2348084515135
-            </div>
-            <div className="flex gap-4">
-              <LuPhone className="h-5 w-5"/> +2349057331175
-            </div>
-            <div className="flex gap-4">
-              <FaLocationDot className="h-7 w-7"/>No 64, Adekunle banjo Magodo, beside domino pizza
-            </div>
-            <div className="flex gap-4">
-              <FaLocationDot className="h-7 w-7"/>No 29B, Afolabi Aina, at nelson's and grills plaza, ikeja Lagos
+              {[
+                { icon: <FaInstagram />, link: 'https://instagram.com/nailed_by_ronnie', name: 'Instagram' },
+                { icon: <FaTwitter />, link: 'https://x.com/ronkeowoyemi', name: 'Twitter' },
+                { icon: <MdEmail />, link: 'mailto:Ronkeowoyemi@gmail.com', name: 'Email' },
+              ].map((social, i) => (
+                <motion.a
+                  key={i}
+                  href={social.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3, color: '#D77A8B' }}
+                  className="p-2 bg-gray-800 rounded-lg text-white transition-colors"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
           </div>
+
+          {/* Locations Column */}
+          <div className="md:col-span-5 space-y-6">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[#D77A8B]">Our Studios</h3>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <FaLocationDot className="text-[#D77A8B] shrink-0 mt-1" size={18} />
+                <div>
+                  <p className="font-semibold text-white">Magodo Phase II</p>
+                  <p className="text-sm text-gray-400">No 64, Adekunle Banjo, beside Domino's Pizza, Lagos.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <FaLocationDot className="text-[#D77A8B] shrink-0 mt-1" size={18} />
+                <div>
+                  <p className="font-semibold text-white">Ikeja Studio</p>
+                  <p className="text-sm text-gray-400">No 29B, Afolabi Aina, Nelson's & Grills Plaza, Lagos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Contact Column */}
+          <div className="md:col-span-3 space-y-6">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[#D77A8B]">Booking</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 group">
+                <LuPhone className="text-gray-500 group-hover:text-[#D77A8B] transition-colors" />
+                <a href="tel:+2348084515135" className="text-sm hover:text-white">+234 808 451 5135</a>
+              </div>
+              <div className="flex items-center gap-3 group">
+                <LuPhone className="text-gray-500 group-hover:text-[#D77A8B] transition-colors" />
+                <a href="tel:+2349057331175" className="text-sm hover:text-white">+234 905 733 1175</a>
+              </div>
+              <div className="pt-4">
+                <p className="text-xs text-gray-500 mb-2 font-medium">Opening Hours</p>
+                <p className="text-sm">Mon - Sat: 9:00 AM - 7:00 PM</p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        {/* Social Links with Motion */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4">Connect with us</h3>
-          <div className="flex gap-4 text-2xl">
-            {[
-              { icon: <FaInstagram />, link: 'https://www.instagram.com/nailed_by_ronnie?igsh=MTh4Y3EzaWducHJlNg%3D%3D&utm_source=qr', name: 'Instagram' },
-              { icon: <FaTwitter />, link: 'https://x.com/ronkeowoyemi?s=21', name: 'Twitter' },
-              { icon: <FaFacebookF />, link: 'https://facebook.com', name: 'Facebook' },
-              { icon: <MdEmail />, link: 'mailto:Ronkeowoyemi@gmail.com', name: 'Email' },
-            ].map(({ icon, link, name }, i) => (
-              <motion.a
-                key={i}
-                href={link}
-                target="_blank"
-                aria-label={`Follow us on ${name}`}
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, color: '#E11D48' }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="text-white dark:text-[#F9D8DA]"
-              >
-                {icon}
-              </motion.a>
-            ))}
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 uppercase tracking-widest">
+          <p>&copy; {currentYear} Nailed by Ronnie.</p>
+          <div className="flex gap-6">
+            <button className="hover:text-[#D77A8B]">Privacy Policy</button>
+            <button className="hover:text-[#D77A8B]">Terms of Service</button>
           </div>
         </div>
-      </div>
-
-      {/* Footer Bottom */}
-      <div className="mt-10 border-t border-white/30 dark:border-[#444] pt-4 text-center text-sm text-white/70 dark:text-[#999]">
-        &copy; {new Date().getFullYear()} Nails by Ronnie. All rights reserved.
-      </div>
-    </footer>
+      </footer>
     </>
   );
 }

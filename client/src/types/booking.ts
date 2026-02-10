@@ -36,6 +36,8 @@ export interface Property {
     booking_status: BookingStatus
     booking_location: string
     additional_notes: string
+    email: string
+    createdAt: string
   }
   
   export type BookingStatus = "confirmed" | "pending" | "completed" | "cancelled";

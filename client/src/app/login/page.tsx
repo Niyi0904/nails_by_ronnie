@@ -1,268 +1,187 @@
-"use client"
+"use client";
+
 import { motion } from "framer-motion";
 import Image from "next/image";
-import {FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { BiLoaderAlt } from "react-icons/bi";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { AppState } from "@/redux/store";
 import toast from 'react-hot-toast';
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks/useReduxHook";
 import { setUser, User } from "@/redux/features/authSlice";
-import { serverTimestamp } from "firebase/firestore";
-
-import { doc, updateDoc } from "firebase/firestore";
-import {GetUserData} from "@/functions/getUserData/getUserData";
+import { serverTimestamp, doc, updateDoc } from "firebase/firestore";
+import { GetUserData } from "@/functions/getUserData/getUserData";
 import { auth, db } from "@/lib/Firebase/firebaseUtils";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Link from "next/link";
 
-interface LoginDetails {
-  email: string;
-  password: string;
-}
-
-export default function Contact() {
-  const formRef = useRef<HTMLFormElement>(null);
+export default function LoginPage() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const checkboxRef = useRef<HTMLInputElement>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success: boolean;
-    err: unknown;
-    message: string;
-  } | null>(null);
-  const {user} = useSelector((state: AppState) => state.auth);
-  const {theme} = useSelector((state: AppState) => state.theme);
+  
+  const { user } = useSelector((state: AppState) => state.auth);
+  const { theme } = useSelector((state: AppState) => state.theme);
 
   const router = useRouter();
-  const dispatch = useAppDispatch()
-  
+  const dispatch = useAppDispatch();
 
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
-    const body: LoginDetails = {
-        email: emailRef.current?.value as string ,
-        password: passwordRef.current?.value as string,
-    };
-    
+    const email = emailRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
+
     try {
-      const userAuth = await signInWithEmailAndPassword(auth, body.email, body.password);
+      const userAuth = await signInWithEmailAndPassword(auth, email, password);
       const docRef = doc(db, 'users', userAuth.user.email as string);
+      
+      // Update last login
       await updateDoc(docRef, {
         lastLogin: serverTimestamp(),
       });
-      const user = await GetUserData(docRef);
-      const userData = {
-        userId: user?.UserId,
-        full_name: user?.full_name,
-        email: user?.email,
-        phone_number: user?.phoneNumber,
-        address: user?.address,
-        role: user?.role,
-        profilePicture: user?.profilePicture,
+
+      const userDataFromDb = await GetUserData(docRef);
+      
+      const userData: User = {
+        userId: userDataFromDb?.UserId!,
+        full_name: userDataFromDb?.full_name!,
+        email: userDataFromDb?.email!,
+        phone_number: userDataFromDb?.phoneNumber!,
+        address: userDataFromDb?.address!,
+        role: userDataFromDb?.role!,
+        profilePicture: userDataFromDb?.profilePicture,
       };
-      dispatch(setUser(userData as User));
-      console.log(user);
-
-      setTimeout(() => {
-        router.push('/')
-      }, 3000)
-
-      toast.success('Login successful, Redirecting to Home');
-
-      formRef.current?.reset();
+      dispatch(setUser(userData));
+      toast.success('Welcome back!');
+      router.push('/');
+      
     } catch (err: any) {
-      let errorMessage = 'Internal server error, please try again';
-
-      if (err.response) {
-        // Backend returned a non-2xx status code
-        errorMessage = err.response.data?.error || err.response.data?.message || 'Something went wrong';
-        console.error('Response Error:', err.response);
-      } else if (err.request) {
-        // Request was made but no response received
-        errorMessage = 'No response from server. Please check your internet or try again later.';
-        console.error('Request Error:', err.request);
-      } else {
-        // Other errors (e.g., bad config)
-        errorMessage = err.message || 'Unexpected error occurred.';
-        console.error('General Error:', err.message);
+      console.error(err);
+      let errorMessage = 'Invalid email or password';
+      
+      if (err.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your connection.';
       }
-      setSubmitStatus({
-        success: false,
-        err: err,
-        message: errorMessage,
-      });
+      
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  useEffect(() => {
-      if (user) {
-        setTimeout(() => {
-          router.push('/')
-        }, 3000);
-      }
-  
-    }, [user]);
-
-  
   return (
-    <div className="relative flex justify-center items-center pt-6 mx-auto w-[99%] md:w-[50%] bg-[#F9D8DA] text-[#1E1B23] dark:bg-[#1E1B23] dark:text-[#F2F2F2]">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F9D8DA] dark:bg-[#0F0E13] px-4 transition-colors duration-300">
+      <div className="w-full max-w-md">
+        
+        {/* Logo Section */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: false }}
-          className="text-center items-center  justify-center mb-8 flex flex-col"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center mb-8"
         >
-        <div className="mb-8 rounded-lg">
-            {
-            theme === 'dark' ? <Image 
-              src='/assets/logo-dark.png'
-              alt='logo-dark-mode'
-              width={150}
-              height={150}
-              className="h-14 w-36 rounded-xl  object-cover"
-            />
-
-            :
+          <div className="relative h-16 w-40 mb-6">
             <Image 
-              src='/assets/logo-white.png'
-              alt='logo-light-mode'
-              width={150}
-              height={150}
-              className="h-14 w-36 rounded-xl object-cover"
+              src={theme === 'dark' ? '/assets/logo-dark.png' : '/assets/logo-white.png'}
+              alt='Brand Logo'
+              fill
+              className="object-contain"
+              priority
             />
-            }
           </div>
-
-          <h2 className="text-3xl md:text-4xl font-delugia italic mb-4">Log
-            <span className="text-[#E11D48]">in</span>
+          <h2 className="text-3xl font-delugia italic text-[#1E1B23] dark:text-white">
+            Log<span className="text-[#943F54]">in</span>
           </h2>
         </motion.div>
 
-        <div>
-          {/* Contact Form */}
-          <motion.form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: false }}
-            className="bg-[#FCE4EC] dark:bg-[#2A262F] text-[#1E1B23] p-8 rounded-xl shadow-lg"
-          >
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-[#1E1B23] dark:text-[#F2F2F2] mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  ref={emailRef}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
+        {/* Form Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white dark:bg-[#1A1A1A] p-8 rounded-[2rem] shadow-xl border border-gray-100 dark:border-gray-800"
+        >
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block ml-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                ref={emailRef}
+                className="w-full h-14 px-5 bg-gray-50 dark:bg-[#2A262F] border-2 border-transparent focus:border-[#943F54] rounded-2xl outline-none transition-all text-sm font-medium dark:text-white"
+                placeholder="jane@example.com"
+                required
+              />
+            </div>
 
-              <div className="relative">
-                <label htmlFor="password" className="block text-sm font-medium text-[#1E1B23] dark:text-[#F2F2F2] mb-2">
+            <div className="relative">
+              <div className="flex justify-between items-center mb-2 ml-1">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-400">
                   Password
                 </label>
+                <Link href="/forgot-password" className="text-[10px] text-[#943F54] font-bold hover:underline">
+                  Forgot?
+                </Link>
+              </div>
+              <div className="relative">
                 <input
                   type={showPassword ? 'text' : "password"}
-                  id="password"
                   ref={passwordRef}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Password"
+                  className="w-full h-14 px-5 bg-gray-50 dark:bg-[#2A262F] border-2 border-transparent focus:border-[#943F54] rounded-2xl outline-none transition-all text-sm font-medium dark:text-white"
+                  placeholder="••••••••"
                   required
                 />
-
                 <button
                   type="button"
-                  className="absolute right-3 top-[65%] transform -translate-y-1/2 text-gray-400"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#943F54]"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaRegEye className="h-5 w-5" /> : <FaRegEyeSlash className="h-5 w-5" />}
+                  {showPassword ? <FaRegEyeSlash size={18} /> : <FaRegEye size={18} />}
                 </button>
               </div>
-
-
-              {submitStatus && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={`p-4 rounded-md ${
-                    submitStatus.success
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                      : 'bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200'
-                  }`}
-                >
-                  {submitStatus.message}
-                </motion.div>
-              )}
-
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full ${
-                  isSubmitting
-                    ? 'bg-[#D77A8B] cursor-not-allowed'
-                    : 'primary'
-                } text-white font-medium py-3 px-6 rounded-lg transition-colors`}
-              >
-                {isSubmitting ? <BiLoaderAlt className="mx-auto text-2xl h-4 w-4 animate-spin"/> : 'Login'}
-              </motion.button>
             </div>
-            <div className="flex mt-4 space-x-2 items-center text-center align-middle">
-                <input
-                    type='checkbox'
-                    id='remember-me'
-                    className="checked:bg-pink-500"
-                    ref={checkboxRef}
-                />
-                <label htmlFor="remember-me" className="text-sm font-medium text-[#1E1B23] dark:text-[#F2F2F2]">
-                    Remember me
-                </label>
+
+            <div className="flex items-center gap-2 px-1">
+              <input
+                type="checkbox"
+                id="remember"
+                className="w-4 h-4 accent-[#943F54] cursor-pointer"
+              />
+              <label htmlFor="remember" className="text-xs font-bold text-gray-500 cursor-pointer">
+                Keep me logged in
+              </label>
             </div>
-          </motion.form>
 
-            <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mt-5 space-y-4">
-                <p>Dont have an account ?</p>
-                <div className="w-full flex justify-end">
-                    <motion.button
-                        type="submit"
-                        whileHover={{ scale: 1.03 }}
-                        onClick={() => router.push('/signup')}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-[50%] primary text-white font-medium py-3 px-6 rounded-lg transition-colors"
-                        >
-                        SignUp
-                    </motion.button>
-                </div>
-            </motion.div>
-        </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-14 bg-[#943F54] hover:bg-[#7a3345] text-white font-bold rounded-2xl shadow-lg shadow-pink-200 dark:shadow-none transition-all flex items-center justify-center disabled:opacity-70 active:scale-[0.98]"
+            >
+              {isSubmitting ? <BiLoaderAlt className="animate-spin text-xl"/> : 'Sign In'}
+            </button>
+          </form>
 
+          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
+            <p className="text-sm text-gray-400 font-medium">
+              New here?{" "}
+              <Link href="/signup" className="text-[#943F54] font-black hover:underline">
+                Create Account
+              </Link>
+            </p>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
