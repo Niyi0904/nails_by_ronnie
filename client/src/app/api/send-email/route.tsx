@@ -18,8 +18,8 @@ export async function POST(request: Request) {
       port: 587, // Changed from 465
       secure: false, // Use TLS
       auth: {
-        user: 'owoyeminiyi2@gmail.com',
-        pass: 'aogv orqv gmkd hujf', // Ensure this is a valid App Password
+        user: 'ronkeowoyemi@gmail.com',
+        pass: 'bndu ygkr liui toye', // Ensure this is a valid App Password
       },
       tls: {
         // This helps if you are on a network that has strict handshake rules
@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     });
 
     const info = await transporter.sendMail({
-      from: `"Nails by Ronnie" <owoyeminiyi2@gmail.com>`,
-      to: 'owoyeminiyi2@gmail.com,',
+      from: `"Nails by Ronnie" <ronkeowoyemi@gmail.com>`,
+      to: 'owoyeminiyi2@gmail.com, ronkeowoyemi@gmail.com',
       subject: `New message from ${name}`,
       text: message, // Plain text fallback
       html: emailHtml,
