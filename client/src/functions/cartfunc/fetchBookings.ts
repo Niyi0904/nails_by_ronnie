@@ -1,10 +1,14 @@
-import { db } from "@/lib/Firebase/firebaseUtils"
-import { getDocs, collection, query, orderBy } from "firebase/firestore"
+import { db, auth } from "@/lib/Firebase/firebaseUtils"
+import { getDocs, collection } from "firebase/firestore"
 
-export const FetchCart = async (userEmail: string): Promise<any|string> => {
+export const FetchCart = async (): Promise<any|string> => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("You must be logged in to view your cart.");
+    }
 
     try {
-        const collectionRef = collection(db, 'users', userEmail, 'cart');
+        const collectionRef = collection(db, 'users', currentUser.uid, 'cart');
 
         const snapshot = await getDocs(collectionRef);
 

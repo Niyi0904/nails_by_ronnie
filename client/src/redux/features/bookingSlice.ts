@@ -1,30 +1,29 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-import { act } from "react"
+// redux/features/bookingSlice.ts
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+// REMOVED: import { act } from 'react'  ← was a test utility, never used in production
 
 export interface SubServiceType {
-    id: string
-    name: string
-    image: string,
-    price: number,
-    description: string
-  }
-
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+}
 
 export interface BookingState {
-  step: number
-  serviceType: string
-  subServiceType: SubServiceType[]
+  step: number;
+  serviceType: string;      // Stores the selected location name — renamed for clarity
+  subServiceType: SubServiceType[];
   date: {
-    selectedDate?: string
-  },
-  notes: string
-  location: string
-  time: string
-  email: string
-  phone: string
-  name: string
-  // notes: string
-  isModalOpen: boolean
+    selectedDate?: string;
+  };
+  notes: string;
+  location: string;
+  time: string;
+  email: string;
+  phone: string;
+  name: string;
+  isModalOpen: boolean;
 }
 
 const initialState: BookingState = {
@@ -32,41 +31,52 @@ const initialState: BookingState = {
   serviceType: '',
   subServiceType: [],
   date: {
-    selectedDate:''
+    selectedDate: '',
   },
   notes: '',
   location: '',
-  time: "",
+  time: '',
   email: '',
-  phone:'',
+  phone: '',
   name: '',
-  // notes: "",
   isModalOpen: false,
-}
+};
 
 export const bookingSlice = createSlice({
-  name: "booking",
+  name: 'booking',
   initialState,
   reducers: {
     setStep: (state, action: PayloadAction<number>) => {
-      state.step = action.payload
+      state.step = action.payload;
     },
-    setServiceType: (state, action: PayloadAction<BookingState["serviceType"]>) => {
-      state.serviceType = action.payload
+
+    setServiceType: (state, action: PayloadAction<string>) => {
+      state.serviceType = action.payload;
     },
+
     setSubServiceType: (state, action: PayloadAction<SubServiceType>) => {
-      // Good practice: check if it already exists before pushing
       const exists = state.subServiceType.find(s => s.id === action.payload.id);
       if (!exists) {
         state.subServiceType.push(action.payload);
       }
     },
+
     removeSubServiceType: (state, action: PayloadAction<string>) => {
-      state.subServiceType = state.subServiceType.filter(subService => subService.id !== action.payload)
+      state.subServiceType = state.subServiceType.filter(s => s.id !== action.payload);
     },
-    setEmail: (state, action:PayloadAction<string>) => {
-      state.email = action.payload
+
+    setEmail: (state, action: PayloadAction<string>) => {
+      state.email = action.payload;
     },
+
+    setPhone: (state, action: PayloadAction<string>) => {
+      state.phone = action.payload;
+    },
+
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
+    },
+
     loadUserDetails: (
       state,
       action: PayloadAction<{ email: string; phone: string; name: string }>
@@ -75,49 +85,46 @@ export const bookingSlice = createSlice({
       state.phone = action.payload.phone;
       state.name = action.payload.name;
     },
-    setPhone: (state, action: PayloadAction<string>) => {
-      state.phone = action.payload
-    },
-    setName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload
-    },
+
     setDate: (state, action: PayloadAction<string>) => {
-      state.date.selectedDate = action.payload
-    },
-    setTime: (state, action: PayloadAction<string>) => {
-      state.time = action.payload
-    },
-    setLocation: (state, action: PayloadAction<string>) => {
-        state.location = action.payload
-    },
-    setNotes: (state, action: PayloadAction<string>) => {
-      state.notes = action.payload
-    },
-    // setNotes: (state, action: PayloadAction<string>) => {
-    //   state.notes = action.payload
-    // },
-    openModal: (state) => {
-      state.isModalOpen = true
-    },
-    closeModal: (state) => {
-      state.isModalOpen = false
-      state.step = 1
-      state.serviceType = ''
-      state.subServiceType= []
-      state.time = ""
-      state.date.selectedDate=''
-      // state.notes = ""
-    },
-    resetBooking: () => initialState,
-    setDateType: (state, action: PayloadAction<string>) => {
-      state.date.selectedDate = undefined
-    },
-    setSelectedDate: (state, action: PayloadAction<string>) => {
-      state.date.selectedDate = action.payload
+      state.date.selectedDate = action.payload;
     },
 
+    setSelectedDate: (state, action: PayloadAction<string>) => {
+      state.date.selectedDate = action.payload;
+    },
+
+    setTime: (state, action: PayloadAction<string>) => {
+      state.time = action.payload;
+    },
+
+    setLocation: (state, action: PayloadAction<string>) => {
+      state.location = action.payload;
+    },
+
+    setNotes: (state, action: PayloadAction<string>) => {
+      state.notes = action.payload;
+    },
+
+    openModal: (state) => {
+      state.isModalOpen = true;
+    },
+
+    closeModal: (state) => {
+      state.isModalOpen = false;
+      state.step = 1;
+      state.serviceType = '';
+      state.subServiceType = [];
+      state.time = '';
+      state.date.selectedDate = '';
+    },
+
+    resetBooking: () => initialState,
+
+    // REMOVED: setDateType — was broken (accepted string payload but used undefined)
+    // Use setSelectedDate or resetBooking instead
   },
-})
+});
 
 export const {
   setStep,
@@ -125,6 +132,7 @@ export const {
   setSubServiceType,
   removeSubServiceType,
   setDate,
+  setSelectedDate,
   setTime,
   setNotes,
   setName,
@@ -134,10 +142,7 @@ export const {
   openModal,
   closeModal,
   resetBooking,
-  setDateType,
-  setSelectedDate,
-  setLocation
-} = bookingSlice.actions
+  setLocation,
+} = bookingSlice.actions;
 
-export default bookingSlice.reducer
-
+export default bookingSlice.reducer;

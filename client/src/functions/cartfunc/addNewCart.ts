@@ -1,17 +1,22 @@
 import { setDoc, collection, doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/Firebase/firebaseUtils";
+import { db, auth } from "@/lib/Firebase/firebaseUtils";
 
 export const addToCart = async (cartData: any) => {
-    const CartCollection = doc(db, 'users', cartData.email);
-    const snapshot = await getDoc(CartCollection);
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("You must be logged in to add items to your cart.");
+    }
+
+    const userDocRef = doc(db, 'users', currentUser.uid);
+    const snapshot = await getDoc(userDocRef);
 
     if (!snapshot.exists()) {
-        setDoc(CartCollection, {
+        setDoc(userDocRef, {
             email: cartData.email,
         })
     }
     
 
-    const cartItemDoc = doc(collection(CartCollection, 'cart'));
+    const cartItemDoc = doc(collection(userDocRef, 'cart'));
     await setDoc(cartItemDoc, cartData);
 }

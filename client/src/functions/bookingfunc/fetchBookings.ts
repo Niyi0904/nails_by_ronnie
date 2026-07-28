@@ -9,6 +9,7 @@ import {
   updateDoc, 
   deleteDoc // 1. Added deleteDoc import
 } from "firebase/firestore"
+import { logFirebaseError } from "@/lib/Firebase/firebaseLogger"
 
 export const FetchBookings = async (userEmail: string): Promise<any|string> => {
     try {
@@ -22,7 +23,7 @@ export const FetchBookings = async (userEmail: string): Promise<any|string> => {
             return snapshot.docs.map( doc => ({id: doc.id, ...doc.data()}))
         }
     } catch (error) {
-        console.error("Error fetching bookings:", error);
+        logFirebaseError('FetchBookings', error);
     }
 }
 
@@ -41,7 +42,7 @@ export const FetchAllBookings = async (): Promise<any|string> => {
       }));
     }
   } catch (error) {
-    console.error("Error fetching bookings:", error);
+    logFirebaseError('FetchAllBookings', error);
     throw error;
   }
 }
@@ -53,7 +54,7 @@ export const updateBooking = async (bookingId: string, newStatus: string, bookin
       status: newStatus,
     });
   } catch (error) {
-    console.error("Error updating booking:", error);
+    logFirebaseError('updateBooking', error);
     throw error;
   }
 };
@@ -70,7 +71,7 @@ export const deleteBooking = async (bookingId: string, bookingEmail: string) => 
     
     return { success: true };
   } catch (error) {
-    console.error("Error deleting booking:", error);
+    logFirebaseError('deleteBooking', error);
     throw error;
   }
 };

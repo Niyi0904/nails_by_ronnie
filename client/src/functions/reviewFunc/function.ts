@@ -1,5 +1,6 @@
 import { addDoc, collection,  query, getDocs, serverTimestamp, orderBy } from "firebase/firestore";
 import { db } from "@/lib/Firebase/firebaseUtils";
+import { logFirebaseError } from "@/lib/Firebase/firebaseLogger";
 
 
 export const addNewReview = async (reviewData: any) => {
@@ -16,7 +17,8 @@ export const addNewReview = async (reviewData: any) => {
 
       return response;
   } catch (error) {
-    throw new Error(`${error}`);
+    logFirebaseError('addNewReview', error);
+    throw error;
   }
 };
 
@@ -36,8 +38,8 @@ export const FetchAllReviews = async (): Promise<any|string> => {
         }));
         }
     } catch (error) {
-        console.error("Error fetching review:", error);
-        throw new Error(`${error}`);
+        logFirebaseError('FetchAllReviews', error);
+        throw error;
     }
 
 }

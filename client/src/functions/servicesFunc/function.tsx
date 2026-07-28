@@ -1,5 +1,6 @@
 import { addDoc, collection, query, getDocs, serverTimestamp, orderBy, where } from "firebase/firestore";
 import { db } from "@/lib/Firebase/firebaseUtils";
+import { logFirebaseError } from "@/lib/Firebase/firebaseLogger";
 
 // --- CATEGORY FUNCTIONS ---
 export const addServiceCategory = async (name: string) => {
@@ -12,6 +13,7 @@ export const addServiceCategory = async (name: string) => {
     });
     return response;
   } catch (error) {
+    logFirebaseError('addServiceCategory', error);
     throw new Error(`Failed to add category: ${error}`);
   }
 };
@@ -39,6 +41,7 @@ export const addNewService = async (serviceData: {
     });
     return response;
   } catch (error) {
+    logFirebaseError('addNewService', error);
     throw new Error(`Failed to add service: ${error}`);
   }
 };
@@ -47,5 +50,6 @@ export const fetchAllServices = async () => {
   const serviceRef = collection(db, "services");
   const q = query(serviceRef, orderBy("name", "asc"));
   const snapshot = await getDocs(q);
+  console.log(snapshot);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };

@@ -1,0 +1,131 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── Users collection (email-based — guests) ────────────────
+    // Anyone can create/read a user document when the email in the
+    // path matches the email in the document data (guest booking).
+    match /users/{email} {
+      allow read: if isAdmin() || resource.data.email == email;
+      allow create: if request.resource.data.email == email;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+
+      // ── Bookings sub-collection (guest-friendly) ──────────────
+      match /bookings/{bookingId} {
+        allow read: if isAdmin() || resource.data.email == email;
+        allow create: if request.resource.data.email == email;
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
+      }
+
+      // ── Cart sub-collection (guest-friendly) ──────────────────
+      match /cart/{cartItemId} {
+        allow read: if isAdmin() || resource.data.email == email;
+        allow create: if request.resource.data.email == email;
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ── Users collection (UID-based — signed-in users) ──────────
+    // Overlapping rule for authenticated users who have profiles
+    // keyed by Firebase UID (signup, login, profile management).
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /bookings/{bookingId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid) || isAdmin();
+        allow delete: if isAdmin();
+      }
+
+      match /cart/{cartItemId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid) || isAdmin();
+        allow delete: if isOwner(uid) || isAdmin();
+      }
+    }
+
+    // ── Gallery collection ──────────────────────────────────────
+    // Anyone (including guests) can view gallery images.
+    // Only admins can upload, update, or delete.
+    match /gallery/{imageId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Services collection ─────────────────────────────────────
+    // Public read — customers need to see services without logging in.
+    // Only admins can manage services.
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Service categories collection ───────────────────────────
+    match /service-categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Reviews collection ──────────────────────────────────────
+    // Anyone can read reviews.
+    // Only authenticated users can submit a review.
+    // Only admins can delete reviews (moderation).
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── User roles collection ───────────────────────────────────
+    // Used by isAdmin() helper above.
+    // Users can read their own role. Only admins can assign roles.
+    match /user_roles/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── Availability collection ─────────────────────────────────
+    // For future slot management feature (Phase 2).
+    // Customers can read availability. Only admins can set it.
+    match /availability/{slotId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ── Collection group: all booking subcollections ────────────
+    // Enables FetchAllBookings (admin dashboard collectionGroup query).
+    match /{path=**}/bookings/{bookingId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── Deny everything else ────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

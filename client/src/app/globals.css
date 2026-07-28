@@ -1,43 +1,117 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
-
+/* ── Brand CSS variables ─────────────────────────────────────── */
 :root {
-  --background: #F9D8DA;
+  --background: #FFF5F8;
+  /* Updated: cream is softer than the old #F9D8DA */
   --foreground: #1e1b23;
+  --brand-rose: #943F54;
+  --brand-blush: #D77A8B;
+  --brand-rosegold: #B76E79;
+  --brand-cream: #FFF5F8;
 }
 
+/* ── Font variables ──────────────────────────────────────────── */
+/* These are set by next/font in layout.tsx and referenced here  */
 :root {
   --font-pacifico: 'Pacifico', cursive;
 }
 
-.font-heading { 
-  font-family: var(--font-dancing_script), 'Dancing_Script', cursive !important;
+/*
+  FIX: Previous version had --font-dancing_script (underscores)
+  which never matched the CSS variable --font-heading set by
+  next/font in layout.tsx. This is now corrected to use hyphens.
+  The font-heading class will now actually render Dancing Script.
+*/
+.font-heading {
+  font-family: var(--font-heading), 'Dancing Script', cursive;
 }
 
+/* ── Tailwind theme bridge ───────────────────────────────────── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
+/* ── Base styles ─────────────────────────────────────────────── */
 body {
   background: var(--background);
   color: var(--foreground);
 }
 
-.dark{
+/* ── Dark mode ───────────────────────────────────────────────── */
+.dark {
   --background: #1E1B23;
   --foreground: #F2F2F2;
 }
 
-.primary{
+/* ── Brand utility classes ───────────────────────────────────── */
+/* Keep these as convenience classes alongside Tailwind tokens   */
+.bg-primary {
+  background: var(--brand-rose);
+}
+
+.bg-primary:hover {
+  background: #7a3345;
+}
+
+.text-primary {
+  color: var(--brand-rose);
+}
+
+.border-primary {
+  border-color: var(--brand-rose);
+}
+
+/* ── Scrollbar utility ───────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Custom scrollbar (for booking steps overflow areas) ─────── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
   background: #D77A8B;
+  border-radius: 4px;
 }
-.primary:hover{
-  background: #943F54;
+
+/* ── Skeleton shimmer ────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
-.dark-text{
-  color: #1e1b23;
+
+.dark .skeleton {
+  background: linear-gradient(90deg,
+      #2a262f 25%,
+      #333 50%,
+      #2a262f 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }

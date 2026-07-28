@@ -1,6 +1,7 @@
-import { addDoc, collection, query, doc, getDoc, getDocs, updateDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, serverTimestamp, orderBy } from "firebase/firestore";
 import { db } from "@/lib/Firebase/firebaseUtils";
 import { uploadImage } from '@/functions/uploadImage/uploadImage';
+import { logFirebaseError } from "@/lib/Firebase/firebaseLogger";
 
 
 export const addNewGallery = async (galleryData: any) => {
@@ -18,7 +19,8 @@ export const addNewGallery = async (galleryData: any) => {
 
       return response;
   } catch (error) {
-    throw new Error(`${error}`);
+    logFirebaseError('addNewGallery', error);
+    throw error;
   }
 };
 
@@ -38,8 +40,8 @@ export const FetchAllGallery = async (): Promise<any|string> => {
       }));
     }
   } catch (error) {
-    console.error("Error fetching gallery:", error);
-    throw new Error(`${error}`);
+    logFirebaseError('FetchAllGallery', error);
+    throw error;
   }
 
 }
