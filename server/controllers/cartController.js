@@ -1,4 +1,5 @@
 const {CartItem, User} = require('../models');
+const logger = require('../utils/logger');
 
 const addToCart = async (req, res) => {
     const {email, name, quantity, image, price} = req.body;
@@ -20,8 +21,8 @@ const addToCart = async (req, res) => {
     
         return res.status(201).json({message: 'item has been successfully added to cart'});
     } catch (error) {
-        console.log(error);
-        res.status(500).json({message: "Internal server error"});
+        logger.error(error, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -39,8 +40,8 @@ const myCart = async (req, res) => {
             message: 'completed', allcarts
         });
     } catch (err) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -54,8 +55,8 @@ const deleteCart = async (req, res) => {
             message:'Deleted successfully'
         })
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(error, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -68,8 +69,8 @@ const increaseCart = async (req, res) => {
             message:'Increased successfully'
         })
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(error, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -77,25 +78,22 @@ const decreaseCart = async (req, res) => {
   const id = req.params.id;
 
   try {
-    // Fetch current item
     const cartItem = await CartItem.findByPk(id);
 
     if (!cartItem) {
       return res.status(404).json({ error: 'Item not found' });
     }
 
-    // Prevent quantity from going below 1
     if (cartItem.quantity <= 1) {
       return res.status(400).json({ error: 'Quantity cannot be less than 1' });
     }
 
-    // Decrement quantity
     await CartItem.decrement('quantity', { where: { id } });
 
     return res.status(200).json({ message: 'Decreased successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error.' });
+    logger.error(error, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 };
 

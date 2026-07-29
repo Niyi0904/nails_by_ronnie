@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const logger = require('../utils/logger');
 
 const getUserById = async (req, res) => {
     const Userid = req.params.userId;
@@ -16,8 +17,8 @@ const getUserById = async (req, res) => {
       success: true, message: 'User found', user});
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error.' });
+    logger.error(err, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 };
 
@@ -35,8 +36,8 @@ const getAllUsers = async (req, res) => {
         success: true, Users: user});
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 

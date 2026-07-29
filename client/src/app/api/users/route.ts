@@ -15,9 +15,9 @@ export async function GET() {
       data,
     });
   } catch (error: any) {
-    console.error('Fetch error:', error);
+    console.error(`[Users API] ${error.message}`, error.stack);
     return NextResponse.json(
-      { error: 'Failed to fetch quote', details: error.message },
+      { error: 'Something went wrong. Please try again later.' },
       { status: 500 }
     );
   }

@@ -1,0 +1,115 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ────────────────────────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── Users collection (email-based — guests) ────────────────
+    match /users/{email} {
+      allow read: if isAdmin() || resource.data.email == email;
+      allow create: if request.resource.data.email == email;
+      allow update: if isAdmin() || resource.data.email == email;
+      allow delete: if isAdmin();
+
+      // ── Bookings sub-collection (guest-friendly) ──────────────
+      match /bookings/{bookingId} {
+        allow read: if isAdmin() || resource.data.email == email;
+        allow create: if request.resource.data.email == email;
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
+      }
+
+      // ── Cart sub-collection (guest-friendly) ──────────────────
+      match /cart/{cartItemId} {
+        allow read: if isAdmin() || resource.data.email == email;
+        allow create: if request.resource.data.email == email;
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ── Users collection (UID-based — signed-in users) ──────────
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+
+      match /bookings/{bookingId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid) || isAdmin();
+        allow delete: if isAdmin();
+      }
+
+      match /cart/{cartItemId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid);
+        allow update: if isOwner(uid) || isAdmin();
+        allow delete: if isOwner(uid) || isAdmin();
+      }
+    }
+
+    // ── Gallery collection ──────────────────────────────────────
+    match /gallery/{imageId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Services collection ─────────────────────────────────────
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Service categories collection ───────────────────────────
+    match /service-categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Reviews collection ──────────────────────────────────────
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── User roles collection ───────────────────────────────────
+    match /user_roles/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── Availability collection ─────────────────────────────────
+    match /availability/{slotId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ── Collection group: all booking subcollections ────────────
+    match /{path=**}/bookings/{bookingId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── Deny everything else ────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,41 +1,33 @@
-// utils/api.ts
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  timeout: 10000, // 10 seconds
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': undefined,
   },
-  withCredentials: true, // ✅ This tells axios to send cookies!
-
+  withCredentials: true,
 });
 
-// Add request interceptor
 api.interceptors.request.use(
-  (config) => {
-    // You can modify requests here (e.g., add auth tokens)
-    return config;
-  },
+  (config) => config,
   (error) => {
+    console.error(`[API] Request Error: ${error.message}`);
     return Promise.reject(error);
   }
 );
 
-// Add response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle errors globally
     if (error.response) {
-      // Server responded with status code outside 2xx
-      const message = error.response?.data || error.message
+      const { status, data } = error.response;
+      const serverMsg = data?.error || data?.message || '';
+      console.error(`[API] ${status} ${error.config?.url}: ${serverMsg || error.message}`);
     } else if (error.request) {
-      // Request was made but no response received
-      console.error('API Error: No response received');
+      console.error(`[API] Network Error: No response from server for ${error.config?.url}`);
     } else {
-      // Something happened in setting up the request
-      console.error('API Error:', error.message);
+      console.error(`[API] Setup Error: ${error.message}`);
     }
     return Promise.reject(error);
   }

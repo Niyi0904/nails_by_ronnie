@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { User, CartItem } = require('../models');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const logger = require('../utils/logger');
 
 
 const signup = async (req, res) => {
@@ -70,8 +71,8 @@ const signup = async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error.' });
+    logger.error(err, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 };
 
@@ -126,8 +127,8 @@ const login = async (req, res) => {
       message: 'Login Successful', user});
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error.' });
+    logger.error(err, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 };
 
@@ -144,19 +145,24 @@ const logout = async (req, res) => {
 
 
 const verifyEmail = async (req, res) => {
-  const { token } = req.query;
+  try {
+    const { token } = req.query;
 
-  if (!token) return res.status(400).json({ error: "Token is required" });
+    if (!token) return res.status(400).json({ error: "Verification link is invalid or expired." });
 
-  const user = await User.findOne({ where: { verification_token: token } });
+    const user = await User.findOne({ where: { verification_token: token } });
 
-  if (!user) return res.status(400).json({ error: "Invalid token" });
+    if (!user) return res.status(400).json({ error: "Verification link is invalid or expired." });
 
-  user.email_verified = true;
-  user.verification_token = null;
-  await user.save();
+    user.email_verified = true;
+    user.verification_token = null;
+    await user.save();
 
-  res.status(200).json({ message: "Email verified successfully" });
+    res.status(200).json({ message: "Email verified successfully" });
+  } catch (err) {
+    logger.error(err, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+  }
 };
 
 

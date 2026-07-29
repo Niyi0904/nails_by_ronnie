@@ -12,12 +12,12 @@ export async function GET(req: Request) {
     const response = await fetch(`http://localhost:3030/api/auth/verify-email?token=${token}`);
 
     if (!response.ok) {
-      return NextResponse.json({ error: "Email verification failed", status: false }, { status: response.status });
+      return NextResponse.json({ error: "Verification link is invalid or expired.", status: false }, { status: response.status });
     }
 
     return NextResponse.json({ message: "Email verified successfully", status: true });
   } catch (error) {
-    console.error("Verification error:", error);
-    return NextResponse.json({ error: "Internal Server Error", status: false  }, { status: 500 });
+    console.error(`[VerifyEmail] ${error.message}`, error.stack);
+    return NextResponse.json({ error: "Something went wrong. Please try again later.", status: false  }, { status: 500 });
   }
 }

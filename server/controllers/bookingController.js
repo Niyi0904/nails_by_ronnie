@@ -1,5 +1,6 @@
 const { where } = require('sequelize');
 const { Booking, User } = require('../models');
+const logger = require('../utils/logger');
 
 const myBookings = async (req, res) => {
     const email = req.params.email;
@@ -15,23 +16,23 @@ const myBookings = async (req, res) => {
             message: 'completed', allBookings
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
 const allBookings = async (req, res) => {
     try {
         const allBookings = await Booking.findAll({
-            order: [['updated_at', 'DESC']] // Orders by updated_at descending
+            order: [['updated_at', 'DESC']]
         });
 
         return res.status(201).json({
             message: 'completed', allBookings
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -47,8 +48,8 @@ const bookingsById = async (req, res) => {
             message: 'completed', bookingDetails
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -71,8 +72,8 @@ const updateBooking = async (req, res) => {
 
     res.json({ success: true, message: "Status updated"});
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to update status" });
+    logger.error(err, req);
+    res.status(500).json({ error: 'Something went wrong. Please try again later.' });
   }
 };
 
@@ -105,8 +106,8 @@ const addBookings = async (req, res) => {
             newBooking
         })
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error.' });
+        logger.error(err, req);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
