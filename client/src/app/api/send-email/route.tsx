@@ -1,4 +1,4 @@
-run import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { render } from "@react-email/render";
 import BookingConfirmation from '@/components/react-email';
