@@ -17,7 +17,8 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ message: "Email verified successfully", status: true });
   } catch (error) {
-    console.error(`[VerifyEmail] ${error.message}`, error.stack);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error(`[VerifyEmail] ${message}`);
     return NextResponse.json({ error: "Something went wrong. Please try again later.", status: false  }, { status: 500 });
   }
 }
