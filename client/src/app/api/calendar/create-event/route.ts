@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createCalendarEvent, buildEventDescription } from '@/lib/googleCalendar';
 
-function parseBookingTime(bookingDate: string, bookingTime: string): { start: Date; end: Date } {
+const SLOT_DURATION_HOURS = 3;
+
+function parseBookingTime(bookingDate: string, bookingTime: string): { startDateTime: string; endDateTime: string } {
   const timeStr = bookingTime.trim().toUpperCase();
   let hours: number;
   let minutes = 0;
@@ -19,13 +21,20 @@ function parseBookingTime(bookingDate: string, bookingTime: string): { start: Da
     minutes = m || 0;
   }
 
-  const start = new Date(bookingDate);
-  start.setHours(hours, minutes, 0, 0);
+  const [year, month, day] = bookingDate.split('-').map(Number);
 
-  const end = new Date(start);
-  end.setHours(end.getHours() + 1);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const startDateTime = `${year}-${pad(month)}-${pad(day)}T${pad(hours)}:${pad(minutes)}:00`;
 
-  return { start, end };
+  let endHours = hours + SLOT_DURATION_HOURS;
+  let endDay = day;
+  if (endHours >= 24) {
+    endHours -= 24;
+    endDay += 1;
+  }
+  const endDateTime = `${year}-${pad(month)}-${pad(endDay)}T${pad(endHours)}:${pad(minutes)}:00`;
+
+  return { startDateTime, endDateTime };
 }
 
 export async function POST(req: Request) {
@@ -37,7 +46,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { start, end } = parseBookingTime(booking_date, booking_time);
+    const { startDateTime, endDateTime } = parseBookingTime(booking_date, booking_time);
 
     const event = await createCalendarEvent({
       summary: `Nails by Ronnie - ${service_type} with ${name}`,
@@ -50,8 +59,8 @@ export async function POST(req: Request) {
         additional_notes,
       }),
       location: booking_location || '',
-      startDateTime: start.toISOString(),
-      endDateTime: end.toISOString(),
+      startDateTime,
+      endDateTime,
     });
 
     return NextResponse.json({ success: true, eventId: event.id });

@@ -1,6 +1,5 @@
-import { setDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { setDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/Firebase/firebaseUtils";
-import api from "@/utils/api";
 
 export const addNewBooking = async (bookingData: any) => {
   try {
