@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+run import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { render } from "@react-email/render";
 import BookingConfirmation from '@/components/react-email';
@@ -45,7 +45,8 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error(`[SendEmail] ${error.message}`, error.stack);
+    const err = error instanceof Error ? error : new Error(String(error));
+    console.error(`[SendEmail] ${err.message}`, err.stack);
     return NextResponse.json(
       { error: 'Something went wrong. Please try again later.' },
       { status: 500 }

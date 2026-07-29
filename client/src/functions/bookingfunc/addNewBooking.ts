@@ -25,7 +25,13 @@ export const addNewBooking = async (bookingData: any) => {
         body: JSON.stringify({ name: bookingData.name, email: bookingData.email }),
     });
 
-    console.log("Booking saved & email sent ✅");
+    await fetch("/api/calendar/create-event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bookingData),
+    }).catch((err) => console.error("Calendar event creation failed:", err));
+
+    console.log("Booking saved, email sent & calendar event created ✅");
   } catch (error) {
     console.error("Error adding new booking:", error);
     throw error;
