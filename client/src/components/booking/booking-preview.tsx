@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import { setStep, resetBooking } from "@/redux/features/bookingSlice";
-import { FaCheck, FaRegCalendarCheck, FaMapMarkerAlt, FaUserEdit } from "react-icons/fa";
+import { FaCheck, FaRegCalendarCheck, FaMapMarkerAlt, FaUserEdit, FaCalendarPlus } from "react-icons/fa";
 import { IoArrowBack, IoSparklesSharp } from "react-icons/io5";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -10,6 +10,7 @@ import Loading from "@/app/(dashboard)/my-bookings/loading";
 import { useRouter } from "next/navigation";
 import { serverTimestamp } from "firebase/firestore";
 import { addNewBooking } from "@/functions/bookingfunc/addNewBooking";
+import { generateICS } from "@/lib/generateICS";
 
 export default function BookingPreview() {
   const dispatch = useAppDispatch();
@@ -56,6 +57,27 @@ export default function BookingPreview() {
     dispatch(setStep(6));
   };
 
+  const handleDownloadICS = () => {
+    const icsContent = generateICS({
+      name: booking.name,
+      email: booking.email,
+      phone: booking.phone,
+      service_type: booking.serviceType,
+      sub_category: booking.subServiceType,
+      booking_date: booking.date.selectedDate || '',
+      booking_time: booking.time,
+      booking_location: booking.location,
+      additional_notes: booking.notes,
+    });
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `nails-by-ronnie-${booking.date.selectedDate}.ics`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (success) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center animate-in zoom-in-95 duration-500">
@@ -67,12 +89,20 @@ export default function BookingPreview() {
         <p className="text-gray-500 mb-10 max-w-sm leading-relaxed">
           Ronnie has received your request. We'll send a confirmation to <span className="font-bold text-[#943F54]">{booking.phone}</span> shortly.
         </p>
-        <button
-          onClick={handleGoToHome}
-          className="bg-[#943F54] text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:bg-[#D77A8B] transition-all"
-        >
-          Return Home
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+          <button
+            onClick={handleDownloadICS}
+            className="flex-1 flex items-center justify-center gap-2 bg-white dark:bg-[#1A1A1A] border-2 border-[#943F54] text-[#943F54] px-6 py-4 rounded-2xl font-bold hover:bg-[#943F54] hover:text-white transition-all"
+          >
+            <FaCalendarPlus /> Add to Calendar
+          </button>
+          <button
+            onClick={handleGoToHome}
+            className="flex-1 bg-[#943F54] text-white px-6 py-4 rounded-2xl font-bold shadow-lg hover:bg-[#D77A8B] transition-all"
+          >
+            Return Home
+          </button>
+        </div>
       </div>
     );
   }

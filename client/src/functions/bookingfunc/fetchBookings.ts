@@ -1,13 +1,13 @@
 import { db } from "@/lib/Firebase/firebaseUtils"
 import { 
-  getDocs, 
+  getDocs, getDoc,
   collection, 
   collectionGroup,  
   query, 
   orderBy, 
   doc, 
   updateDoc, 
-  deleteDoc // 1. Added deleteDoc import
+  deleteDoc
 } from "firebase/firestore"
 
 export const FetchBookings = async (userEmail: string): Promise<any|string> => {
@@ -49,9 +49,30 @@ export const FetchAllBookings = async (): Promise<any|string> => {
 export const updateBooking = async (bookingId: string, newStatus: string, bookingEmail: string) => {
   try {
     const docRef = doc(db, "users", bookingEmail, "bookings", bookingId);
-    await updateDoc(docRef, {
-      status: newStatus,
-    });
+    await updateDoc(docRef, { status: newStatus });
+
+    if (newStatus === "confirmed" || newStatus === "completed") {
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        await fetch("/api/send-status-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: newStatus,
+            name: data.name,
+            email: bookingEmail,
+            service_type: data.service_type,
+            booking_date: data.booking_date,
+            booking_time: data.booking_time,
+            booking_location: data.booking_location,
+            sub_category: data.sub_category || [],
+            phone: data.phone || "",
+            additional_notes: data.additional_notes || "",
+          }),
+        }).catch((err) => console.error("Status email failed:", err));
+      }
+    }
   } catch (error) {
     console.error("Error updating booking:", error);
     throw error;
