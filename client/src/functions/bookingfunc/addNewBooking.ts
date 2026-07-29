@@ -4,15 +4,15 @@ import api from "@/utils/api";
 
 export const addNewBooking = async (bookingData: any) => {
   try {
-    // Reference to user doc (use email carefully as ID)
     const userDocRef = doc(db, "users", bookingData.email);
-    const snapshot = await getDoc(userDocRef);
 
-    // Create user doc if it doesn't exist
-    if (!snapshot.exists()) {
-      await setDoc(userDocRef, {
-        email: bookingData.email,
-      });
+    try {
+      const snapshot = await getDoc(userDocRef);
+      if (!snapshot.exists()) {
+        await setDoc(userDocRef, { email: bookingData.email });
+      }
+    } catch {
+      await setDoc(userDocRef, { email: bookingData.email }).catch(() => {});
     }
 
     // Create a booking inside user's "bookings" subcollection
